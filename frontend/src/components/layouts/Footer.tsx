@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { TrendingUp, Mail, Twitter, Linkedin, Youtube } from 'lucide-react';
+import { TrendingUp, Twitter, Linkedin, Youtube } from 'lucide-react';
 
 export function Footer() {
   return (

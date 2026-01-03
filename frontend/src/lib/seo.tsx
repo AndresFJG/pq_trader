@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+// SEO utility functions for PQ Trader
 
 interface Product {
   '@context': string;

@@ -4,7 +4,7 @@ import { Footer } from '@/components/layouts/Footer';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Download, Shield, TrendingUp, Zap, CheckCircle, Clock, Target, BarChart3 } from 'lucide-react';
+import { Download, Shield, TrendingUp, Zap, CheckCircle, Target, BarChart3 } from 'lucide-react';
 import Link from 'next/link';
 import { RiskDisclaimer, USRestrictionBanner } from '@/components/legal/RiskDisclaimer';
 
