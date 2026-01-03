@@ -16,7 +16,8 @@ export function RiskDisclaimer({ productType, className = '' }: RiskDisclaimerPr
         'Este servicio NO está registrado ante la CFTC/NFA como Asesor de Comercio de Productos Básicos (CTA).',
         'Los sistemas ofrecidos son herramientas educativas y no constituyen asesoramiento de inversión personalizado.',
         'Residentes de EE.UU.: Consulte con un asesor financiero registrado antes de utilizar estos sistemas.'
-      ]
+      ],
+      critical: false
     },
     cfds: {
       title: 'Restricción Legal - CFDs',
@@ -35,7 +36,8 @@ export function RiskDisclaimer({ productType, className = '' }: RiskDisclaimerPr
         'Los resultados pasados no garantizan rendimientos futuros.',
         'Opere solo con capital que pueda permitirse perder.',
         'Consulte con un asesor financiero registrado si tiene dudas.'
-      ]
+      ],
+      critical: false
     }
   };
 
