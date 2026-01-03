@@ -1,0 +1,473 @@
+# PQ Trader - Cursor AI Rules
+
+## Contexto del Proyecto
+
+Este es **PQ Trader**, una plataforma profesional de trading que ofrece:
+- Venta de cursos y mentorías de trading algorítmico
+- Visualización de resultados reales de Darwinex
+- Sistema de pagos recurrentes con Stripe
+- Panel de administración completo
+- Sistema de autenticación y gestión de usuarios
+
+### Stack Tecnológico Principal
+- **Frontend:** Next.js 14 (App Router), TypeScript, Tailwind CSS, shadcn/ui
+- **Backend:** Node.js, Express, TypeScript, MongoDB, Mongoose
+- **Pagos:** Stripe (Subscriptions + Webhooks)
+- **Trading Data:** Darwinex API
+- **Testing:** Jest, React Testing Library, Supertest
+
+## Reglas de Desarrollo
+
+### 1. TypeScript Estricto
+- Usa TypeScript en modo strict
+- Define tipos e interfaces explícitas para todo
+- Evita `any`, usa `unknown` si es necesario
+- Crea tipos compartidos en `/shared/types` para frontend y backend
+
+```typescript
+// ✅ Correcto
+interface UserProfile {
+  id: string;
+  email: string;
+  role: 'user' | 'admin' | 'mentor';
+}
+
+// ❌ Incorrecto
+let user: any = {...}
+```
+
+### 2. Componentes de React
+- Usa componentes funcionales con TypeScript
+- Implementa Server Components donde sea posible (Next.js 14)
+- Client Components solo cuando sea necesario (interactividad, hooks)
+- Props siempre tipadas con interfaces
+
+```typescript
+// ✅ Correcto - Server Component
+interface CourseCardProps {
+  course: Course;
+  showPrice?: boolean;
+}
+
+export default function CourseCard({ course, showPrice = true }: CourseCardProps) {
+  return <div>...</div>
+}
+
+// ✅ Correcto - Client Component
+'use client';
+import { useState } from 'react';
+
+export default function InteractiveChart() {
+  const [data, setData] = useState<ChartData>([]);
+  // ...
+}
+```
+
+### 3. Estructura de Archivos
+```
+frontend/src/
+├── app/                    # App Router (Next.js 14)
+│   ├── (auth)/            # Grupo de rutas de autenticación
+│   ├── (dashboard)/       # Grupo de rutas del dashboard
+│   ├── api/               # API Routes
+│   └── layout.tsx         # Layout raíz
+├── components/
+│   ├── ui/                # Componentes de shadcn/ui
+│   ├── layouts/           # Layouts reutilizables
+│   ├── forms/             # Componentes de formularios
+│   └── trading/           # Componentes específicos de trading
+├── lib/                   # Utilidades y configuración
+├── hooks/                 # Custom hooks
+└── types/                 # TypeScript types
+
+backend/src/
+├── controllers/           # Lógica de negocio
+├── models/               # Modelos de MongoDB
+├── routes/               # Definición de rutas
+├── middleware/           # Middlewares
+├── services/             # Servicios externos
+├── utils/                # Utilidades
+└── types/                # TypeScript types
+```
+
+### 4. Nombres de Archivos y Convenciones
+- Componentes: `PascalCase.tsx` (CourseCard.tsx)
+- Utilities: `camelCase.ts` (formatCurrency.ts)
+- Constants: `UPPER_SNAKE_CASE` (MAX_RETRY_ATTEMPTS)
+- Types/Interfaces: `PascalCase` (UserProfile, ApiResponse)
+- Hooks: `use + PascalCase` (useAuth, useCourse)
+
+### 5. Importaciones Ordenadas
+```typescript
+// 1. Dependencias externas
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
+// 2. Componentes internos
+import { Button } from '@/components/ui/button';
+import CourseCard from '@/components/CourseCard';
+
+// 3. Utils y hooks
+import { formatCurrency } from '@/lib/utils';
+import { useAuth } from '@/hooks/useAuth';
+
+// 4. Types
+import type { Course } from '@/types/course';
+
+// 5. Estilos (si aplica)
+import styles from './styles.module.css';
+```
+
+### 6. Manejo de Errores
+```typescript
+// Backend - Siempre usar try-catch con respuestas consistentes
+export const getCourse = async (req: Request, res: Response) => {
+  try {
+    const course = await Course.findById(req.params.id);
+    if (!course) {
+      return res.status(404).json({ 
+        success: false, 
+        error: 'Curso no encontrado' 
+      });
+    }
+    res.json({ success: true, data: course });
+  } catch (error) {
+    console.error('Error al obtener curso:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Error del servidor' 
+    });
+  }
+};
+
+// Frontend - Manejo de errores en hooks
+const { data, error, isLoading } = useSWR('/api/courses', fetcher);
+
+if (error) return <ErrorMessage message={error.message} />;
+if (isLoading) return <Spinner />;
+```
+
+### 7. Validación de Datos
+```typescript
+// Backend - Usar Joi o Zod
+import Joi from 'joi';
+
+const courseSchema = Joi.object({
+  title: Joi.string().required().min(3).max(100),
+  description: Joi.string().required().min(10),
+  price: Joi.number().positive().required(),
+  duration: Joi.number().integer().positive(),
+});
+
+// Frontend - React Hook Form + Zod
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+
+const schema = z.object({
+  email: z.string().email('Email inválido'),
+  password: z.string().min(8, 'Mínimo 8 caracteres'),
+});
+
+const { register, handleSubmit } = useForm({
+  resolver: zodResolver(schema),
+});
+```
+
+### 8. Autenticación y Seguridad
+```typescript
+// Backend - Middleware de autenticación
+export const authenticateToken = async (
+  req: Request, 
+  res: Response, 
+  next: NextFunction
+) => {
+  const token = req.headers.authorization?.split(' ')[1];
+  
+  if (!token) {
+    return res.status(401).json({ 
+      success: false, 
+      error: 'Token no proporcionado' 
+    });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    res.status(403).json({ 
+      success: false, 
+      error: 'Token inválido' 
+    });
+  }
+};
+
+// Frontend - Protección de rutas
+export default async function DashboardLayout({ children }) {
+  const session = await getServerSession();
+  
+  if (!session) {
+    redirect('/login');
+  }
+  
+  return <div>{children}</div>
+}
+```
+
+### 9. Rate Limiting
+```typescript
+// Backend - Configurar rate limiting por ruta
+import rateLimit from 'express-rate-limit';
+
+// Rate limit general
+export const generalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutos
+  max: 100,
+  message: 'Demasiadas peticiones, intenta más tarde',
+});
+
+// Rate limit para login
+export const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  skipSuccessfulRequests: true,
+});
+
+// Aplicar en rutas
+app.use('/api', generalLimiter);
+app.use('/api/auth/login', loginLimiter);
+```
+
+### 10. Testing
+```typescript
+// Backend - Tests unitarios con Jest
+describe('Course Controller', () => {
+  it('should create a new course', async () => {
+    const courseData = {
+      title: 'Trading Algorítmico',
+      price: 299,
+    };
+    
+    const response = await request(app)
+      .post('/api/courses')
+      .send(courseData)
+      .expect(201);
+      
+    expect(response.body.success).toBe(true);
+    expect(response.body.data.title).toBe(courseData.title);
+  });
+});
+
+// Frontend - Tests de componentes
+import { render, screen } from '@testing-library/react';
+import CourseCard from './CourseCard';
+
+describe('CourseCard', () => {
+  it('renders course information', () => {
+    const course = {
+      title: 'Trading Algorítmico',
+      price: 299,
+    };
+    
+    render(<CourseCard course={course} />);
+    expect(screen.getByText('Trading Algorítmico')).toBeInTheDocument();
+  });
+});
+```
+
+### 11. Estilos con Tailwind
+```typescript
+// ✅ Usar clases de Tailwind + shadcn/ui
+<Button className="bg-primary hover:bg-primary/90 text-white">
+  Comprar Curso
+</Button>
+
+// Para estilos condicionales, usar cn() utility
+import { cn } from '@/lib/utils';
+
+<div className={cn(
+  "rounded-lg p-4",
+  isActive && "bg-primary text-white",
+  !isActive && "bg-gray-100 text-gray-800"
+)}>
+  ...
+</div>
+
+// Tema de trading
+const tradingTheme = {
+  colors: {
+    profit: '#00C853',    // Verde
+    loss: '#FF3B30',      // Rojo
+    neutral: '#F59E0B',   // Amarillo
+  }
+};
+```
+
+### 12. Integración de Stripe
+```typescript
+// Backend - Crear suscripción
+import Stripe from 'stripe';
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
+export const createSubscription = async (req: Request, res: Response) => {
+  try {
+    const { priceId, customerId } = req.body;
+    
+    const subscription = await stripe.subscriptions.create({
+      customer: customerId,
+      items: [{ price: priceId }],
+      payment_behavior: 'default_incomplete',
+      expand: ['latest_invoice.payment_intent'],
+    });
+    
+    res.json({ 
+      success: true, 
+      data: subscription 
+    });
+  } catch (error) {
+    // Manejar error
+  }
+};
+
+// Webhook de Stripe
+export const handleWebhook = async (req: Request, res: Response) => {
+  const sig = req.headers['stripe-signature']!;
+  
+  try {
+    const event = stripe.webhooks.constructEvent(
+      req.body,
+      sig,
+      process.env.STRIPE_WEBHOOK_SECRET!
+    );
+    
+    switch (event.type) {
+      case 'invoice.payment_succeeded':
+        // Activar acceso del usuario
+        break;
+      case 'customer.subscription.deleted':
+        // Desactivar acceso del usuario
+        break;
+    }
+    
+    res.json({ received: true });
+  } catch (error) {
+    res.status(400).send(`Webhook Error: ${error.message}`);
+  }
+};
+```
+
+### 13. Integración de Darwinex
+```typescript
+// Backend - Servicio de Darwinex
+export class DarwinexService {
+  private apiKey: string;
+  private apiSecret: string;
+  private baseUrl: string;
+
+  constructor() {
+    this.apiKey = process.env.DARWINEX_API_KEY!;
+    this.apiSecret = process.env.DARWINEX_API_SECRET!;
+    this.baseUrl = process.env.DARWINEX_BASE_URL!;
+  }
+
+  async getPortfolioPerformance(darwinName: string) {
+    try {
+      const response = await axios.get(
+        `${this.baseUrl}/darwins/${darwinName}/performance`,
+        {
+          headers: {
+            'Authorization': `Bearer ${this.apiKey}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error('Error al obtener datos de Darwinex');
+    }
+  }
+}
+```
+
+### 14. Variables de Entorno
+```typescript
+// Siempre validar variables de entorno al inicio
+import { z } from 'zod';
+
+const envSchema = z.object({
+  NODE_ENV: z.enum(['development', 'production', 'test']),
+  PORT: z.string().transform(Number),
+  MONGODB_URI: z.string().url(),
+  JWT_SECRET: z.string().min(32),
+  STRIPE_SECRET_KEY: z.string().startsWith('sk_'),
+  DARWINEX_API_KEY: z.string(),
+});
+
+export const env = envSchema.parse(process.env);
+```
+
+### 15. Commits y Documentación
+```bash
+# Formato de commits (Conventional Commits)
+feat: agregar página de checkout
+fix: corregir error en autenticación
+docs: actualizar README con instrucciones de Stripe
+style: formatear código con Prettier
+refactor: optimizar consultas a MongoDB
+test: agregar tests para controlador de cursos
+chore: actualizar dependencias
+
+# Documentar funciones complejas
+/**
+ * Crea una suscripción mensual para un usuario
+ * @param userId - ID del usuario
+ * @param priceId - ID del precio de Stripe
+ * @returns Objeto de suscripción de Stripe
+ * @throws Error si falla la creación
+ */
+export async function createMonthlySubscription(
+  userId: string, 
+  priceId: string
+): Promise<Stripe.Subscription> {
+  // ...
+}
+```
+
+## Comandos Rápidos
+
+```bash
+# Desarrollo
+npm run dev                 # Iniciar frontend
+cd backend && npm run dev   # Iniciar backend
+
+# Testing
+npm run test               # Tests unitarios
+npm run test:watch         # Tests en modo watch
+npm run test:coverage      # Coverage report
+
+# Build
+npm run build              # Build de producción
+npm run lint               # Linting
+npm run format             # Formatear código
+```
+
+## Prioridades al Desarrollar
+
+1. **Seguridad primero:** Siempre validar inputs, usar rate limiting, sanitizar datos
+2. **TypeScript estricto:** No usar `any`, tipar todo
+3. **Tests:** Escribir tests para nuevas features
+4. **Performance:** Optimizar consultas, usar caché cuando sea apropiado
+5. **UX:** Diseño responsive, loading states, error handling
+6. **Documentación:** Comentar código complejo, actualizar README
+
+## Recursos Importantes
+
+- [Next.js 14 Docs](https://nextjs.org/docs)
+- [Stripe API](https://stripe.com/docs/api)
+- [Darwinex API](https://www.darwinex.com/api)
+- [shadcn/ui](https://ui.shadcn.com/)
+- [Tailwind CSS](https://tailwindcss.com/docs)
+
+---
+
+**Mantén siempre el foco en crear una experiencia profesional para traders.**
