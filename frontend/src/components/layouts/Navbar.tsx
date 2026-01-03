@@ -28,6 +28,9 @@ export function Navbar() {
             <Link href="/mentorias" className="text-foreground hover:text-profit transition">
               Mentorías
             </Link>
+            <Link href="/strategyquant" className="text-foreground hover:text-profit transition">
+              StrategyQuant
+            </Link>
             <Link href="/portafolios" className="text-foreground hover:text-profit transition">
               Portafolios
             </Link>
@@ -83,6 +86,13 @@ export function Navbar() {
               onClick={() => setIsOpen(false)}
             >
               Mentorías
+            </Link>
+            <Link
+              href="/strategyquant"
+              className="block py-2 text-foreground hover:text-profit transition"
+              onClick={() => setIsOpen(false)}
+            >
+              StrategyQuant
             </Link>
             <Link
               href="/portafolios"
