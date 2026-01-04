@@ -3,6 +3,9 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { Providers } from '@/components/providers';
 import { Toaster } from 'react-hot-toast';
+import { FloatingButtons } from '@/components/ui/FloatingButtons';
+import { CookieBanner } from '@/components/legal/CookieBanner';
+import { AIChat } from '@/components/chat/AIChat';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -87,10 +90,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" className="dark">
+    <html lang="es" suppressHydrationWarning>
       <body className={inter.className}>
         <Providers>
           {children}
+          <FloatingButtons />
           <Toaster
             position="top-right"
             toastOptions={{
@@ -114,6 +118,8 @@ export default function RootLayout({
               },
             }}
           />
+          <CookieBanner />
+          <AIChat />
         </Providers>
       </body>
     </html>

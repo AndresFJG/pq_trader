@@ -64,12 +64,15 @@ export function Hero() {
             <div className="bg-secondary/50 backdrop-blur-xl rounded-2xl p-8 border border-border shadow-2xl">
               <div className="space-y-6">
                 {/* Mock Trading Interface */}
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center space-x-2">
                     <BarChart3 className="h-6 w-6 text-profit" />
                     <span className="font-semibold">Portafolio Live</span>
                   </div>
-                  <span className="text-sm text-profit">+24.5%</span>
+                  <div className="flex items-center gap-2">
+                    <TrendingUp className="h-5 w-5 text-profit" />
+                    <span className="text-lg font-bold text-profit">+24.5%</span>
+                  </div>
                 </div>
 
                 {/* Mock Chart Bars */}
@@ -101,8 +104,8 @@ export function Hero() {
             </div>
 
             {/* Floating Elements */}
-            <div className="absolute -top-4 -right-4 bg-profit/10 backdrop-blur-xl rounded-lg p-4 border border-profit/20">
-              <TrendingUp className="h-8 w-8 text-profit" />
+            <div className="absolute -top-3 -right-3 bg-profit/10 backdrop-blur-xl rounded-lg p-3 border border-profit/20">
+              <TrendingUp className="h-5 w-5 text-profit" />
             </div>
           </div>
         </div>

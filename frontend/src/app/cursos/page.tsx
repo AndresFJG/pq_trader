@@ -56,6 +56,15 @@ type Course = typeof courses[0];
 export default function CursosPage() {
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedLevel, setSelectedLevel] = useState('Todos');
+  const [selectedTopic, setSelectedTopic] = useState('Todos');
+
+  // Filtrar cursos
+  const filteredCourses = courses.filter((course) => {
+    const levelMatch = selectedLevel === 'Todos' || course.level === selectedLevel;
+    const topicMatch = selectedTopic === 'Todos' || course.topics.includes(selectedTopic);
+    return levelMatch && topicMatch;
+  });
 
   const handleOpenCourseDetails = (course: Course) => {
     setSelectedCourse(course);
@@ -117,8 +126,10 @@ export default function CursosPage() {
               {levels.map((level) => (
                 <Button
                   key={level}
-                  variant={level === 'Todos' ? 'default' : 'outline'}
+                  variant={level === selectedLevel ? 'default' : 'outline'}
                   size="sm"
+                  onClick={() => setSelectedLevel(level)}
+                  className={level === selectedLevel ? 'bg-profit hover:bg-profit/90' : ''}
                 >
                   {level}
                 </Button>
@@ -132,7 +143,8 @@ export default function CursosPage() {
                   key={topic}
                   variant="ghost"
                   size="sm"
-                  className="text-muted-foreground hover:text-profit"
+                  onClick={() => setSelectedTopic(topic)}
+                  className={topic === selectedTopic ? 'text-profit bg-profit/10' : 'text-muted-foreground hover:text-profit'}
                 >
                   {topic}
                 </Button>
@@ -145,8 +157,24 @@ export default function CursosPage() {
       {/* Courses Grid */}
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-7xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {courses.map((course) => (
+          {filteredCourses.length === 0 ? (
+            <div className="text-center py-20">
+              <BookOpen className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <p className="text-xl text-muted-foreground">No se encontraron cursos con los filtros seleccionados.</p>
+              <Button 
+                onClick={() => {
+                  setSelectedLevel('Todos');
+                  setSelectedTopic('Todos');
+                }}
+                variant="outline"
+                className="mt-4"
+              >
+                Limpiar Filtros
+              </Button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredCourses.map((course) => (
               <Card key={course.id} className="group hover:border-profit/40 transition-all duration-300">
                 <div className="relative overflow-hidden rounded-t-lg h-48 bg-gradient-to-br from-profit/10 to-background">
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -215,6 +243,7 @@ export default function CursosPage() {
               </Card>
             ))}
           </div>
+          )}
         </div>
       </section>
 

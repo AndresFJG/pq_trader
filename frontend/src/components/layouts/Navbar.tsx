@@ -5,10 +5,14 @@ import { useState } from 'react';
 import { Menu, X, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
+import { LanguageToggle } from '@/components/theme/LanguageToggle';
+import { useLanguage } from '@/lib/i18n';
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
+  const { t } = useLanguage();
 
   return (
     <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-border">
@@ -23,27 +27,29 @@ export function Navbar() {
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
             <Link href="/cursos" className="text-foreground hover:text-profit transition">
-              Cursos
+              {t('nav.courses')}
             </Link>
             <Link href="/mentorias" className="text-foreground hover:text-profit transition">
-              Mentorías
+              {t('nav.mentorships')}
             </Link>
             <Link href="/strategyquant" className="text-foreground hover:text-profit transition">
-              StrategyQuant
+              {t('nav.strategyquant')}
             </Link>
             <Link href="/portafolios" className="text-foreground hover:text-profit transition">
-              Portafolios
+              {t('nav.portfolios')}
             </Link>
             <Link href="/alquileres" className="text-foreground hover:text-profit transition">
-              Alquileres
+              {t('nav.rentals')}
             </Link>
             <Link href="/blog" className="text-foreground hover:text-profit transition">
-              Blog
+              {t('nav.blog')}
             </Link>
           </div>
 
           {/* CTA Buttons */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-3">
+            <LanguageToggle />
+            <ThemeToggle />
             {user ? (
               <Link href="/dashboard">
                 <Button variant="profit">Dashboard</Button>
@@ -51,10 +57,10 @@ export function Navbar() {
             ) : (
               <>
                 <Link href="/login">
-                  <Button variant="ghost">Iniciar Sesión</Button>
+                  <Button variant="ghost">{t('common.login')}</Button>
                 </Link>
                 <Link href="/register">
-                  <Button variant="profit">Comenzar Ahora</Button>
+                  <Button variant="profit">{t('common.register')}</Button>
                 </Link>
               </>
             )}
