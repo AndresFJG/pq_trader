@@ -2,50 +2,53 @@
 
 import { Card, CardContent } from '@/components/ui/card';
 import { BookOpen, Users, TrendingUp, Shield, Zap, Award } from 'lucide-react';
-
-const features = [
-  {
-    icon: BookOpen,
-    title: 'Cursos Completos',
-    description: 'Desde principiante hasta avanzado, aprende a tu propio ritmo con material estructurado.',
-  },
-  {
-    icon: Users,
-    title: 'Mentorías 1-a-1',
-    description: 'Sesiones personalizadas con traders experimentados para resolver tus dudas específicas.',
-  },
-  {
-    icon: TrendingUp,
-    title: 'Resultados Reales',
-    description: 'Visualiza nuestros portafolios en tiempo real integrados con Darwinex.',
-  },
-  {
-    icon: Shield,
-    title: 'Pago Seguro',
-    description: 'Pagos protegidos con Stripe. Cancela tu suscripción cuando quieras.',
-  },
-  {
-    icon: Zap,
-    title: 'Acceso Inmediato',
-    description: 'Comienza a aprender inmediatamente después de tu suscripción.',
-  },
-  {
-    icon: Award,
-    title: 'Certificados',
-    description: 'Obtén certificados al completar cursos y demuestra tus habilidades.',
-  },
-];
+import { useLanguage } from '@/lib/i18n';
 
 export function Features() {
+  const { t } = useLanguage();
+  
+  const features = [
+    {
+      icon: BookOpen,
+      titleKey: 'features.list.courses.title',
+      descriptionKey: 'features.list.courses.description',
+    },
+    {
+      icon: Users,
+      titleKey: 'features.list.mentorships.title',
+      descriptionKey: 'features.list.mentorships.description',
+    },
+    {
+      icon: TrendingUp,
+      titleKey: 'features.list.results.title',
+      descriptionKey: 'features.list.results.description',
+    },
+    {
+      icon: Shield,
+      titleKey: 'features.list.payment.title',
+      descriptionKey: 'features.list.payment.description',
+    },
+    {
+      icon: Zap,
+      titleKey: 'features.list.access.title',
+      descriptionKey: 'features.list.access.description',
+    },
+    {
+      icon: Award,
+      titleKey: 'features.list.certificates.title',
+      descriptionKey: 'features.list.certificates.description',
+    },
+  ];
+
   return (
     <section className="py-20 px-4 bg-secondary/20">
       <div className="container mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold mb-4">
-            ¿Por qué elegir <span className="text-profit">PQ Trader</span>?
+            {t('features.title')} <span className="text-profit">{t('features.titleHighlight')}</span>?
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Todo lo que necesitas para dominar el trading algorítmico en un solo lugar
+            {t('features.subtitle')}
           </p>
         </div>
 
@@ -61,8 +64,8 @@ export function Features() {
                   <div className="w-12 h-12 rounded-lg bg-profit/10 flex items-center justify-center group-hover:bg-profit/20 transition">
                     <Icon className="h-6 w-6 text-profit" />
                   </div>
-                  <h3 className="text-xl font-semibold">{feature.title}</h3>
-                  <p className="text-muted-foreground">{feature.description}</p>
+                  <h3 className="text-xl font-semibold">{t(feature.titleKey)}</h3>
+                  <p className="text-muted-foreground">{t(feature.descriptionKey)}</p>
                 </CardContent>
               </Card>
             );

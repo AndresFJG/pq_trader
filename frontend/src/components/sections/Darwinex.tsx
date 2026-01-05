@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { formatPercentage, getPercentageColor } from '@/lib/utils';
 import { TrendingUp, TrendingDown, Activity } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n';
 
 // Mock data - En producción vendrá de la API de Darwinex
 const portfolios = [
@@ -36,15 +37,17 @@ const portfolios = [
 ];
 
 export function Darwinex() {
+  const { t } = useLanguage();
+  
   return (
     <section className="py-20 px-4 bg-secondary/20">
       <div className="container mx-auto">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold mb-4">
-            Resultados <span className="text-profit">Verificados</span>
+            {t('darwinex.title')} <span className="text-profit">{t('darwinex.titleHighlight')}</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Nuestros portafolios en vivo integrados con Darwinex. Transparencia total.
+            {t('darwinex.subtitle')}
           </p>
         </div>
 
@@ -66,7 +69,7 @@ export function Darwinex() {
               <CardContent className="space-y-4">
                 {/* Return */}
                 <div>
-                  <div className="text-sm text-muted-foreground mb-1">Retorno Anual</div>
+                  <div className="text-sm text-muted-foreground mb-1">{t('darwinex.annualReturn')}</div>
                   <div className={`text-3xl font-bold ${getPercentageColor(portfolio.return)}`}>
                     {formatPercentage(portfolio.return)}
                   </div>
@@ -75,23 +78,23 @@ export function Darwinex() {
                 {/* Stats Grid */}
                 <div className="grid grid-cols-2 gap-4 pt-4 border-t border-border">
                   <div>
-                    <div className="text-xs text-muted-foreground">Drawdown</div>
+                    <div className="text-xs text-muted-foreground">{t('darwinex.drawdown')}</div>
                     <div className="text-sm font-semibold text-loss">
                       {formatPercentage(portfolio.drawdown)}
                     </div>
                   </div>
                   <div>
-                    <div className="text-xs text-muted-foreground">Sharpe Ratio</div>
+                    <div className="text-xs text-muted-foreground">{t('darwinex.sharpeRatio')}</div>
                     <div className="text-sm font-semibold">{portfolio.sharpeRatio.toFixed(2)}</div>
                   </div>
                   <div>
-                    <div className="text-xs text-muted-foreground">Win Rate</div>
+                    <div className="text-xs text-muted-foreground">{t('darwinex.winRate')}</div>
                     <div className="text-sm font-semibold text-profit">
                       {portfolio.winRate.toFixed(1)}%
                     </div>
                   </div>
                   <div>
-                    <div className="text-xs text-muted-foreground">Trades</div>
+                    <div className="text-xs text-muted-foreground">{t('darwinex.trades')}</div>
                     <div className="text-sm font-semibold">{portfolio.trades}</div>
                   </div>
                 </div>

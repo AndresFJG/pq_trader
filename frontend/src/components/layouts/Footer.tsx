@@ -1,7 +1,12 @@
+'use client';
+
 import Link from 'next/link';
 import { TrendingUp, Twitter, Linkedin, Youtube } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n';
 
 export function Footer() {
+  const { t } = useLanguage();
+  
   return (
     <footer className="bg-secondary/30 border-t border-border">
       <div className="container mx-auto px-6 md:px-8 lg:px-12 py-12 md:py-16">
@@ -13,7 +18,7 @@ export function Footer() {
               <span className="text-xl font-bold">PQ Trader</span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Aprende trading algorítmico con expertos y resultados reales.
+              {t('footer.description')}
             </p>
             <div className="flex space-x-4 pt-2">
               <a 
@@ -42,26 +47,26 @@ export function Footer() {
 
           {/* Productos */}
           <div>
-            <h3 className="font-semibold mb-4 text-foreground">Productos</h3>
+            <h3 className="font-semibold mb-4 text-foreground">{t('footer.products')}</h3>
             <ul className="space-y-3 text-sm">
               <li>
                 <Link href="/cursos" className="text-muted-foreground hover:text-profit transition-colors inline-block">
-                  Cursos
+                  {t('common.courses')}
                 </Link>
               </li>
               <li>
                 <Link href="/mentorias" className="text-muted-foreground hover:text-profit transition-colors inline-block">
-                  Mentorías
+                  {t('common.mentorships')}
                 </Link>
               </li>
               <li>
                 <Link href="/alquileres" className="text-muted-foreground hover:text-profit transition-colors inline-block">
-                  Alquileres
+                  {t('common.rentals')}
                 </Link>
               </li>
               <li>
                 <Link href="/portafolios" className="text-muted-foreground hover:text-profit transition-colors inline-block">
-                  Portafolios
+                  {t('common.portfolios')}
                 </Link>
               </li>
             </ul>
@@ -69,26 +74,26 @@ export function Footer() {
 
           {/* Compañía */}
           <div>
-            <h3 className="font-semibold mb-4 text-foreground">Compañía</h3>
+            <h3 className="font-semibold mb-4 text-foreground">{t('footer.company')}</h3>
             <ul className="space-y-3 text-sm">
               <li>
                 <Link href="/sobre-nosotros" className="text-muted-foreground hover:text-profit transition-colors inline-block">
-                  Sobre Nosotros
+                  {t('footer.aboutUs')}
                 </Link>
               </li>
               <li>
                 <Link href="/blog" className="text-muted-foreground hover:text-profit transition-colors inline-block">
-                  Blog
+                  {t('common.blog')}
                 </Link>
               </li>
               <li>
                 <Link href="/contacto" className="text-muted-foreground hover:text-profit transition-colors inline-block">
-                  Contacto
+                  {t('footer.contact')}
                 </Link>
               </li>
               <li>
                 <Link href="/faqs" className="text-muted-foreground hover:text-profit transition-colors inline-block">
-                  FAQs
+                  {t('footer.faqs')}
                 </Link>
               </li>
             </ul>
@@ -96,26 +101,26 @@ export function Footer() {
 
           {/* Legal */}
           <div>
-            <h3 className="font-semibold mb-4 text-foreground">Legal</h3>
+            <h3 className="font-semibold mb-4 text-foreground">{t('footer.legal')}</h3>
             <ul className="space-y-3 text-sm">
               <li>
                 <Link href="/terminos" className="text-muted-foreground hover:text-profit transition-colors inline-block">
-                  Términos y Condiciones
+                  {t('footer.terms')}
                 </Link>
               </li>
               <li>
                 <Link href="/politica-riesgo" className="text-muted-foreground hover:text-profit transition-colors inline-block">
-                  Divulgación de Riesgos
+                  {t('footer.riskDisclosure')}
                 </Link>
               </li>
               <li>
                 <Link href="/privacidad" className="text-muted-foreground hover:text-profit transition-colors inline-block">
-                  Política de Privacidad
+                  {t('footer.privacy')}
                 </Link>
               </li>
               <li>
                 <Link href="/cookies" className="text-muted-foreground hover:text-profit transition-colors inline-block">
-                  Cookies
+                  {t('footer.cookies')}
                 </Link>
               </li>
             </ul>
@@ -128,21 +133,20 @@ export function Footer() {
             <div className="text-center">
               <p className="font-semibold text-foreground mb-3 flex items-center justify-center gap-2">
                 <span className="text-yellow-500">⚠️</span>
-                Aviso Regulatorio Importante
+                {t('footer.regulatoryNotice')}
               </p>
               <p className="text-sm text-muted-foreground max-w-4xl mx-auto mb-3 leading-relaxed">
-                PQ Trader NO está registrado como CTA ante la CFTC/NFA. Los servicios ofrecidos son exclusivamente 
-                educativos y no constituyen asesoramiento de inversión. El trading conlleva riesgos elevados de pérdida.
+                {t('footer.regulatoryText')}
               </p>
               <p className="text-xs text-muted-foreground">
-                CFDs prohibidos para residentes de EE.UU. • Solo para fines educativos • Opere con responsabilidad
+                {t('footer.regulatoryDisclaimer')}
               </p>
             </div>
           </div>
 
           {/* Copyright */}
           <div className="text-center text-sm text-muted-foreground">
-            <p>© 2026 PQ Trader. Todos los derechos reservados.</p>
+            <p>{t('footer.rights')}</p>
           </div>
         </div>
       </div>

@@ -3,8 +3,11 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, TrendingUp, BarChart3 } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n';
 
 export function Hero() {
+  const { t } = useLanguage();
+  
   return (
     <section className="pt-32 pb-20 px-4">
       <div className="container mx-auto">
@@ -13,31 +16,30 @@ export function Hero() {
           <div className="space-y-8">
             <div className="inline-block">
               <span className="bg-profit/10 text-profit px-4 py-2 rounded-full text-sm font-medium">
-                🚀 Resultados reales verificados por Darwinex
+                {t('hero.badge')}
               </span>
             </div>
 
             <h1 className="text-5xl md:text-6xl font-bold leading-tight">
-              Aprende Trading{' '}
-              <span className="text-profit">Algorítmico</span>{' '}
-              con Expertos
+              {t('hero.title')}{' '}
+              <span className="text-profit">{t('hero.titleHighlight')}</span>{' '}
+              {t('hero.titleSuffix')}
             </h1>
 
             <p className="text-xl text-muted-foreground">
-              Domina el trading algorítmico desde cero. Cursos prácticos, mentorías personalizadas
-              y estrategias probadas con resultados reales.
+              {t('hero.subtitle')}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
               <Link href="/cursos">
                 <Button size="xl" variant="profit" className="group w-full sm:w-auto">
-                  <span>Ver Cursos</span>
+                  <span>{t('hero.cta')}</span>
                   <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                 </Button>
               </Link>
               <Link href="/mentorias">
                 <Button size="xl" variant="outline" className="w-full sm:w-auto">
-                  Reservar Mentoría
+                  {t('hero.ctaSecondary')}
                 </Button>
               </Link>
             </div>
@@ -46,15 +48,15 @@ export function Hero() {
             <div className="grid grid-cols-3 gap-8 pt-8">
               <div>
                 <div className="text-3xl font-bold text-profit">500+</div>
-                <div className="text-sm text-muted-foreground">Estudiantes</div>
+                <div className="text-sm text-muted-foreground">{t('hero.stats.students')}</div>
               </div>
               <div>
                 <div className="text-3xl font-bold text-profit">4.8</div>
-                <div className="text-sm text-muted-foreground">Rating Promedio</div>
+                <div className="text-sm text-muted-foreground">{t('hero.stats.rating')}</div>
               </div>
               <div>
                 <div className="text-3xl font-bold text-profit">15+</div>
-                <div className="text-sm text-muted-foreground">Cursos</div>
+                <div className="text-sm text-muted-foreground">{t('hero.stats.courses')}</div>
               </div>
             </div>
           </div>
@@ -67,7 +69,7 @@ export function Hero() {
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center space-x-2">
                     <BarChart3 className="h-6 w-6 text-profit" />
-                    <span className="font-semibold">Portafolio Live</span>
+                    <span className="font-semibold">{t('hero.portfolio')}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <TrendingUp className="h-5 w-5 text-profit" />
@@ -92,12 +94,22 @@ export function Hero() {
                 {/* Stats Row */}
                 <div className="grid grid-cols-2 gap-4 pt-4 border-t border-border">
                   <div>
-                    <div className="text-xs text-muted-foreground">Win Rate</div>
+                    <div className="text-xs text-muted-foreground">{t('hero.winRate')}</div>
                     <div className="text-lg font-semibold text-profit">68.4%</div>
                   </div>
                   <div>
-                    <div className="text-xs text-muted-foreground">Sharpe Ratio</div>
+                    <div className="text-xs text-muted-foreground">{t('hero.sharpeRatio')}</div>
                     <div className="text-lg font-semibold">2.45</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
                   </div>
                 </div>
               </div>
