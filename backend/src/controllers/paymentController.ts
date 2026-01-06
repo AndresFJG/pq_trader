@@ -163,7 +163,7 @@ export const createCheckoutSession = async (req: Request, res: Response): Promis
       productName, 
       amount,
       currency = 'eur',
-      paymentMethod = 'card',
+      // paymentMethod = 'card', // No se usa en esta función
       customerEmail 
     }: PaymentIntentRequest = req.body;
 
@@ -205,7 +205,7 @@ export const createCheckoutSession = async (req: Request, res: Response): Promis
 
     // Crear sesión de checkout
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: paymentMethodTypes,
+      payment_method_types: paymentMethodTypes as Array<'card' | 'sepa_debit'>,
       line_items: [
         {
           price_data: {

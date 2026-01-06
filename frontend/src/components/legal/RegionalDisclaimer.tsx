@@ -4,8 +4,10 @@ import { useEffect, useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { AlertTriangle, Shield } from 'lucide-react';
 import { getUserCountry, getRegionalDisclaimer, shouldShowCFDWarning } from '@/lib/geolocation';
+import { useLanguage } from '@/lib/i18n';
 
 export function RegionalDisclaimer() {
+  const { t } = useLanguage();
   const [disclaimer, setDisclaimer] = useState<any>(null);
   const [showCFDWarning, setShowCFDWarning] = useState(false);
 
@@ -59,10 +61,9 @@ export function RegionalDisclaimer() {
             <div className="flex items-start gap-3">
               <AlertTriangle className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-semibold mb-1">Advertencia de Riesgo de CFDs</p>
+                <p className="text-sm font-semibold mb-1">{t('regional.cfdWarning')}</p>
                 <p className="text-xs text-muted-foreground">
-                  Entre el 74% y 89% de las cuentas de inversores minoristas pierden dinero al operar con CFDs. 
-                  Debe considerar si puede permitirse el alto riesgo de perder su dinero.
+                  {t('regional.cfdContent')}
                 </p>
               </div>
             </div>

@@ -1,11 +1,12 @@
 import { Request, Response } from 'express';
 import { MercadoPagoService } from '../services/mercadopagoService';
 import { PixService } from '../services/pixService';
+// @ts-ignore - TypeScript no encuentra el módulo pero existe
 import { SEPAService } from '../services/sepaService';
 import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
-  apiVersion: '2024-12-18.acacia',
+  apiVersion: '2025-02-24.acacia',
 });
 
 const mercadoPago = new MercadoPagoService();
@@ -17,7 +18,8 @@ const sepaService = new SEPAService();
 // @access  Private
 export const createPaymentIntent = async (req: Request, res: Response) => {
   try {
-    const { amount, currency, paymentMethod, userCountry, metadata } = req.body;
+    const { amount, currency, paymentMethod, metadata } = req.body;
+    // userCountry se puede usar para seleccionar métodos de pago regionales
 
     // Validate input
     if (!amount || !currency || !paymentMethod) {

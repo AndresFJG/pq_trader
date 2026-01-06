@@ -9,6 +9,7 @@ import { CreditCard, Lock, ShieldCheck } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { currencies, convertPrice, formatPrice, detectUserLocation } from '@/lib/currency';
+import { useLanguage } from '@/lib/i18n';
 
 interface CheckoutFormProps {
   productType: 'mentoria' | 'portafolio' | 'curso' | 'mentoria-grupal';
@@ -32,6 +33,7 @@ export function CheckoutForm({
   onCurrencyChange
 }: CheckoutFormProps) {
   const router = useRouter();
+  const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [internalSelectedCurrency, setInternalSelectedCurrency] = useState(initialCurrency);
@@ -159,7 +161,7 @@ export function CheckoutForm({
         <CardContent className="flex items-center justify-center p-12">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-profit mx-auto mb-4"></div>
-            <p className="text-muted-foreground">Detectando tu ubicación...</p>
+            <p className="text-muted-foreground">{t('checkout.detectingLocation')}</p>
           </div>
         </CardContent>
       </Card>
@@ -170,19 +172,19 @@ export function CheckoutForm({
     <form onSubmit={handleSubmit}>
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Información de Pago</CardTitle>
+          <CardTitle className="text-2xl">{t('checkout.paymentInfo')}</CardTitle>
           <CardDescription>
-            Completa tus datos para finalizar la compra
+            {t('checkout.completeData')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Selector de Moneda */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <Label className="text-base font-semibold">Moneda de Pago</Label>
+              <Label className="text-base font-semibold">{t('checkout.paymentCurrency')}</Label>
               {detectedLocation && (
                 <Badge variant="outline" className="text-xs">
-                  Detectado: {detectedLocation}
+                  {t('checkout.detected')}: {detectedLocation}
                 </Badge>
               )}
             </div>
@@ -207,7 +209,7 @@ export function CheckoutForm({
 
           {/* Métodos de Pago */}
           <div className="space-y-3">
-            <Label className="text-base font-semibold">Método de Pago</Label>
+            <Label className="text-base font-semibold">{t('checkout.paymentMethod')}</Label>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               <button
                 type="button"
@@ -219,7 +221,7 @@ export function CheckoutForm({
                 }`}
               >
                 <CreditCard className="h-5 w-5 mx-auto mb-2" />
-                <div className="text-sm font-medium">Tarjeta</div>
+                <div className="text-sm font-medium">{t('checkout.card')}</div>
               </button>
               <button
                 type="button"
@@ -230,7 +232,7 @@ export function CheckoutForm({
                     : 'border-border hover:border-profit/50'
                 }`}
               >
-                <div className="text-lg font-bold mb-1">PayPal</div>
+                <div className="text-lg font-bold mb-1">{t('checkout.paypal')}</div>
               </button>
               <button
                 type="button"
@@ -241,7 +243,7 @@ export function CheckoutForm({
                     : 'border-border hover:border-profit/50'
                 }`}
               >
-                <div className="text-sm font-bold mb-1">Google Pay</div>
+                <div className="text-sm font-bold mb-1">{t('checkout.googlePay')}</div>
               </button>
               <button
                 type="button"
@@ -252,7 +254,7 @@ export function CheckoutForm({
                     : 'border-border hover:border-profit/50'
                 }`}
               >
-                <div className="text-sm font-bold mb-1">Apple Pay</div>
+                <div className="text-sm font-bold mb-1">{t('checkout.applePay')}</div>
               </button>
               <button
                 type="button"
@@ -263,17 +265,17 @@ export function CheckoutForm({
                     : 'border-border hover:border-profit/50'
                 }`}
               >
-                <div className="text-sm font-bold mb-1">SEPA</div>
+                <div className="text-sm font-bold mb-1">{t('checkout.sepa')}</div>
               </button>
             </div>
           </div>
 
           {/* Información Personal */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Información Personal</h3>
+            <h3 className="text-lg font-semibold">{t('checkout.personalInfo')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Nombre Completo *</Label>
+                <Label htmlFor="name">{t('checkout.fullName')} {t('checkout.required')}</Label>
                 <Input
                   id="name"
                   name="name"
@@ -281,11 +283,11 @@ export function CheckoutForm({
                   required
                   value={formData.name}
                   onChange={handleChange}
-                  placeholder="Juan Pérez"
+                  placeholder={t('checkout.fullName')}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">Email *</Label>
+                <Label htmlFor="email">{t('checkout.email')} {t('checkout.required')}</Label>
                 <Input
                   id="email"
                   name="email"
@@ -293,11 +295,11 @@ export function CheckoutForm({
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="juan@email.com"
+                  placeholder={t('checkout.email')}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="phone">Teléfono *</Label>
+                <Label htmlFor="phone">{t('checkout.phone')} {t('checkout.required')}</Label>
                 <Input
                   id="phone"
                   name="phone"
@@ -309,7 +311,7 @@ export function CheckoutForm({
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="country">País *</Label>
+                <Label htmlFor="country">{t('checkout.country')} {t('checkout.required')}</Label>
                 <Input
                   id="country"
                   name="country"
@@ -317,7 +319,7 @@ export function CheckoutForm({
                   required
                   value={formData.country}
                   onChange={handleChange}
-                  placeholder="España"
+                  placeholder={t('checkout.country')}
                 />
               </div>
             </div>
@@ -326,10 +328,10 @@ export function CheckoutForm({
           {/* Información de Tarjeta */}
           {selectedPaymentMethod === 'card' && (
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Información de Tarjeta</h3>
+              <h3 className="text-lg font-semibold">{t('checkout.cardInfo')}</h3>
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="cardNumber">Número de Tarjeta *</Label>
+                  <Label htmlFor="cardNumber">{t('checkout.cardNumber')} {t('checkout.required')}</Label>
                   <Input
                     id="cardNumber"
                     name="cardNumber"
@@ -343,7 +345,7 @@ export function CheckoutForm({
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="cardExpiry">Vencimiento *</Label>
+                    <Label htmlFor="cardExpiry">{t('checkout.expiry')} {t('checkout.required')}</Label>
                     <Input
                       id="cardExpiry"
                       name="cardExpiry"
@@ -356,7 +358,7 @@ export function CheckoutForm({
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="cardCVV">CVV *</Label>
+                    <Label htmlFor="cardCVV">{t('checkout.cvv')} {t('checkout.required')}</Label>
                     <Input
                       id="cardCVV"
                       name="cardCVV"
@@ -376,9 +378,9 @@ export function CheckoutForm({
           {/* PayPal Email */}
           {selectedPaymentMethod === 'paypal' && (
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Información de PayPal</h3>
+              <h3 className="text-lg font-semibold">{t('checkout.paypalInfo')}</h3>
               <div className="space-y-2">
-                <Label htmlFor="paypalEmail">Email de PayPal *</Label>
+                <Label htmlFor="paypalEmail">{t('checkout.paypalEmail')} {t('checkout.required')}</Label>
                 <Input
                   id="paypalEmail"
                   name="paypalEmail"
@@ -386,7 +388,7 @@ export function CheckoutForm({
                   required
                   value={formData.paypalEmail}
                   onChange={handleChange}
-                  placeholder="tu-email@paypal.com"
+                  placeholder={t('checkout.paypalEmail')}
                 />
               </div>
             </div>
@@ -395,9 +397,9 @@ export function CheckoutForm({
           {/* SEPA IBAN */}
           {selectedPaymentMethod === 'sepa' && (
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Información Bancaria</h3>
+              <h3 className="text-lg font-semibold">{t('checkout.bankingInfo')}</h3>
               <div className="space-y-2">
-                <Label htmlFor="sepaIBAN">IBAN *</Label>
+                <Label htmlFor="sepaIBAN">{t('checkout.iban')} {t('checkout.required')}</Label>
                 <Input
                   id="sepaIBAN"
                   name="sepaIBAN"
@@ -413,10 +415,10 @@ export function CheckoutForm({
 
           {/* Dirección de Facturación */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Dirección de Facturación</h3>
+            <h3 className="text-lg font-semibold">{t('checkout.billingAddress')}</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="address">Dirección *</Label>
+                <Label htmlFor="address">{t('checkout.address')} {t('checkout.required')}</Label>
                 <Input
                   id="address"
                   name="address"
@@ -424,11 +426,11 @@ export function CheckoutForm({
                   required
                   value={formData.address}
                   onChange={handleChange}
-                  placeholder="Calle Principal 123"
+                  placeholder={t('checkout.address')}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="city">Ciudad *</Label>
+                <Label htmlFor="city">{t('checkout.city')} {t('checkout.required')}</Label>
                 <Input
                   id="city"
                   name="city"
@@ -436,11 +438,11 @@ export function CheckoutForm({
                   required
                   value={formData.city}
                   onChange={handleChange}
-                  placeholder="Madrid"
+                  placeholder={t('checkout.city')}
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="postalCode">Código Postal *</Label>
+                <Label htmlFor="postalCode">{t('checkout.postalCode')} {t('checkout.required')}</Label>
                 <Input
                   id="postalCode"
                   name="postalCode"
@@ -473,12 +475,12 @@ export function CheckoutForm({
         {loading ? (
           <>
             <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-            Procesando...
+            {t('checkout.processing')}
           </>
         ) : (
           <>
             <Lock className="mr-2 h-5 w-5" />
-            Pagar {getCurrentPrice()}
+            {t('checkout.pay')} {getCurrentPrice()}
           </>
         )}
       </Button>
@@ -486,7 +488,7 @@ export function CheckoutForm({
       <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground mt-4">
         <div className="flex items-center gap-1">
           <ShieldCheck className="h-4 w-4" />
-          <span>SSL Seguro</span>
+          <span>{t('checkout.sslSecure')}</span>
         </div>
         <div className="flex items-center gap-1">
           <CreditCard className="h-4 w-4" />
@@ -494,7 +496,7 @@ export function CheckoutForm({
         </div>
         <div className="flex items-center gap-1">
           <Lock className="h-4 w-4" />
-          <span>Encriptado</span>
+          <span>{t('checkout.encrypted')}</span>
         </div>
       </div>
     </form>

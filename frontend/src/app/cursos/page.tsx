@@ -7,6 +7,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Button } from '@/components/ui/button';
 import { Clock, Users, Star, BookOpen, TrendingUp, Award } from 'lucide-react';
 import { CourseDetailsModal } from '@/components/modals/CourseDetailsModal';
+import { useLanguage } from '@/lib/i18n';
 
 // Mock data - en producción vendría de la API
 const courses = [
@@ -54,10 +55,14 @@ const topics = ['Todos', 'Python', 'StrategyQuant', 'Risk Management'];
 type Course = typeof courses[0];
 
 export default function CursosPage() {
+  const { t } = useLanguage();
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedLevel, setSelectedLevel] = useState('Todos');
   const [selectedTopic, setSelectedTopic] = useState('Todos');
+
+  const levels = [t('coursesPage.filters.all'), 'Principiante', 'Intermedio', 'Avanzado'];
+  const topics = [t('coursesPage.filters.all'), 'Python', 'StrategyQuant', 'Risk Management'];
 
   // Filtrar cursos
   const filteredCourses = courses.filter((course) => {
@@ -85,15 +90,15 @@ export default function CursosPage() {
         <div className="container mx-auto max-w-7xl text-center">
           <div className="inline-flex items-center gap-2 bg-profit/10 border border-profit/20 rounded-full px-4 py-2 mb-6">
             <BookOpen className="h-4 w-4 text-profit" />
-            <span className="text-sm text-profit font-medium">Catálogo Completo</span>
+            <span className="text-sm text-profit font-medium">{t('coursesPage.badge')}</span>
           </div>
           
           <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6">
-            Cursos de Trading <span className="text-profit">Algorítmico</span>
+            {t('coursesPage.title')} <span className="text-profit">{t('coursesPage.titleHighlight')}</span>
           </h1>
           
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-            Aprende de traders profesionales. Desde lo básico hasta estrategias avanzadas de trading cuantitativo.
+            {t('coursesPage.subtitle')}
           </p>
 
           {/* Stats */}

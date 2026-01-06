@@ -6,7 +6,7 @@ import express, { Request, Response, NextFunction } from 'express';
  */
 export const rawBodyMiddleware = (
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction
 ) => {
   if (req.originalUrl === '/api/payments/webhook') {

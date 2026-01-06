@@ -4,7 +4,7 @@ import {
   getPaymentMethods,
   confirmPayment,
 } from '../controllers/multiPaymentController';
-import { protect } from '../middleware/auth';
+import { protect } from '../middleware/auth.middleware';
 
 const router = express.Router();
 

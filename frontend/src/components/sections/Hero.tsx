@@ -104,16 +104,6 @@ export function Hero() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-                  </div>
-                </div>
-              </div>
-            </div>
 
             {/* Floating Elements */}
             <div className="absolute -top-3 -right-3 bg-profit/10 backdrop-blur-xl rounded-lg p-3 border border-profit/20">

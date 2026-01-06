@@ -5,8 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { X, Cookie, Settings } from 'lucide-react';
 import Link from 'next/link';
+import { useLanguage } from '@/lib/i18n';
 
 export function CookieBanner() {
+  const { t } = useLanguage();
   const [showBanner, setShowBanner] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [preferences, setPreferences] = useState({
@@ -83,20 +85,14 @@ export function CookieBanner() {
                   <Cookie className="h-8 w-8 text-profit flex-shrink-0" />
                   <div>
                     <h3 className="text-lg font-bold mb-2">
-                      Usamos cookies para mejorar tu experiencia
+                      {t('cookies.title')}
                     </h3>
                     <p className="text-sm text-muted-foreground">
-                      Utilizamos cookies y tecnologías similares para personalizar contenido, analizar tráfico y mejorar tu experiencia. 
-                      Al hacer clic en "Aceptar todas", aceptas el uso de todas las cookies. 
-                      Lee nuestra{' '}
+                      {t('cookies.description')}{' '}
+                      {t('cookies.learnMore')}{' '}
                       <Link href="/privacy-policy" className="text-profit hover:underline">
-                        Política de Privacidad
-                      </Link>
-                      {' '}y{' '}
-                      <Link href="/cookie-policy" className="text-profit hover:underline">
-                        Política de Cookies
-                      </Link>
-                      .
+                        {t('cookies.privacyPolicy')}
+                      </Link>.
                     </p>
                   </div>
                 </div>
@@ -116,7 +112,7 @@ export function CookieBanner() {
                   onClick={acceptAll}
                   className="flex-1"
                 >
-                  Aceptar Todas
+                  {t('cookies.acceptAll')}
                 </Button>
                 <Button
                   variant="outline"
@@ -124,44 +120,44 @@ export function CookieBanner() {
                   className="flex-1"
                 >
                   <Settings className="h-4 w-4 mr-2" />
-                  Personalizar
+                  {t('cookies.customize')}
                 </Button>
                 <Button
                   variant="ghost"
                   onClick={acceptNecessary}
                   className="flex-1"
                 >
-                  Solo Necesarias
+                  {t('cookies.acceptNecessary')}
                 </Button>
               </div>
             </>
           ) : (
             <>
               <div className="mb-6">
-                <h3 className="text-lg font-bold mb-2">Configuración de Cookies</h3>
+                <h3 className="text-lg font-bold mb-2">{t('cookies.customize')}</h3>
                 <p className="text-sm text-muted-foreground">
-                  Personaliza tus preferencias de cookies
+                  {t('cookies.description')}
                 </p>
               </div>
 
               <div className="space-y-4 mb-6">
                 <div className="flex items-center justify-between p-4 bg-surface/50 rounded-lg">
                   <div className="flex-1">
-                    <h4 className="font-semibold mb-1">Cookies Necesarias</h4>
+                    <h4 className="font-semibold mb-1">{t('cookies.necessary')}</h4>
                     <p className="text-xs text-muted-foreground">
-                      Esenciales para el funcionamiento del sitio web
+                      {t('cookies.necessaryDesc')}
                     </p>
                   </div>
                   <div className="flex items-center">
-                    <span className="text-sm text-muted-foreground">Siempre activas</span>
+                    <span className="text-sm text-muted-foreground">{t('cookies.acceptNecessary')}</span>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between p-4 bg-surface/50 rounded-lg">
                   <div className="flex-1">
-                    <h4 className="font-semibold mb-1">Cookies Analíticas</h4>
+                    <h4 className="font-semibold mb-1">{t('cookies.analytics')}</h4>
                     <p className="text-xs text-muted-foreground">
-                      Nos ayudan a entender cómo usas nuestro sitio
+                      {t('cookies.analyticsDesc')}
                     </p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
@@ -177,9 +173,9 @@ export function CookieBanner() {
 
                 <div className="flex items-center justify-between p-4 bg-surface/50 rounded-lg">
                   <div className="flex-1">
-                    <h4 className="font-semibold mb-1">Cookies de Marketing</h4>
+                    <h4 className="font-semibold mb-1">{t('cookies.marketing')}</h4>
                     <p className="text-xs text-muted-foreground">
-                      Usadas para mostrar anuncios relevantes
+                      {t('cookies.marketingDesc')}
                     </p>
                   </div>
                   <label className="relative inline-flex items-center cursor-pointer">
@@ -200,14 +196,14 @@ export function CookieBanner() {
                   onClick={savePreferences}
                   className="flex-1"
                 >
-                  Guardar Preferencias
+                  {t('cookies.savePreferences')}
                 </Button>
                 <Button
                   variant="outline"
                   onClick={() => setShowSettings(false)}
                   className="flex-1"
                 >
-                  Volver
+                  {t('common.back')}
                 </Button>
               </div>
             </>

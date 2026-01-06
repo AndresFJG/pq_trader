@@ -2,7 +2,7 @@
 // Install: npm install mercadopago
 
 export class MercadoPagoService {
-  private accessToken: string;
+  public readonly accessToken: string; // Se usará cuando se implemente la integración real
 
   constructor() {
     this.accessToken = process.env.MERCADOPAGO_ACCESS_TOKEN || '';

@@ -1,10 +1,16 @@
 import { Request, Response } from 'express';
-import OpenAI from 'openai';
 
-// Inicializar OpenAI (requiere OPENAI_API_KEY en .env)
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || '',
-});
+// OpenAI es opcional - se usará el sistema de respuestas basado en reglas si no está disponible
+let openai: any = null;
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const OpenAI = require('openai');
+  openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY || '',
+  });
+} catch (error) {
+  console.log('OpenAI no disponible, usando sistema de respuestas basado en reglas');
+}
 
 // Knowledge base para respuestas del chatbot
 const knowledgeBase = {
@@ -35,6 +41,11 @@ const knowledgeBase = {
   },
 };
 
+// Helper function para obtener información de la knowledge base
+const getKnowledgeBaseInfo = (topic: string): any => {
+  return knowledgeBase[topic as keyof typeof knowledgeBase] || null;
+};
+
 // @desc    Chat with AI assistant
 // @route   POST /api/chat/message
 // @access  Public
@@ -49,9 +60,19 @@ export const sendMessage = async (req: Request, res: Response) => {
       });
     }
 
+    // Use knowledge base for enhanced responses
+    const lowercaseMessage = message.toLowerCase();
+    let context = '';
+    if (lowercaseMessage.includes('curso')) {
+      const cursos = getKnowledgeBaseInfo('cursos');
+      context = `Cursos disponibles: ${JSON.stringify(cursos)}`;
+    }
+
     // Check if OpenAI is configured
-    if (!process.env.OPENAI_API_KEY) {
+    if (!process.env.OPENAI_API_KEY || !openai) {
       // Fallback to rule-based responses
+      console.log('Using rule-based responses (OpenAI not available)');
+      console.log('Context:', context); // Log context for debugging
       const response = getRuleBasedResponse(message);
       return res.status(200).json({
         success: true,
@@ -155,7 +176,7 @@ function getRuleBasedResponse(message: string): string {
 // @desc    Get chat conversation suggestions
 // @route   GET /api/chat/suggestions
 // @access  Public
-export const getSuggestions = async (req: Request, res: Response) => {
+export const getSuggestions = async (_req: Request, res: Response) => {
   try {
     const suggestions = [
       '¿Qué cursos ofrecen?',

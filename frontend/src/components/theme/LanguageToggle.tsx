@@ -17,7 +17,7 @@ export function LanguageToggle() {
     >
       <Globe className="h-4 w-4" />
       <span className="text-sm font-semibold uppercase">
-        {language === 'es' ? 'EN' : 'ES'}
+        {language === 'es' ? 'ES' : 'EN'}
       </span>
     </Button>
   );

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CreditCard, Smartphone, Building, Globe } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n';
 
 interface PaymentMethod {
   id: string;
@@ -14,51 +15,52 @@ interface PaymentMethod {
   processingTime: string;
 }
 
-const paymentMethods: PaymentMethod[] = [
-  {
-    id: 'stripe',
-    name: 'Tarjeta de Crédito/Débito',
-    icon: CreditCard,
-    regions: ['global'],
-    description: 'Visa, Mastercard, American Express',
-    processingTime: 'Instantáneo',
-  },
-  {
-    id: 'paypal',
-    name: 'PayPal',
-    icon: Globe,
-    regions: ['global'],
-    description: 'Pago seguro con tu cuenta PayPal',
-    processingTime: 'Instantáneo',
-  },
-  {
-    id: 'mercadopago',
-    name: 'Mercado Pago',
-    icon: Smartphone,
-    regions: ['LATAM'],
-    description: 'Disponible en América Latina',
-    processingTime: 'Instantáneo',
-  },
-  {
-    id: 'pix',
-    name: 'PIX',
-    icon: Smartphone,
-    regions: ['BR'],
-    description: 'Transferencia instantánea (Brasil)',
-    processingTime: 'Instantáneo',
-  },
-  {
-    id: 'sepa',
-    name: 'Transferencia SEPA',
-    icon: Building,
-    regions: ['EU'],
-    description: 'Transferencia bancaria europea',
-    processingTime: '1-3 días hábiles',
-  },
-];
-
 export function PaymentMethods({ userCountry = 'ES' }: { userCountry?: string }) {
+  const { t } = useLanguage();
   const [selectedMethod, setSelectedMethod] = useState<string>('stripe');
+
+  const paymentMethods: PaymentMethod[] = [
+    {
+      id: 'stripe',
+      name: t('payments.card'),
+      icon: CreditCard,
+      regions: ['global'],
+      description: t('payments.cardDesc'),
+      processingTime: t('payments.instant'),
+    },
+    {
+      id: 'paypal',
+      name: t('payments.paypal'),
+      icon: Globe,
+      regions: ['global'],
+      description: t('payments.paypalDesc'),
+      processingTime: t('payments.instant'),
+    },
+    {
+      id: 'mercadopago',
+      name: t('payments.mercadopago'),
+      icon: Smartphone,
+      regions: ['LATAM'],
+      description: t('payments.mercadopagoDesc'),
+      processingTime: t('payments.instant'),
+    },
+    {
+      id: 'pix',
+      name: t('payments.pix'),
+      icon: Smartphone,
+      regions: ['BR'],
+      description: t('payments.pixDesc'),
+      processingTime: t('payments.instant'),
+    },
+    {
+      id: 'sepa',
+      name: t('payments.sepa'),
+      icon: Building,
+      regions: ['EU'],
+      description: t('payments.sepaDesc'),
+      processingTime: `1-3 ${t('payments.businessDays')}`,
+    },
+  ];
 
   // Filter payment methods based on user region
   const availableMethods = paymentMethods.filter((method) => {
@@ -71,7 +73,7 @@ export function PaymentMethods({ userCountry = 'ES' }: { userCountry?: string })
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold mb-4">Método de Pago</h3>
+      <h3 className="text-lg font-semibold mb-4">{t('checkout.paymentMethod')}</h3>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {availableMethods.map((method) => (
