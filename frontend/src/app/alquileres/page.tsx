@@ -1,138 +1,99 @@
-import { Metadata } from 'next';
+'use client';
+
 import { Navbar } from '@/components/layouts/Navbar';
 import { Footer } from '@/components/layouts/Footer';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { useLanguage } from '@/lib/i18n';
 import { Download, Shield, TrendingUp, Zap, CheckCircle, Target, BarChart3 } from 'lucide-react';
 import Link from 'next/link';
 import { RiskDisclaimer, USRestrictionBanner } from '@/components/legal/RiskDisclaimer';
 
-export const metadata: Metadata = {
-  title: 'Alquiler de Sistemas de Trading | Robots Verificados',
-  description: 'Alquila sistemas de trading algorítmico profesionales. Robots para cuentas de fondeo, Darwinex y brokers. Desde €50/mes. Track record verificado, soporte incluido.',
-  keywords: [
-    'alquiler robots trading',
-    'alquilar EA',
-    'sistemas trading fondeo',
-    'robots trading darwinex',
-    'alquiler estrategias',
-    'EA alquiler mensual',
-    'trading bot suscripción'
-  ],
-  openGraph: {
-    title: 'Alquiler de Sistemas de Trading | Desde €50/mes',
-    description: 'Robots de trading profesionales en modalidad alquiler. Para fondeo y Darwinex. Track record real, actualizaciones incluidas.',
-    url: 'https://pqtrader.com/alquileres',
-    type: 'website',
-    images: ['/og-alquileres.jpg'],
-  },
-};
-
-const rentalPlans = [
-  {
-    id: '1',
-    name: 'Sistema Individual',
-    type: 'Para Cuentas de Fondeo',
-    description: 'Robot de trading optimizado para pasar challenges de fondeo',
-    features: [
-      '1 robot optimizado',
-      'Configuración para fondeo',
-      'Actualizaciones incluidas',
-      'Soporte técnico 24/7',
-      'Documentación completa',
-      'Backtesting detallado'
-    ],
-    pricing: [
-      { period: 'Mensual', price: 50, unit: '€/mes' },
-      { period: 'Trimestral', price: 130, unit: '€/3 meses', savings: '€20 de ahorro' },
-      { period: 'Semestral', price: 250, unit: '€/6 meses', savings: '€50 de ahorro', popular: true }
-    ],
-    stats: {
-      winRate: '65%',
-      sharpe: '2.1',
-      maxDD: '-8%'
-    }
-  },
-  {
-    id: '2',
-    name: 'Portafolio Fondeo',
-    type: 'Pack de 3 Sistemas',
-    description: 'Portafolio diversificado para maximizar probabilidades en fondeo',
-    features: [
-      '3 robots complementarios',
-      'Diversificación por estrategia',
-      'Optimización para fondeo',
-      'Actualizaciones automáticas',
-      'Soporte prioritario',
-      'Análisis semanal de rendimiento',
-      'Alertas de trading'
-    ],
-    pricing: [
-      { period: 'Mensual', price: 120, unit: '€/mes' },
-      { period: 'Trimestral', price: 320, unit: '€/3 meses', savings: '€40 de ahorro' },
-      { period: 'Semestral', price: 600, unit: '€/6 meses', savings: '€120 de ahorro', popular: true }
-    ],
-    stats: {
-      winRate: '68%',
-      sharpe: '2.4',
-      maxDD: '-6%'
-    },
-    badge: 'Más Popular'
-  },
-  {
-    id: '3',
-    name: 'Portafolio Darwinex',
-    type: 'Trading en Vivo',
-    description: 'Portafolio optimizado para trading real en Darwinex',
-    features: [
-      '5+ robots profesionales',
-      'Optimizado para Darwinex',
-      'Gestión de riesgo avanzada',
-      'Rebalanceo automático',
-      'Soporte VIP 24/7',
-      'Análisis diario',
-      'Acceso a señales premium',
-      'Grupo exclusivo de traders'
-    ],
-    pricing: [
-      { period: 'Mensual', price: 200, unit: '€/mes' },
-      { period: 'Trimestral', price: 550, unit: '€/3 meses', savings: '€50 de ahorro' },
-      { period: 'Semestral', price: 1000, unit: '€/6 meses', savings: '€200 de ahorro', popular: true }
-    ],
-    stats: {
-      winRate: '72%',
-      sharpe: '2.8',
-      maxDD: '-5%'
-    },
-    badge: 'Premium'
-  }
-];
-
-const benefits = [
-  {
-    icon: Shield,
-    title: 'Track Record Verificado',
-    description: 'Todos los sistemas tienen resultados reales verificables en Darwinex'
-  },
-  {
-    icon: Zap,
-    title: 'Actualizaciones Continuas',
-    description: 'Los robots se optimizan constantemente según condiciones de mercado'
-  },
-  {
-    icon: Target,
-    title: 'Optimizado para Fondeo',
-    description: 'Configuraciones específicas para pasar challenges de fondeo'
-  },
-  {
-    icon: BarChart3,
-    title: 'Soporte Profesional',
-    description: 'Equipo técnico disponible 24/7 para resolver cualquier duda'
-  }
-];
-
 export default function AlquileresPage() {
+  const { t, language, translations } = useLanguage();
+  
+  const benefits = [
+    {
+      icon: Shield,
+      title: t('alquileresPage.benefits.benefit1.title'),
+      description: t('alquileresPage.benefits.benefit1.description'),
+    },
+    {
+      icon: Zap,
+      title: t('alquileresPage.benefits.benefit2.title'),
+      description: t('alquileresPage.benefits.benefit2.description'),
+    },
+    {
+      icon: Target,
+      title: t('alquileresPage.benefits.benefit3.title'),
+      description: t('alquileresPage.benefits.benefit3.description'),
+    },
+    {
+      icon: BarChart3,
+      title: t('alquileresPage.benefits.benefit4.title'),
+      description: t('alquileresPage.benefits.benefit4.description'),
+    },
+  ];
+  
+  const rentalPlans = [
+    {
+      id: '1',
+      name: t('alquileresPage.plans.individual.name'),
+      type: language === 'es' ? 'Para Cuentas de Fondeo' : 'For Funded Accounts',
+      description: t('alquileresPage.plans.individual.description'),
+      features: translations.alquileresPage.plans.individual.features,
+      pricing: [
+        { period: language === 'es' ? 'Mensual' : 'Monthly', price: 50, unit: language === 'es' ? '€/mes' : '€/month' },
+        { period: language === 'es' ? 'Trimestral' : 'Quarterly', price: 130, unit: language === 'es' ? '€/3 meses' : '€/3 months', savings: t('alquileresPage.plans.individual.cta') },
+        { period: language === 'es' ? 'Semestral' : 'Semiannual', price: 250, unit: language === 'es' ? '€/6 meses' : '€/6 months', savings: t('alquileresPage.plans.individual.cta'), popular: true }
+      ],
+      stats: {
+        winRate: '65%',
+        sharpe: '2.1',
+        maxDD: '-8%'
+      },
+      cta: t('alquileresPage.plans.individual.cta')
+    },
+    {
+      id: '2',
+      name: t('alquileresPage.plans.portfolioFondeo.name'),
+      type: language === 'es' ? 'Pack de 3 Sistemas' : 'Pack of 3 Systems',
+      description: t('alquileresPage.plans.portfolioFondeo.description'),
+      features: translations.alquileresPage.plans.portfolioFondeo.features,
+      pricing: [
+        { period: language === 'es' ? 'Mensual' : 'Monthly', price: 120, unit: language === 'es' ? '€/mes' : '€/month' },
+        { period: language === 'es' ? 'Trimestral' : 'Quarterly', price: 320, unit: language === 'es' ? '€/3 meses' : '€/3 months', savings: t('alquileresPage.plans.portfolioFondeo.savings') },
+        { period: language === 'es' ? 'Semestral' : 'Semiannual', price: 600, unit: language === 'es' ? '€/6 meses' : '€/6 months', savings: t('alquileresPage.plans.portfolioFondeo.savings'), popular: true }
+      ],
+      stats: {
+        winRate: '68%',
+        sharpe: '2.4',
+        maxDD: '-6%'
+      },
+      badge: t('alquileresPage.plans.portfolioFondeo.popular'),
+      cta: t('alquileresPage.plans.portfolioFondeo.cta')
+    },
+    {
+      id: '3',
+      name: t('alquileresPage.plans.portfolioDarwinex.name'),
+      type: language === 'es' ? 'Trading en Vivo' : 'Live Trading',
+      description: t('alquileresPage.plans.portfolioDarwinex.description'),
+      features: translations.alquileresPage.plans.portfolioDarwinex.features,
+      pricing: [
+        { period: language === 'es' ? 'Mensual' : 'Monthly', price: 200, unit: language === 'es' ? '€/mes' : '€/month' },
+        { period: language === 'es' ? 'Trimestral' : 'Quarterly', price: 550, unit: language === 'es' ? '€/3 meses' : '€/3 months', savings: t('alquileresPage.plans.portfolioDarwinex.savings') },
+        { period: language === 'es' ? 'Semestral' : 'Semiannual', price: 1050, unit: language === 'es' ? '€/6 meses' : '€/6 months', savings: t('alquileresPage.plans.portfolioDarwinex.savings'), popular: true }
+      ],
+      stats: {
+        winRate: '70%',
+        sharpe: '2.6',
+        maxDD: '-5%'
+      },
+      cta: t('alquileresPage.plans.portfolioDarwinex.cta')
+    }
+  ];
+
   return (
     <main className="min-h-screen bg-background">
       <Navbar />
@@ -148,21 +109,21 @@ export default function AlquileresPage() {
           <div className="text-center">
             <Badge className="mb-6 bg-profit/10 text-profit border-profit/20">
               <Download className="h-3 w-3 mr-1" />
-              Sistemas Profesionales en Alquiler
+              {t('alquileresPage.hero.badge')}
             </Badge>
           
             <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              Alquiler de <span className="text-profit">Sistemas de Trading</span>
+              {t('alquileresPage.hero.title')} <span className="text-profit">{t('alquileresPage.hero.titleHighlight')}</span>
             </h1>
           
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto mb-8">
-              Accede a robots de trading profesionales sin comprarlos. Ideal para cuentas de fondeo y trading real en Darwinex.
+              {t('alquileresPage.hero.subtitle')}
             </p>
 
             <div className="mt-6">
               <Link href="#estadisticas">
                 <Button variant="outline" size="sm">
-                  Ver Estadísticas
+                  {t('alquileresPage.hero.cta')}
                 </Button>
               </Link>
             </div>
@@ -182,10 +143,10 @@ export default function AlquileresPage() {
         <div className="container mx-auto max-w-7xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Planes de Alquiler
+              {t('alquileresPage.plans.title')}
             </h2>
             <p className="text-lg text-muted-foreground">
-              Elige el plan que mejor se adapte a tus necesidades
+              {t('alquileresPage.plans.subtitle')}
             </p>
           </div>
 
@@ -252,7 +213,7 @@ export default function AlquileresPage() {
                             <span className="text-sm font-medium">{option.period}</span>
                             {option.popular && (
                               <Badge variant="outline" className="text-xs border-profit/40 text-profit">
-                                Mejor valor
+                                {t('alquileresPage.pricing.bestValue')}
                               </Badge>
                             )}
                           </div>
@@ -271,7 +232,7 @@ export default function AlquileresPage() {
 
                 <CardFooter className="pt-0">
                   <p className="text-xs text-muted-foreground text-center w-full">
-                    Selecciona un periodo arriba para continuar
+                    {t('alquileresPage.pricing.selectPeriod')}
                   </p>
                 </CardFooter>
               </Card>
@@ -285,7 +246,7 @@ export default function AlquileresPage() {
         <div className="container mx-auto max-w-7xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              ¿Por qué alquilar en lugar de comprar?
+              {t('alquileresPage.whyRent.title')}
             </h2>
           </div>
 
@@ -312,10 +273,10 @@ export default function AlquileresPage() {
         <div className="container mx-auto max-w-7xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Estadísticas de Rendimiento
+              {t('alquileresPage.stats.title')}
             </h2>
             <p className="text-muted-foreground">
-              Resultados verificados de nuestros sistemas de trading
+              {t('alquileresPage.stats.subtitle')}
             </p>
           </div>
 
@@ -323,22 +284,22 @@ export default function AlquileresPage() {
             <div className="bg-surface/50 border border-border/40 rounded-lg p-6">
               <TrendingUp className="h-8 w-8 text-profit mx-auto mb-2" />
               <p className="text-2xl font-bold text-foreground">€50</p>
-              <p className="text-sm text-muted-foreground">Desde /mes</p>
+              <p className="text-sm text-muted-foreground">{t('alquileresPage.stats.fromMonth')}</p>
             </div>
             <div className="bg-surface/50 border border-border/40 rounded-lg p-6">
               <Shield className="h-8 w-8 text-profit mx-auto mb-2" />
               <p className="text-2xl font-bold text-foreground">100%</p>
-              <p className="text-sm text-muted-foreground">Verificado</p>
+              <p className="text-sm text-muted-foreground">{t('alquileresPage.stats.verified')}</p>
             </div>
             <div className="bg-surface/50 border border-border/40 rounded-lg p-6">
               <Zap className="h-8 w-8 text-profit mx-auto mb-2" />
               <p className="text-2xl font-bold text-foreground">24/7</p>
-              <p className="text-sm text-muted-foreground">Soporte</p>
+              <p className="text-sm text-muted-foreground">{t('alquileresPage.stats.support')}</p>
             </div>
             <div className="bg-surface/50 border border-border/40 rounded-lg p-6">
               <Target className="h-8 w-8 text-profit mx-auto mb-2" />
               <p className="text-2xl font-bold text-foreground">70%</p>
-              <p className="text-sm text-muted-foreground">Win Rate</p>
+              <p className="text-sm text-muted-foreground">{t('alquileresPage.stats.winRate')}</p>
             </div>
           </div>
         </div>
@@ -350,14 +311,14 @@ export default function AlquileresPage() {
           <Card className="border-profit/20 bg-gradient-to-br from-profit/5 to-background">
             <CardContent className="pt-8 pb-8">
               <h2 className="text-3xl font-bold mb-4">
-                ¿Necesitas ayuda para elegir?
+                {t('alquileresPage.cta.title')}
               </h2>
               <p className="text-lg text-muted-foreground mb-6">
-                Agenda una consulta gratuita con nuestros expertos
+                {t('alquileresPage.cta.subtitle')}
               </p>
               <Link href="/mentorias">
                 <Button variant="profit" size="lg">
-                  Hablar con un Experto
+                  {t('alquileresPage.cta.button')}
                 </Button>
               </Link>
             </CardContent>

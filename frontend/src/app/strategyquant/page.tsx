@@ -5,6 +5,7 @@ import { Footer } from '@/components/layouts/Footer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { useLanguage } from '@/lib/i18n';
 import { 
   Zap, 
   Brain, 
@@ -23,87 +24,6 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
-
-const features = [
-  {
-    icon: Brain,
-    title: 'Inteligencia Artificial',
-    description: 'Genera estrategias automáticamente usando algoritmos genéticos y machine learning avanzado'
-  },
-  {
-    icon: Code,
-    title: 'Sin Programar',
-    description: 'Interfaz visual intuitiva. Crea sistemas completos sin escribir una sola línea de código'
-  },
-  {
-    icon: Shield,
-    title: 'Tests de Robustez',
-    description: 'Validación automática con Monte Carlo, Walk-Forward y análisis de sobreajuste'
-  },
-  {
-    icon: Workflow,
-    title: 'Multi-Mercado',
-    description: 'Desarrolla estrategias para Forex, Futuros, Acciones y Criptomonedas simultáneamente'
-  },
-  {
-    icon: Target,
-    title: 'Optimización Avanzada',
-    description: 'Encuentra la mejor combinación de parámetros usando algoritmos evolutivos'
-  },
-  {
-    icon: BarChart3,
-    title: 'Portfolios Diversificados',
-    description: 'Crea carteras de estrategias no correlacionadas para reducir el riesgo'
-  }
-];
-
-const process = [
-  {
-    number: '01',
-    title: 'Generación Automática',
-    description: 'StrategyQuant explora millones de combinaciones de indicadores, condiciones de entrada/salida y gestión de capital. El motor de IA genera estrategias rentables basándose en tus criterios de selección.',
-    icon: Sparkles
-  },
-  {
-    number: '02',
-    title: 'Validación Rigurosa',
-    description: 'Cada estrategia pasa por múltiples pruebas de robustez: simulaciones Monte Carlo, optimización Walk-Forward, análisis Out-of-Sample y permutaciones de parámetros para garantizar resultados reales.',
-    icon: Shield
-  },
-  {
-    number: '03',
-    title: 'Exportación Universal',
-    description: 'Código fuente completo generado automáticamente para MetaTrader 4/5, NinjaTrader, TradingView y más. Listo para operar en demo o real sin modificaciones.',
-    icon: Code
-  },
-  {
-    number: '04',
-    title: 'Gestión de Portafolio',
-    description: 'Combina múltiples estrategias descorrelacionadas en un portafolio profesional. Rebalanceo automático y análisis de correlación incluidos para máxima estabilidad.',
-    icon: LineChart
-  }
-];
-
-const benefits = [
-  {
-    icon: Cpu,
-    title: '1000x Más Rápido',
-    stat: 'Millones de estrategias/día',
-    description: 'Lo que tardarías años en probar manualmente, StrategyQuant lo hace en horas'
-  },
-  {
-    icon: Brain,
-    title: 'Edge Cuantificado',
-    stat: '95% Confianza Estadística',
-    description: 'Solo estrategias con ventaja matemática verificable pasan los filtros'
-  },
-  {
-    icon: TrendingUp,
-    title: 'Resultados Reales',
-    stat: 'Track Record Verificado',
-    description: 'Estrategias testeadas con datos históricos reales de 20+ años'
-  }
-];
 
 const faqs = [
   {
@@ -134,6 +54,68 @@ const faqs = [
 
 export default function StrategyQuantPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const { t, language } = useLanguage();
+
+  const features = [
+    {
+      icon: Brain,
+      title: t('strategyquantPage.features.ai.title'),
+      description: t('strategyquantPage.features.ai.description')
+    },
+    {
+      icon: Code,
+      title: t('strategyquantPage.features.noCoding.title'),
+      description: t('strategyquantPage.features.noCoding.description')
+    },
+    {
+      icon: Shield,
+      title: t('strategyquantPage.features.robustness.title'),
+      description: t('strategyquantPage.features.robustness.description')
+    },
+    {
+      icon: Workflow,
+      title: t('strategyquantPage.features.multiMarket.title'),
+      description: t('strategyquantPage.features.multiMarket.description')
+    },
+    {
+      icon: Target,
+      title: t('strategyquantPage.features.optimization.title'),
+      description: t('strategyquantPage.features.optimization.description')
+    },
+    {
+      icon: BarChart3,
+      title: t('strategyquantPage.features.portfolios.title'),
+      description: t('strategyquantPage.features.portfolios.description')
+    }
+  ];
+
+  const process = [
+    {
+      number: '01',
+      title: t('strategyquantPage.process.step1.title'),
+      description: t('strategyquantPage.process.step1.description'),
+      icon: Sparkles
+    },
+    {
+      number: '02',
+      title: t('strategyquantPage.process.step2.title'),
+      description: t('strategyquantPage.process.step2.description'),
+      icon: Shield
+    },
+    {
+      number: '03',
+      title: t('strategyquantPage.process.step3.title'),
+      description: t('strategyquantPage.process.step3.description'),
+      icon: Code
+    },
+    {
+      number: '04',
+      title: t('strategyquantPage.process.step4.title'),
+      description: t('strategyquantPage.process.step4.description'),
+      icon: LineChart
+    }
+  ];
+
   return (
     <main className="min-h-screen bg-background">
       <Navbar />
@@ -146,28 +128,27 @@ export default function StrategyQuantPage() {
             <div className="lg:col-span-2">
               <Badge className="mb-6 bg-profit/10 text-profit border-profit/20 text-sm">
                 <Zap className="h-3 w-3 mr-1" />
-                Inteligencia Artificial para Trading
+                {t('strategyquantPage.hero.badge')}
               </Badge>
               
               <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6">
-                Domina <span className="text-profit">StrategyQuant X</span>
+                {t('strategyquantPage.hero.title')} <span className="text-profit">{t('strategyquantPage.hero.titleHighlight')}</span>
               </h1>
               
               <p className="text-xl text-muted-foreground mb-8">
-                La plataforma líder en creación automatizada de sistemas de trading. 
-                Aprende a generar robots rentables sin programar, usando machine learning y validación estadística rigurosa.
+                {t('strategyquantPage.hero.subtitle')}
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 mb-12">
                 <Link href="/mentorias#club-strategyquant">
                   <Button variant="profit" size="lg" className="text-lg">
-                    Unirme al Club
+                    {t('strategyquantPage.hero.cta')}
                     <TrendingUp className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
                 <Link href="#caracteristicas">
                   <Button variant="outline" size="lg" className="text-lg">
-                    Ver Características
+                    {t('strategyquantPage.features.title')}
                   </Button>
                 </Link>
               </div>
@@ -175,22 +156,75 @@ export default function StrategyQuantPage() {
 
             {/* Stats Sidebar */}
             <div className="lg:col-span-1 space-y-4">
-              {benefits.map((benefit, index) => (
-                <Card key={index} className="border-profit/20 hover:border-profit/40 transition-all">
-                  <CardContent className="p-6">
-                    <div className="flex items-start gap-4">
-                      <div className="bg-profit/10 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
-                        <benefit.icon className="h-6 w-6 text-profit" />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="font-bold text-sm mb-1">{benefit.title}</h3>
-                        <p className="text-lg font-bold text-profit mb-1">{benefit.stat}</p>
-                        <p className="text-xs text-muted-foreground">{benefit.description}</p>
-                      </div>
+              <Card className="border-profit/20 hover:border-profit/40 transition-all">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-profit/10 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Cpu className="h-6 w-6 text-profit" />
                     </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    <div className="flex-1">
+                      <h3 className="font-bold text-sm mb-1">
+                        1000x {language === 'es' ? 'Más Rápido' : 'Faster'}
+                      </h3>
+                      <p className="text-lg font-bold text-profit mb-1">
+                        {language === 'es' ? 'Millones de estrategias/día' : 'Millions of strategies/day'}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {language === 'es' 
+                          ? 'Lo que tardarías años en probar manualmente, StrategyQuant lo hace en horas'
+                          : 'What would take you years to test manually, StrategyQuant does in hours'
+                        }
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="border-profit/20 hover:border-profit/40 transition-all">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-profit/10 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
+                      <Brain className="h-6 w-6 text-profit" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-bold text-sm mb-1">
+                        {language === 'es' ? 'Edge Cuantificado' : 'Quantified Edge'}
+                      </h3>
+                      <p className="text-lg font-bold text-profit mb-1">
+                        95% {language === 'es' ? 'Confianza Estadística' : 'Statistical Confidence'}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {language === 'es'
+                          ? 'Solo estrategias con ventaja matemática verificable pasan los filtros'
+                          : 'Only strategies with verifiable mathematical edge pass the filters'
+                        }
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card className="border-profit/20 hover:border-profit/40 transition-all">
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-profit/10 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
+                      <TrendingUp className="h-6 w-6 text-profit" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-bold text-sm mb-1">
+                        {language === 'es' ? 'Resultados Reales' : 'Real Results'}
+                      </h3>
+                      <p className="text-lg font-bold text-profit mb-1">
+                        {language === 'es' ? 'Track Record Verificado' : 'Verified Track Record'}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {language === 'es'
+                          ? 'Estrategias testeadas con datos históricos reales de 20+ años'
+                          : 'Strategies tested with real historical data from 20+ years'
+                        }
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </div>
@@ -201,10 +235,10 @@ export default function StrategyQuantPage() {
         <div className="container mx-auto max-w-7xl">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">
-              ¿Qué hace único a StrategyQuant X?
+              {t('strategyquantPage.benefits.title')}
             </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Herramientas profesionales de quants y hedge funds, ahora accesibles para traders individuales
+              {t('strategyquantPage.benefits.subtitle')}
             </p>
           </div>
 
@@ -236,13 +270,16 @@ export default function StrategyQuantPage() {
           <div className="text-center mb-16">
             <Badge className="mb-4 bg-profit/10 text-profit border-profit/20">
               <PlayCircle className="h-3 w-3 mr-1" />
-              Videos Oficiales
+              {language === 'es' ? 'Videos Oficiales' : 'Official Videos'}
             </Badge>
             <h2 className="text-4xl font-bold mb-4">
-              Aprende con Tutoriales Oficiales
+              {language === 'es' ? 'Aprende con Tutoriales Oficiales' : 'Learn with Official Tutorials'}
             </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Demostraciones y guías directamente del equipo de StrategyQuant
+              {language === 'es' 
+                ? 'Demostraciones y guías directamente del equipo de StrategyQuant'
+                : 'Demonstrations and guides directly from the StrategyQuant team'
+              }
             </p>
           </div>
 
@@ -268,10 +305,15 @@ export default function StrategyQuantPage() {
                   </div>
                 </a>
                 <div className="p-6">
-                  <Badge className="mb-3 bg-profit/10 text-profit text-xs">Video Oficial</Badge>
+                  <Badge className="mb-3 bg-profit/10 text-profit text-xs">
+                    {language === 'es' ? 'Video Oficial' : 'Official Video'}
+                  </Badge>
                   <h3 className="font-bold text-lg mb-2">Introducing StrategyQuant X</h3>
                   <p className="text-sm text-muted-foreground">
-                    Presentación oficial de la plataforma y sus características principales
+                    {language === 'es'
+                      ? 'Presentación oficial de la plataforma y sus características principales'
+                      : 'Official presentation of the platform and its main features'
+                    }
                   </p>
                 </div>
               </CardContent>
@@ -298,10 +340,15 @@ export default function StrategyQuantPage() {
                   </div>
                 </a>
                 <div className="p-6">
-                  <Badge className="mb-3 bg-profit/10 text-profit text-xs">Video Oficial</Badge>
+                  <Badge className="mb-3 bg-profit/10 text-profit text-xs">
+                    {language === 'es' ? 'Video Oficial' : 'Official Video'}
+                  </Badge>
                   <h3 className="font-bold text-lg mb-2">QuantDataManager</h3>
                   <p className="text-sm text-muted-foreground">
-                    Cómo gestionar y preparar datos históricos para tus estrategias
+                    {language === 'es'
+                      ? 'Cómo gestionar y preparar datos históricos para tus estrategias'
+                      : 'How to manage and prepare historical data for your strategies'
+                    }
                   </p>
                 </div>
               </CardContent>
@@ -320,23 +367,32 @@ export default function StrategyQuantPage() {
                     <div className="absolute inset-0 bg-[url('https://i.ytimg.com/vi/sa5RN9fjSVw/maxresdefault.jpg')] bg-cover bg-center opacity-30"></div>
                     <div className="absolute inset-0 bg-gradient-to-br from-profit/60 to-profit/30 flex flex-col items-center justify-center">
                       <Badge className="mb-4 bg-profit text-background text-sm px-4 py-1">
-                        Curso Completo Gratis
+                        {language === 'es' ? 'Curso Completo Gratis' : 'Free Complete Course'}
                       </Badge>
                       <PlayCircle className="h-24 w-24 text-white mb-3 group-hover:scale-110 transition-transform drop-shadow-lg" />
-                      <p className="text-sm font-semibold text-white drop-shadow-md">Ver playlist completa</p>
-                      <p className="text-xs text-white/80 mt-1">20+ videos educativos</p>
+                      <p className="text-sm font-semibold text-white drop-shadow-md">
+                        {language === 'es' ? 'Ver playlist completa' : 'View complete playlist'}
+                      </p>
+                      <p className="text-xs text-white/80 mt-1">
+                        {language === 'es' ? '20+ videos educativos' : '20+ educational videos'}
+                      </p>
                     </div>
                   </div>
                 </a>
                 <div className="p-6">
-                  <Badge className="mb-3 bg-profit text-background text-xs">Playlist Oficial</Badge>
+                  <Badge className="mb-3 bg-profit text-background text-xs">
+                    {language === 'es' ? 'Playlist Oficial' : 'Official Playlist'}
+                  </Badge>
                   <h3 className="font-bold text-lg mb-2">Free Course - Playlist Completa</h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Serie completa de videos educativos oficiales de StrategyQuant
+                    {language === 'es'
+                      ? 'Serie completa de videos educativos oficiales de StrategyQuant'
+                      : 'Complete series of official StrategyQuant educational videos'
+                    }
                   </p>
                   <a href="https://www.youtube.com/playlist?list=PLpSheYEBcnu2f56PO4yOENEnJ0AZBKWgo" target="_blank" rel="noopener noreferrer">
                     <Button variant="profit" size="sm" className="w-full">
-                      Ver en YouTube
+                      {language === 'es' ? 'Ver en YouTube' : 'Watch on YouTube'}
                     </Button>
                   </a>
                 </div>
@@ -349,24 +405,29 @@ export default function StrategyQuantPage() {
                 <div className="relative pb-[56.25%] bg-gradient-to-br from-profit/30 to-profit/10 overflow-hidden">
                   <div className="absolute inset-0 flex flex-col items-center justify-center">
                     <Badge className="mb-4 bg-profit text-background">
-                      Contenido Exclusivo en Español
+                      {language === 'es' ? 'Contenido Exclusivo en Español' : 'Exclusive Content in Spanish'}
                     </Badge>
                     <Brain className="h-20 w-20 text-profit mb-4 group-hover:scale-110 transition-transform" />
                     <p className="text-sm font-semibold">Club PQ Trader</p>
                   </div>
                 </div>
                 <div className="p-6">
-                  <Badge className="mb-3 bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 text-xs">Solo Miembros</Badge>
+                  <Badge className="mb-3 bg-yellow-500/10 text-yellow-500 border border-yellow-500/20 text-xs">
+                    {language === 'es' ? 'Solo Miembros' : 'Members Only'}
+                  </Badge>
                   <h3 className="font-bold text-lg mb-2 flex items-center gap-2">
                     <CheckCircle className="h-5 w-5 text-profit" />
-                    Tutoriales en Español
+                    {language === 'es' ? 'Tutoriales en Español' : 'Spanish Tutorials'}
                   </h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Webinars semanales en vivo, estrategias reales y soporte personalizado
+                    {language === 'es'
+                      ? 'Webinars semanales en vivo, estrategias reales y soporte personalizado'
+                      : 'Weekly live webinars, real strategies and personalized support'
+                    }
                   </p>
                   <Link href="/mentorias#club-strategyquant">
                     <Button variant="profit" size="sm" className="w-full">
-                      Unirme al Club - $150/mes
+                      {language === 'es' ? 'Unirme al Club - $150/mes' : 'Join the Club - $150/month'}
                     </Button>
                   </Link>
                 </div>
@@ -376,11 +437,14 @@ export default function StrategyQuantPage() {
 
           <div className="text-center mt-12">
             <p className="text-muted-foreground mb-6">
-              ¿Prefieres aprender en español con acompañamiento personalizado?
+              {language === 'es'
+                ? '¿Prefieres aprender en español con acompañamiento personalizado?'
+                : 'Prefer to learn in Spanish with personalized guidance?'
+              }
             </p>
             <Link href="/mentorias#club-strategyquant">
               <Button variant="profit" size="lg">
-                Ver Club StrategyQuant
+                {language === 'es' ? 'Ver Club StrategyQuant' : 'View StrategyQuant Club'}
                 <TrendingUp className="ml-2 h-5 w-5" />
               </Button>
             </Link>
@@ -393,10 +457,10 @@ export default function StrategyQuantPage() {
         <div className="container mx-auto max-w-7xl">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">
-              Metodología de 4 Pasos
+              {t('strategyquantPage.process.title')}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Del concepto al trading en vivo con validación científica
+              {t('common.fromConceptToLive') || 'Del concepto al trading en vivo con validación científica'}
             </p>
           </div>
 

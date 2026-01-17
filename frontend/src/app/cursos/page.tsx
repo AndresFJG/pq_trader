@@ -13,44 +13,79 @@ import { useLanguage } from '@/lib/i18n';
 const courses = [
   {
     id: '1',
-    title: 'Trading Algorítmico con Python',
-    description: 'Aprende a crear estrategias automatizadas desde cero usando Python y bibliotecas especializadas.',
+    titleKey: 'courses.list.basicAlgo.title',
+    descriptionKey: 'courses.list.basicAlgo.description',
     instructor: 'Carlos Martínez',
-    price: 299,
-    duration: 40,
+    price: 290,
+    duration: 6,
     students: 245,
     rating: 4.8,
-    level: 'Principiante',
-    topics: ['Python', 'Backtesting', 'MetaTrader', 'Estrategias Básicas'],
+    levelKey: 'courses.level.beginner',
+    topics: ['MT5', 'Backtesting', 'Estadística', 'Automatización'],
+    modules: [
+      'courses.list.basicAlgo.module1',
+      'courses.list.basicAlgo.module2',
+      'courses.list.basicAlgo.module3',
+      'courses.list.basicAlgo.module4',
+      'courses.list.basicAlgo.module5',
+      'courses.list.basicAlgo.module6',
+    ],
   },
   {
     id: '2',
-    title: 'StrategyQuant Masterclass',
-    description: 'Domina StrategyQuant para diseñar, testear y optimizar robots de trading sin programar.',
+    titleKey: 'courses.list.strategyquant.title',
+    descriptionKey: 'courses.list.strategyquant.description',
     instructor: 'Ana García',
-    price: 249,
-    duration: 30,
+    price: 300,
+    duration: 5,
     students: 189,
     rating: 4.9,
-    level: 'Intermedio',
-    topics: ['StrategyQuant', 'Backtesting', 'Optimización', 'Walk-Forward'],
+    levelKey: 'courses.level.intermediate',
+    topics: ['StrategyQuant', 'Optimización', 'Robustez', 'Exportación'],
+    modules: [
+      'courses.list.strategyquant.module1',
+      'courses.list.strategyquant.module2',
+      'courses.list.strategyquant.module3',
+      'courses.list.strategyquant.module4',
+      'courses.list.strategyquant.module5',
+    ],
   },
   {
     id: '3',
-    title: 'Gestión de Riesgo Avanzada',
-    description: 'Aprende técnicas profesionales de gestión de riesgo y money management.',
+    titleKey: 'courses.list.fxdreema.title',
+    descriptionKey: 'courses.list.fxdreema.description',
     instructor: 'Roberto Silva',
-    price: 199,
-    duration: 25,
+    price: 600,
+    duration: 10,
     students: 156,
     rating: 4.7,
-    level: 'Avanzado',
-    topics: ['Risk Management', 'Kelly Criterion', 'VaR', 'Sharpe Ratio'],
+    levelKey: 'courses.level.beginner',
+    topics: ['fxDreema', 'Indicadores', 'Grid Trading', 'EAs'],
+    modules: [
+      'courses.list.fxdreema.module1',
+      'courses.list.fxdreema.module2',
+      'courses.list.fxdreema.module3',
+    ],
+  },
+  {
+    id: '4',
+    titleKey: 'courses.list.advancedData.title',
+    descriptionKey: 'courses.list.advancedData.description',
+    instructor: 'Carlos Martínez',
+    price: 600,
+    duration: 10,
+    students: 98,
+    rating: 4.9,
+    levelKey: 'courses.level.advanced',
+    topics: ['WFA', 'Montecarlo', 'QuantAnalyzer', 'VPS'],
+    modules: [
+      'courses.list.advancedData.module1',
+      'courses.list.advancedData.module2',
+      'courses.list.advancedData.module3',
+      'courses.list.advancedData.module4',
+    ],
   },
 ];
-
-const levels = ['Todos', 'Principiante', 'Intermedio', 'Avanzado'];
-const topics = ['Todos', 'Python', 'StrategyQuant', 'Risk Management'];
 
 type Course = typeof courses[0];
 
@@ -58,16 +93,22 @@ export default function CursosPage() {
   const { t } = useLanguage();
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedLevel, setSelectedLevel] = useState('Todos');
-  const [selectedTopic, setSelectedTopic] = useState('Todos');
+  const [selectedLevel, setSelectedLevel] = useState(t('coursesPage.filters.all'));
+  const [selectedTopic, setSelectedTopic] = useState(t('coursesPage.filters.all'));
 
-  const levels = [t('coursesPage.filters.all'), 'Principiante', 'Intermedio', 'Avanzado'];
+  const levels = [
+    t('coursesPage.filters.all'),
+    t('courses.level.beginner'),
+    t('courses.level.intermediate'),
+    t('courses.level.advanced')
+  ];
   const topics = [t('coursesPage.filters.all'), 'Python', 'StrategyQuant', 'Risk Management'];
 
   // Filtrar cursos
   const filteredCourses = courses.filter((course) => {
-    const levelMatch = selectedLevel === 'Todos' || course.level === selectedLevel;
-    const topicMatch = selectedTopic === 'Todos' || course.topics.includes(selectedTopic);
+    const allText = t('coursesPage.filters.all');
+    const levelMatch = selectedLevel === allText || t(course.levelKey) === selectedLevel;
+    const topicMatch = selectedTopic === allText || course.topics.includes(selectedTopic);
     return levelMatch && topicMatch;
   });
 
@@ -104,19 +145,19 @@ export default function CursosPage() {
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto mt-12">
             <div className="bg-surface/50 border border-border/40 rounded-lg p-6">
-              <Users className="h-8 w-8 text-profit mx-auto mb-2" />
-              <p className="text-3xl font-bold text-foreground">5,324</p>
-              <p className="text-sm text-muted-foreground">Estudiantes Activos</p>
+              <BookOpen className="h-8 w-8 text-profit mx-auto mb-2" />
+              <p className="text-3xl font-bold text-foreground">4</p>
+              <p className="text-sm text-muted-foreground">{t('coursesPage.stats.activeCourses')}</p>
             </div>
             <div className="bg-surface/50 border border-border/40 rounded-lg p-6">
-              <Award className="h-8 w-8 text-profit mx-auto mb-2" />
-              <p className="text-3xl font-bold text-foreground">98%</p>
-              <p className="text-sm text-muted-foreground">Satisfacción</p>
+              <Users className="h-8 w-8 text-profit mx-auto mb-2" />
+              <p className="text-3xl font-bold text-foreground">5,324</p>
+              <p className="text-sm text-muted-foreground">{t('coursesPage.stats.totalStudents')}</p>
             </div>
             <div className="bg-surface/50 border border-border/40 rounded-lg p-6">
               <TrendingUp className="h-8 w-8 text-profit mx-auto mb-2" />
-              <p className="text-3xl font-bold text-foreground">40+</p>
-              <p className="text-sm text-muted-foreground">Horas de Contenido</p>
+              <p className="text-3xl font-bold text-foreground">31</p>
+              <p className="text-sm text-muted-foreground">{t('coursesPage.stats.contentHours')}</p>
             </div>
           </div>
         </div>
@@ -165,16 +206,16 @@ export default function CursosPage() {
           {filteredCourses.length === 0 ? (
             <div className="text-center py-20">
               <BookOpen className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-              <p className="text-xl text-muted-foreground">No se encontraron cursos con los filtros seleccionados.</p>
+              <p className="text-xl text-muted-foreground">{t('coursesPage.noResults')}</p>
               <Button 
                 onClick={() => {
-                  setSelectedLevel('Todos');
-                  setSelectedTopic('Todos');
+                  setSelectedLevel(t('coursesPage.filters.all'));
+                  setSelectedTopic(t('coursesPage.filters.all'));
                 }}
                 variant="outline"
                 className="mt-4"
               >
-                Limpiar Filtros
+                {t('coursesPage.clearFilters')}
               </Button>
             </div>
           ) : (
@@ -187,17 +228,17 @@ export default function CursosPage() {
                   </div>
                   <div className="absolute top-4 right-4">
                     <span className="bg-profit/90 text-background text-xs font-bold px-3 py-1 rounded-full">
-                      {course.level}
+                      {t(course.levelKey)}
                     </span>
                   </div>
                 </div>
 
                 <CardHeader>
                   <CardTitle className="group-hover:text-profit transition-colors">
-                    {course.title}
+                    {t(course.titleKey)}
                   </CardTitle>
                   <p className="text-sm text-muted-foreground line-clamp-2">
-                    {course.description}
+                    {t(course.descriptionKey)}
                   </p>
                 </CardHeader>
 
@@ -205,11 +246,11 @@ export default function CursosPage() {
                   <div className="flex items-center justify-between text-sm mb-4">
                     <div className="flex items-center gap-1 text-muted-foreground">
                       <Clock className="h-4 w-4" />
-                      <span>{course.duration}h</span>
+                      <span>{course.duration} {t('coursesPage.card.hours')}</span>
                     </div>
                     <div className="flex items-center gap-1 text-muted-foreground">
                       <Users className="h-4 w-4" />
-                      <span>{course.students.toLocaleString()}</span>
+                      <span>{course.students.toLocaleString()} {t('coursesPage.card.students')}</span>
                     </div>
                     <div className="flex items-center gap-1 text-profit">
                       <Star className="h-4 w-4 fill-profit" />
@@ -231,7 +272,7 @@ export default function CursosPage() {
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="text-2xl font-bold text-profit">${course.price}</p>
-                      <p className="text-xs text-muted-foreground">pago único</p>
+                      <p className="text-xs text-muted-foreground">{t('coursesPage.card.oneTimePayment')}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -242,7 +283,7 @@ export default function CursosPage() {
                     className="w-full group-hover:shadow-lg group-hover:shadow-profit/20 transition-all"
                     onClick={() => handleOpenCourseDetails(course)}
                   >
-                    Ver Curso
+                    {t('coursesPage.card.viewCourse')}
                   </Button>
                 </CardFooter>
               </Card>
@@ -256,17 +297,17 @@ export default function CursosPage() {
       <section className="py-16 px-4 bg-gradient-to-r from-profit/5 to-background">
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            ¿No encuentras lo que buscas?
+            {t('coursesPage.cta.title')}
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
-            Reserva una mentoría personalizada 1-a-1 con nuestros expertos
+            {t('coursesPage.cta.subtitle')}
           </p>
           <Button 
             variant="profit" 
             size="lg"
             onClick={() => window.location.href = '/mentorias'}
           >
-            Ver Mentorías
+            {t('coursesPage.cta.viewMentorships')}
           </Button>
         </div>
       </section>

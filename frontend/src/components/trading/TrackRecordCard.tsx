@@ -1,9 +1,11 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { TrendingUp, TrendingDown, Activity } from 'lucide-react';
+import { TrendingUp, TrendingDown, Activity, ExternalLink } from 'lucide-react';
 import { cn, formatPercentage } from '@/lib/utils';
+import { useLanguage } from '@/lib/i18n';
 
 interface MonthlyReturn {
   month: string;
@@ -17,6 +19,7 @@ interface TrackRecordData {
   maxDrawdown: number;
   sharpeRatio: number;
   winRate: number;
+  darwinexUrl?: string;
   monthlyReturns: {
     year: number;
     months: MonthlyReturn[];
@@ -32,9 +35,13 @@ interface TrackRecordCardProps {
   className?: string;
 }
 
-const monthNames = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
-
 export function TrackRecordCard({ data, className }: TrackRecordCardProps) {
+  const { language } = useLanguage();
+  
+  const monthNames = language === 'es' 
+    ? ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC']
+    : ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+  
   const isPositive = data.totalReturn > 0;
 
   const getReturnColor = (value: number) => {
@@ -56,7 +63,7 @@ export function TrackRecordCard({ data, className }: TrackRecordCardProps) {
           <div>
             <CardTitle className="text-2xl font-bold">{data.name}</CardTitle>
             <p className="text-sm text-muted-foreground mt-1">
-              Periodo: {data.period}
+              {language === 'es' ? 'Periodo:' : 'Period:'} {data.period}
             </p>
           </div>
           <div className="text-right">
@@ -73,7 +80,9 @@ export function TrackRecordCard({ data, className }: TrackRecordCardProps) {
                 {formatPercentage(data.totalReturn)}
               </span>
             </div>
-            <p className="text-xs text-muted-foreground mt-1">Retorno Total</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              {language === 'es' ? 'Retorno Total' : 'Total Return'}
+            </p>
           </div>
         </div>
       </CardHeader>
@@ -109,7 +118,7 @@ export function TrackRecordCard({ data, className }: TrackRecordCardProps) {
                   borderRadius: '8px',
                 }}
                 labelStyle={{ color: '#fff' }}
-                formatter={(value: any) => [`${value.toFixed(2)}%`, 'Equity']}
+                formatter={(value: any) => [`${value.toFixed(2)}%`, language === 'es' ? 'Equity' : 'Equity']}
               />
               <Line
                 type="monotone"
@@ -144,18 +153,24 @@ export function TrackRecordCard({ data, className }: TrackRecordCardProps) {
 
         {/* Tabla de Retornos Mensuales */}
         <div className="space-y-2">
-          <h4 className="text-sm font-semibold text-foreground mb-3">Retorno Mensual</h4>
+          <h4 className="text-sm font-semibold text-foreground mb-3">
+            {language === 'es' ? 'Retorno Mensual' : 'Monthly Return'}
+          </h4>
           <div className="overflow-x-auto">
             <table className="w-full text-xs">
               <thead>
                 <tr className="border-b border-border/30">
-                  <th className="text-left py-2 px-2 text-muted-foreground font-medium">Año</th>
+                  <th className="text-left py-2 px-2 text-muted-foreground font-medium">
+                    {language === 'es' ? 'Año' : 'Year'}
+                  </th>
                   {monthNames.map((month) => (
                     <th key={month} className="text-center py-2 px-1 text-muted-foreground font-medium">
                       {month}
                     </th>
                   ))}
-                  <th className="text-right py-2 px-2 text-muted-foreground font-medium">Total</th>
+                  <th className="text-right py-2 px-2 text-muted-foreground font-medium">
+                    {language === 'es' ? 'Total' : 'Total'}
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -202,14 +217,35 @@ export function TrackRecordCard({ data, className }: TrackRecordCardProps) {
         <div className="flex items-center justify-between pt-2 border-t border-border/30">
           <div className="flex items-center gap-2">
             <div className="h-2 w-2 rounded-full bg-profit animate-pulse" />
-            <span className="text-xs text-muted-foreground">Sistema Activo</span>
+            <span className="text-xs text-muted-foreground">
+              {language === 'es' ? 'Sistema Activo' : 'Active System'}
+            </span>
           </div>
-          <a 
-            href="#" 
-            className="text-xs text-profit hover:text-profit/80 transition-colors font-medium"
-          >
-            Ver Detalles →
-          </a>
+          {data.darwinexUrl ? (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-xs text-profit hover:text-profit/80 hover:bg-profit/10 h-auto py-1 px-2"
+              asChild
+            >
+              <a 
+                href={data.darwinexUrl} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-1"
+              >
+                {language === 'es' ? 'Ver en Darwinex' : 'View on Darwinex'}
+                <ExternalLink className="h-3 w-3" />
+              </a>
+            </Button>
+          ) : (
+            <a 
+              href="#" 
+              className="text-xs text-profit hover:text-profit/80 transition-colors font-medium"
+            >
+              {language === 'es' ? 'Ver Detalles →' : 'View Details →'}
+            </a>
+          )}
         </div>
       </CardContent>
     </Card>

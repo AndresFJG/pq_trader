@@ -37,7 +37,7 @@ const portfolios = [
 ];
 
 export function Darwinex() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   return (
     <section className="py-20 px-4 bg-secondary/20">
@@ -102,7 +102,9 @@ export function Darwinex() {
                 {/* Live Indicator */}
                 <div className="flex items-center justify-center gap-2 pt-2">
                   <Activity className="h-4 w-4 text-profit animate-pulse" />
-                  <span className="text-xs text-muted-foreground">Actualización en tiempo real</span>
+                  <span className="text-xs text-muted-foreground">
+                    {language === 'es' ? 'Actualización en tiempo real' : 'Real-time update'}
+                  </span>
                 </div>
               </CardContent>
             </Card>
@@ -111,11 +113,11 @@ export function Darwinex() {
 
         <div className="text-center mt-12">
           <p className="text-sm text-muted-foreground">
-            Datos verificados por{' '}
+            {language === 'es' ? 'Datos verificados por' : 'Data verified by'}{' '}
             <a href="https://www.darwinex.com" target="_blank" rel="noopener noreferrer" className="text-profit hover:underline">
               Darwinex
             </a>
-            . Última actualización: {new Date().toLocaleDateString('es-ES')}
+            . {language === 'es' ? 'Última actualización:' : 'Last update:'} {new Date().toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US')}
           </p>
         </div>
       </div>

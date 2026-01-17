@@ -13,21 +13,21 @@ export function Courses() {
   const courses = [
     {
       id: '1',
-      titleKey: 'courses.list.python.title',
-      descriptionKey: 'courses.list.python.description',
-      price: 299,
-      duration: 40,
+      titleKey: 'courses.list.basicAlgo.title',
+      descriptionKey: 'courses.list.basicAlgo.description',
+      price: 290,
+      duration: 6,
       levelKey: 'courses.level.beginner',
       enrolled: 245,
       rating: 4.8,
-      thumbnail: '/courses/python.jpg',
+      thumbnail: '/courses/basic-algo.jpg',
     },
     {
       id: '2',
       titleKey: 'courses.list.strategyquant.title',
       descriptionKey: 'courses.list.strategyquant.description',
-      price: 249,
-      duration: 30,
+      price: 300,
+      duration: 5,
       levelKey: 'courses.level.intermediate',
       enrolled: 189,
       rating: 4.9,
@@ -35,26 +35,37 @@ export function Courses() {
     },
     {
       id: '3',
-      titleKey: 'courses.list.risk.title',
-      descriptionKey: 'courses.list.risk.description',
-      price: 199,
-      duration: 25,
-      levelKey: 'courses.level.advanced',
+      titleKey: 'courses.list.fxdreema.title',
+      descriptionKey: 'courses.list.fxdreema.description',
+      price: 600,
+      duration: 10,
+      levelKey: 'courses.level.beginner',
       enrolled: 156,
       rating: 4.7,
-      thumbnail: '/courses/risk.jpg',
+      thumbnail: '/courses/fxdreema.jpg',
     },
-  ];
+  {
+    id: '4',
+    titleKey: 'courses.list.advancedData.title',
+    descriptionKey: 'courses.list.advancedData.description',
+    price: 600,
+    duration: 10,
+    levelKey: 'courses.level.advanced',
+    enrolled: 98,
+    rating: 4.9,
+    thumbnail: '/courses/advanced-data.jpg',
+  },
+];
   
   return (
     <section className="py-20 px-4">
-      <div className="container mx-auto">
+      <div className="container mx-auto max-w-7xl">
         <div className="flex items-center justify-between mb-12">
           <div>
-            <h2 className="text-4xl font-bold mb-4">{t('courses.title')}</h2>
-            <p className="text-xl text-muted-foreground">
-              {t('courses.subtitle')}
-            </p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-2">
+              {t('courses.title')} <span className="text-profit">{t('courses.titleHighlight')}</span>
+            </h2>
+            <p className="text-muted-foreground">{t('courses.subtitle')}</p>
           </div>
           <Link href="/cursos">
             <Button variant="outline" className="group">

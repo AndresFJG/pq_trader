@@ -1,4 +1,5 @@
-import { Metadata } from 'next';
+'use client';
+
 import { Navbar } from '@/components/layouts/Navbar';
 import { Footer } from '@/components/layouts/Footer';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,28 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, Clock, Video, MessageCircle, Users, Award, CheckCircle, Target, Rocket, BookOpen, Linkedin, Mail, Code2, BarChart3 } from 'lucide-react';
 import Link from 'next/link';
-
-export const metadata: Metadata = {
-  title: 'Mentorías 1-a-1 de Trading Algorítmico con Expertos',
-  description: 'Mentorías personalizadas de trading algorítmico con traders profesionales. Sesiones 1-a-1, mentorías grupales, seguimiento personalizado y acceso a estrategias exclusivas. +12 años de experiencia.',
-  keywords: [
-    'mentorías trading',
-    'mentor trading algorítmico',
-    'asesoría trading personalizada',
-    'coach trading profesional',
-    'mentoría 1 a 1 trading',
-    'consultoría trading',
-    'formación trading personalizada',
-    'mentor trading cuantitativo'
-  ],
-  openGraph: {
-    title: 'Mentorías 1-a-1 con Traders Profesionales | PQ Trader',
-    description: 'Mentorías personalizadas con expertos. +12 años de experiencia, estrategias verificadas, seguimiento continuo.',
-    url: 'https://pqtrader.com/mentorias',
-    type: 'website',
-    images: ['/og-mentorias.jpg'],
-  },
-};
+import { useLanguage } from '@/lib/i18n';
 
 // Profesionales/Mentores
 const mentors = [
@@ -309,6 +289,93 @@ const groupSessions = [
 ];
 
 export default function MentoriasPage() {
+  const { t, language } = useLanguage();
+  
+  const packagesTranslated = [
+    {
+      name: language === 'es' ? 'Sesión Individual' : 'Individual Session',
+      duration: language === 'es' ? '1 hora' : '1 hour',
+      description: language === 'es' 
+        ? 'Perfecta para resolver dudas específicas o revisar una estrategia'
+        : 'Perfect for resolving specific questions or reviewing a strategy',
+      price: 70,
+      features: language === 'es' 
+        ? [
+            'Videollamada 1-a-1',
+            'Revisión de código',
+            'Feedback personalizado',
+            'Grabación de sesión',
+            'Material de apoyo'
+          ]
+        : [
+            '1-on-1 Video call',
+            'Code review',
+            'Personalized feedback',
+            'Session recording',
+            'Support materials'
+          ],
+    },
+    {
+      name: language === 'es' ? 'Pack 5 Sesiones' : 'Pack 5 Sessions',
+      duration: language === 'es' ? '5 horas' : '5 hours',
+      description: language === 'es'
+        ? 'Ideal para desarrollo de proyecto completo o aprendizaje profundo'
+        : 'Ideal for complete project development or deep learning',
+      price: 320,
+      savings: 30,
+      features: language === 'es'
+        ? [
+            'Todo del plan individual',
+            'Seguimiento entre sesiones',
+            'Revisión de progreso semanal',
+            'Soporte por email ilimitado',
+            'Material exclusivo',
+            'Plan personalizado',
+            'Acceso a repositorios privados'
+          ]
+        : [
+            'Everything from individual plan',
+            'Follow-up between sessions',
+            'Weekly progress review',
+            'Unlimited email support',
+            'Exclusive materials',
+            'Personalized plan',
+            'Access to private repositories'
+          ],
+      popular: true,
+    },
+    {
+      name: language === 'es' ? 'Club de Trading StrategyQuant' : 'StrategyQuant Trading Club',
+      duration: language === 'es' ? 'Mensual' : 'Monthly',
+      description: language === 'es'
+        ? 'Comunidad exclusiva en Skool - Laboratorio de Trading con StrategyQuant'
+        : 'Exclusive Skool community - Trading Lab with StrategyQuant',
+      price: 150,
+      recurring: true,
+      features: language === 'es'
+        ? [
+            'Acceso a comunidad Skool',
+            'Mentorías grupales semanales',
+            'Estrategias exclusivas',
+            'Análisis de mercado diario',
+            'Soporte prioritario',
+            'Recursos descargables',
+            'Networking con traders',
+            'Mínimo 10 miembros activos'
+          ]
+        : [
+            'Access to Skool community',
+            'Weekly group mentorships',
+            'Exclusive strategies',
+            'Daily market analysis',
+            'Priority support',
+            'Downloadable resources',
+            'Networking with traders',
+            'Minimum 10 active members'
+          ],
+    },
+  ];
+  
   return (
     <main className="min-h-screen bg-background">
       <Navbar />
@@ -318,24 +385,24 @@ export default function MentoriasPage() {
         <div className="container mx-auto max-w-7xl text-center">
           <div className="inline-flex items-center gap-2 bg-profit/10 border border-profit/20 rounded-full px-4 py-2 mb-6">
             <Users className="h-4 w-4 text-profit" />
-            <span className="text-sm text-profit font-medium">Aprendizaje Personalizado</span>
+            <span className="text-sm text-profit font-medium">{t('mentorshipsPage.badge')}</span>
           </div>
           
           <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6">
-            Programas de <span className="text-profit">Mentoría</span>
+            {t('mentorshipsPage.title')} <span className="text-profit">{t('mentorshipsPage.titleHighlight')}</span>
           </h1>
           
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
-            Aprende directamente de traders profesionales. Elige entre sesiones individuales personalizadas o talleres grupales.
+            {t('mentorshipsPage.subtitle')}
           </p>
 
           {/* Benefits */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-5xl mx-auto mt-12">
             {[
-              { icon: Video, label: 'Videollamadas HD' },
-              { icon: MessageCircle, label: 'Soporte Continuo' },
-              { icon: Calendar, label: 'Horarios Flexibles' },
-              { icon: Award, label: 'Certificado' },
+              { icon: Video, label: t('mentorshipsPage.benefits.videoHD') },
+              { icon: MessageCircle, label: t('mentorshipsPage.benefits.continuousSupport') },
+              { icon: Calendar, label: t('mentorshipsPage.benefits.flexibleSchedule') },
+              { icon: Award, label: t('mentorshipsPage.benefits.certificate') },
             ].map((benefit, idx) => (
               <div key={idx} className="bg-surface/50 border border-border/40 rounded-lg p-4">
                 <benefit.icon className="h-8 w-8 text-profit mx-auto mb-2" />
@@ -351,39 +418,49 @@ export default function MentoriasPage() {
         <div className="container mx-auto max-w-7xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Mentorías <span className="text-profit">Individuales 1-a-1</span>
+              {t('mentorshipsPage.individual.title')} <span className="text-profit">{t('mentorshipsPage.individual.titleHighlight')}</span>
             </h2>
             <p className="text-lg text-muted-foreground mb-6">
-              Atención personalizada con tu mentor. Elige el plan que mejor se adapte a tus objetivos
+              {t('mentorshipsPage.individual.subtitle')}
             </p>
             
-            {/* Platform Badges */}
-            <div className="flex flex-wrap items-center justify-center gap-6 mb-8">
-              <div className="flex items-center gap-2 bg-surface/50 border border-border/40 rounded-lg px-4 py-2">
-                <Code2 className="h-5 w-5 text-profit" />
-                <span className="text-sm font-semibold text-foreground">Python & C++</span>
-              </div>
-              <div className="flex items-center gap-2 bg-surface/50 border border-border/40 rounded-lg px-4 py-2">
-                <BarChart3 className="h-5 w-5 text-profit" />
-                <span className="text-sm font-semibold text-foreground">TradingView</span>
-              </div>
-              <div className="flex items-center gap-2 bg-surface/50 border border-border/40 rounded-lg px-4 py-2">
-                <Award className="h-5 w-5 text-profit" />
-                <span className="text-sm font-semibold text-foreground">MetaTrader 4/5</span>
-              </div>
-              <div className="flex items-center gap-2 bg-surface/50 border border-border/40 rounded-lg px-4 py-2">
-                <Target className="h-5 w-5 text-profit" />
-                <span className="text-sm font-semibold text-foreground">QuantConnect</span>
-              </div>
-              <div className="flex items-center gap-2 bg-surface/50 border border-border/40 rounded-lg px-4 py-2">
-                <Rocket className="h-5 w-5 text-profit" />
-                <span className="text-sm font-semibold text-foreground">Interactive Brokers</span>
+            {/* Mentorship Topics */}
+            <div className="mb-8">
+              <p className="text-sm text-muted-foreground mb-4 font-medium">{t('mentorshipsPage.individual.topicsTitle')}</p>
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <Badge variant="outline" className="bg-profit/10 border-profit/30 text-profit px-4 py-2 text-sm font-semibold">
+                  {t('mentorshipsPage.individual.topics.trading')}
+                </Badge>
+                <Badge variant="outline" className="bg-profit/10 border-profit/30 text-profit px-4 py-2 text-sm font-semibold">
+                  {t('mentorshipsPage.individual.topics.fxdreema')}
+                </Badge>
+                <Badge variant="outline" className="bg-profit/10 border-profit/30 text-profit px-4 py-2 text-sm font-semibold">
+                  {t('mentorshipsPage.individual.topics.sqx')}
+                </Badge>
+                <Badge variant="outline" className="bg-profit/10 border-profit/30 text-profit px-4 py-2 text-sm font-semibold">
+                  {t('mentorshipsPage.individual.topics.mt45')}
+                </Badge>
+                <Badge variant="outline" className="bg-profit/10 border-profit/30 text-profit px-4 py-2 text-sm font-semibold">
+                  {t('mentorshipsPage.individual.topics.python')}
+                </Badge>
+                <Badge variant="outline" className="bg-profit/10 border-profit/30 text-profit px-4 py-2 text-sm font-semibold">
+                  {t('mentorshipsPage.individual.topics.pinescript')}
+                </Badge>
+                <Badge variant="outline" className="bg-profit/10 border-profit/30 text-profit px-4 py-2 text-sm font-semibold">
+                  {t('mentorshipsPage.individual.topics.mql5')}
+                </Badge>
+                <Badge variant="outline" className="bg-profit/10 border-profit/30 text-profit px-4 py-2 text-sm font-semibold">
+                  {t('mentorshipsPage.individual.topics.performance')}
+                </Badge>
+                <Badge variant="outline" className="bg-profit/10 border-profit/30 text-profit px-4 py-2 text-sm font-semibold">
+                  {t('mentorshipsPage.individual.topics.darwinex')}
+                </Badge>
               </div>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {packages.map((pkg) => (
+            {packagesTranslated.map((pkg) => (
               <Card 
                 key={pkg.name}
                 className={`relative ${pkg.popular ? 'border-profit shadow-lg shadow-profit/20' : ''}`}
@@ -391,7 +468,7 @@ export default function MentoriasPage() {
                 {pkg.popular && (
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2">
                     <span className="bg-profit text-background text-xs font-bold px-4 py-1 rounded-full">
-                      MÁS POPULAR
+                      {language === 'es' ? 'MÁS POPULAR' : 'MOST POPULAR'}
                     </span>
                   </div>
                 )}
@@ -441,7 +518,10 @@ export default function MentoriasPage() {
                     asChild
                   >
                     <Link href={`/checkout?type=mentoria&name=${encodeURIComponent(pkg.name)}&price=${pkg.price}&description=${encodeURIComponent(pkg.description)}&id=${pkg.name.toLowerCase().replace(/\s+/g, '-')}&recurring=${pkg.recurring ? 'true' : 'false'}`}>
-                      {pkg.recurring ? 'Suscribirme Ahora' : 'Comenzar Ahora'}
+                      {pkg.recurring 
+                        ? (language === 'es' ? 'Suscribirme Ahora' : 'Subscribe Now')
+                        : (language === 'es' ? 'Comenzar Ahora' : 'Start Now')
+                      }
                     </Link>
                   </Button>
                 </CardFooter>

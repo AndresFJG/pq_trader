@@ -290,23 +290,23 @@ export function AIChat() {
     <>
       {/* Chat Toggle Button - Mejorado */}
       {!isOpen && (
-        <div className="fixed bottom-20 left-6 z-40">
+        <div className="fixed bottom-16 sm:bottom-20 left-4 z-40">
           <div className="relative">
             {/* Ping animation */}
-            <span className="absolute -top-1 -right-1 flex h-3 w-3">
+            <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5 sm:h-3 sm:w-3">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-profit opacity-75"></span>
               <span className="relative inline-flex rounded-full h-3 w-3 bg-profit"></span>
             </span>
             
             <button
               onClick={() => setIsOpen(true)}
-              className="group relative w-16 h-16 bg-gradient-to-br from-profit to-profit/80 hover:from-profit/90 hover:to-profit rounded-full shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-110 flex items-center justify-center"
+              className="group relative w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-profit to-profit/80 hover:from-profit/90 hover:to-profit rounded-full shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-110 flex items-center justify-center"
               aria-label={language === 'es' ? 'Abrir chat' : 'Open chat'}
             >
-              <Bot className="h-7 w-7 text-background transition-transform group-hover:scale-110" />
+              <Bot className="h-5 w-5 sm:h-6 sm:w-6 text-background transition-transform group-hover:scale-110" />
               
               {/* Tooltip */}
-              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-background border-2 border-profit/40 rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap text-sm font-medium pointer-events-none">
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 sm:px-2.5 py-1 sm:py-1.5 bg-background border-2 border-profit/40 rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap text-[10px] sm:text-xs font-medium pointer-events-none">
                 {language === 'es' ? '¿Necesitas ayuda? ¡Pregúntame!' : 'Need help? Ask me!'}
                 <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-1 border-4 border-transparent border-t-profit/40"></div>
               </div>
@@ -317,64 +317,64 @@ export function AIChat() {
 
       {/* Chat Window - Mejorado */}
       {isOpen && (
-        <div className="fixed bottom-6 left-6 z-50 w-[420px] max-w-[calc(100vw-3rem)]">
+        <div className="fixed bottom-4 left-4 right-4 sm:right-auto z-50 w-full sm:w-[340px] max-w-[calc(100vw-2rem)]">
           <Card className="border-2 border-profit/40 shadow-2xl bg-background/95 backdrop-blur-xl overflow-hidden">
-            {/* Header mejorado */}
-            <div className="p-4 bg-gradient-to-r from-profit/10 via-profit/5 to-transparent border-b border-profit/20">
+            {/* Header mejorado con botón de cierre */}
+            <div className="p-2 sm:p-2.5 bg-gradient-to-r from-profit/10 via-profit/5 to-transparent border-b border-profit/20">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
                   <div className="relative">
-                    <div className="w-11 h-11 rounded-full bg-gradient-to-br from-profit to-profit/80 flex items-center justify-center ring-2 ring-profit/20">
-                      <Sparkles className="h-6 w-6 text-background" />
+                    <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-profit to-profit/80 flex items-center justify-center ring-2 ring-profit/20">
+                      <Sparkles className="h-4 w-4 sm:h-4.5 sm:w-4.5 text-background" />
                     </div>
-                    <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-green-500 rounded-full border-2 border-background"></div>
+                    <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-green-500 rounded-full border-2 border-background"></div>
                   </div>
                   <div>
-                    <h3 className="font-bold text-base">
+                    <h3 className="font-bold text-xs sm:text-sm">
                       {language === 'es' ? 'Asistente PQ Trader' : 'PQ Trader Assistant'}
                     </h3>
-                    <p className="text-xs text-muted-foreground flex items-center gap-1">
+                    <p className="text-[9px] sm:text-[10px] text-muted-foreground flex items-center gap-1">
                       <span className="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
                       {language === 'es' ? 'Online • Respuesta instantánea' : 'Online • Instant response'}
                     </p>
                   </div>
                 </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
+                {/* Botón de cierre prominente */}
+                <button
                   onClick={() => setIsOpen(false)}
-                  className="hover:bg-red-500/10 hover:text-red-500"
+                  className="group flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full hover:bg-loss/10 transition-all duration-200 hover:rotate-90 flex-shrink-0"
+                  aria-label="Cerrar chat"
                 >
-                  <X className="h-4 w-4" />
-                </Button>
+                  <X className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-muted-foreground group-hover:text-loss transition-colors" />
+                </button>
               </div>
             </div>
 
-            {/* Messages */}
-            <div className="h-[500px] overflow-y-auto p-4 space-y-4 bg-surface/20">
+            {/* Messages con mejor espaciado */}
+            <div className="h-[300px] sm:h-[350px] overflow-y-auto p-2.5 sm:p-3 space-y-2.5 sm:space-y-3 bg-surface/20">
               {messages.map((message, index) => (
                 <div key={index}>
                   <div
-                    className={`flex gap-3 ${
+                    className={`flex gap-2 sm:gap-3 ${
                       message.role === 'user' ? 'justify-end' : 'justify-start'
                     }`}
                   >
                     {message.role === 'assistant' && (
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-profit/20 to-profit/10 flex items-center justify-center flex-shrink-0 border border-profit/20">
-                        <Bot className="h-4 w-4 text-profit" />
+                      <div className="w-6 h-6 sm:w-6.5 sm:h-6.5 rounded-full bg-gradient-to-br from-profit/20 to-profit/10 flex items-center justify-center flex-shrink-0 border border-profit/20">
+                        <Bot className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-profit" />
                       </div>
                     )}
                     <div
-                      className={`rounded-2xl p-3.5 max-w-[85%] ${
+                      className={`rounded-xl p-2 sm:p-2.5 max-w-[90%] sm:max-w-[85%] ${
                         message.role === 'user'
                           ? 'bg-gradient-to-br from-profit to-profit/90 text-background shadow-md'
                           : 'bg-background/80 border border-border shadow-sm'
                       }`}
                     >
-                      <p className="text-sm whitespace-pre-line leading-relaxed">
+                      <p className="text-[10px] sm:text-[11px] whitespace-pre-line leading-relaxed">
                         {message.content}
                       </p>
-                      <p className={`text-xs mt-2 ${message.role === 'user' ? 'text-background/70' : 'text-muted-foreground'}`}>
+                      <p className={`text-[8px] sm:text-[9px] mt-1 sm:mt-1.5 ${message.role === 'user' ? 'text-background/70' : 'text-muted-foreground'}`}>
                         {message.timestamp.toLocaleTimeString(language === 'es' ? 'es-ES' : 'en-US', {
                           hour: '2-digit',
                           minute: '2-digit',
@@ -382,16 +382,16 @@ export function AIChat() {
                       </p>
                     </div>
                     {message.role === 'user' && (
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-md">
-                        <User className="h-4 w-4 text-white" />
+                      <div className="w-6 h-6 sm:w-6.5 sm:h-6.5 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-md">
+                        <User className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-white" />
                       </div>
                     )}
                   </div>
                   
                   {/* Suggestions después de mensaje del asistente */}
                   {message.role === 'assistant' && message.suggestions && showSuggestions && index === messages.length - 1 && (
-                    <div className="mt-3 ml-11 space-y-2">
-                      <p className="text-xs text-muted-foreground font-medium">
+                    <div className="mt-2 sm:mt-2.5 ml-8 sm:ml-9 space-y-1.5">
+                      <p className="text-[9px] sm:text-[10px] text-muted-foreground font-medium">
                         {language === 'es' ? '💡 Sugerencias:' : '💡 Suggestions:'}
                       </p>
                       <div className="flex flex-wrap gap-2">
@@ -399,7 +399,7 @@ export function AIChat() {
                           <button
                             key={i}
                             onClick={() => handleQuickQuestion(suggestion)}
-                            className="text-xs px-3 py-1.5 rounded-full bg-background border border-profit/30 hover:border-profit hover:bg-profit/5 transition-all hover:scale-105 shadow-sm"
+                            className="text-[10px] sm:text-[11px] px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full bg-background border border-profit/30 hover:border-profit hover:bg-profit/10 transition-all hover:scale-105 shadow-sm font-medium"
                           >
                             {suggestion}
                           </button>
@@ -411,11 +411,11 @@ export function AIChat() {
               ))}
               
               {isLoading && (
-                <div className="flex gap-3">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-profit/20 to-profit/10 flex items-center justify-center border border-profit/20">
-                    <Bot className="h-4 w-4 text-profit" />
+                <div className="flex gap-2 sm:gap-2.5">
+                  <div className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-gradient-to-br from-profit/20 to-profit/10 flex items-center justify-center border border-profit/20 flex-shrink-0">
+                    <Bot className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-profit" />
                   </div>
-                  <div className="bg-background/80 border border-border rounded-2xl p-4 shadow-sm">
+                  <div className="bg-white dark:bg-background/80 border border-border rounded-xl p-2.5 sm:p-3 shadow-sm">
                     <div className="flex gap-1.5">
                       <div className="w-2.5 h-2.5 bg-profit/60 rounded-full animate-bounce" />
                       <div className="w-2.5 h-2.5 bg-profit/60 rounded-full animate-bounce [animation-delay:0.2s]" />
@@ -428,30 +428,30 @@ export function AIChat() {
             </div>
 
             {/* Input mejorado */}
-            <div className="p-4 border-t border-border bg-background">
-              <div className="flex gap-2">
+            <div className="p-2 sm:p-2.5 border-t border-profit/20 bg-background">
+              <div className="flex gap-1.5 sm:gap-2">
                 <input
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
                   placeholder={language === 'es' ? 'Escribe tu pregunta...' : 'Type your question...'}
-                  className="flex-1 bg-surface/50 border-2 border-border focus:border-profit/40 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-profit/20 transition-all"
+                  className="flex-1 bg-surface/50 border-2 border-border focus:border-profit rounded-lg px-2 sm:px-2.5 py-1.5 sm:py-2 text-[10px] sm:text-[11px] focus:outline-none focus:ring-2 focus:ring-profit/20 transition-all placeholder:text-muted-foreground/60"
                   disabled={isLoading}
                 />
                 <Button
                   onClick={handleSend}
-                  size="sm"
-                  className="bg-gradient-to-r from-profit to-profit/90 hover:from-profit/90 hover:to-profit px-4 rounded-xl shadow-md hover:shadow-lg transition-all"
                   disabled={!input.trim() || isLoading}
+                  className="bg-gradient-to-r from-profit to-profit/80 hover:from-profit/90 hover:to-profit px-2 sm:px-2.5 py-1.5 sm:py-2 rounded-lg shadow-md hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <Send className="h-4 w-4" />
+                  <Send className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </Button>
               </div>
-              <p className="text-xs text-muted-foreground mt-2 text-center">
+              <p className="text-[8px] sm:text-[9px] text-muted-foreground mt-1.5 sm:mt-2 text-center flex items-center justify-center gap-2">
+                <Sparkles className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
                 {language === 'es' 
-                  ? '⚡ Respuestas instantáneas • Disponible 24/7' 
-                  : '⚡ Instant answers • Available 24/7'}
+                  ? 'Respuestas instantáneas • Disponible 24/7' 
+                  : 'Instant answers • Available 24/7'}
               </p>
             </div>
           </Card>
