@@ -114,12 +114,12 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/privacidad" className="text-muted-foreground hover:text-profit transition-colors inline-block">
+                <Link href="/politica-privacidad" className="text-muted-foreground hover:text-profit transition-colors inline-block">
                   {t('footer.privacy')}
                 </Link>
               </li>
               <li>
-                <Link href="/cookies" className="text-muted-foreground hover:text-profit transition-colors inline-block">
+                <Link href="/politica-cookies" className="text-muted-foreground hover:text-profit transition-colors inline-block">
                   {t('footer.cookies')}
                 </Link>
               </li>

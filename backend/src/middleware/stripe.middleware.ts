@@ -47,3 +47,6 @@ export const rawBodyMiddleware = (
  * );
  */
 export const stripeWebhookConfig = express.raw({ type: 'application/json' });
+
+// Export for routes
+export const stripeWebhookMiddleware = express.raw({ type: 'application/json' });

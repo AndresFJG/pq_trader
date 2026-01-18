@@ -90,7 +90,7 @@ export function CookieBanner() {
                     <p className="text-sm text-muted-foreground">
                       {t('cookies.description')}{' '}
                       {t('cookies.learnMore')}{' '}
-                      <Link href="/privacy-policy" className="text-profit hover:underline">
+                      <Link href="/politica-privacidad" className="text-profit hover:underline">
                         {t('cookies.privacyPolicy')}
                       </Link>.
                     </p>

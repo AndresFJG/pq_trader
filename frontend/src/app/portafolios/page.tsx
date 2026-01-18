@@ -56,7 +56,9 @@ const portfoliosData = [
         ],
       },
     ],
-    chartData: generateChartData(18.45, 23),
+    get chartData() {
+      return generateChartData(this.monthlyReturns);
+    },
   },
   {
     name: 'PSI',
@@ -118,7 +120,9 @@ const portfoliosData = [
         ],
       },
     ],
-    chartData: generateChartData(39.88, 36),
+    get chartData() {
+      return generateChartData(this.monthlyReturns);
+    },
   },
   {
     name: 'QM2',
@@ -180,7 +184,9 @@ const portfoliosData = [
         ],
       },
     ],
-    chartData: generateChartData(22.71, 26),
+    get chartData() {
+      return generateChartData(this.monthlyReturns);
+    },
   },
   {
     name: 'QXPA',
@@ -242,7 +248,9 @@ const portfoliosData = [
         ],
       },
     ],
-    chartData: generateChartData(106.51, 68),
+    get chartData() {
+      return generateChartData(this.monthlyReturns);
+    },
   },
   {
     name: 'PQCL',
@@ -253,46 +261,133 @@ const portfoliosData = [
     winRate: 70.5,
     monthlyReturns: [
       {
+        year: 2020,
+        months: [
+          { month: 'ENE', return: 2.45 },
+          { month: 'FEB', return: 1.87 },
+          { month: 'MAR', return: -3.21 },
+          { month: 'ABR', return: 3.54 },
+          { month: 'MAY', return: 2.19 },
+          { month: 'JUN', return: 1.76 },
+          { month: 'JUL', return: 2.98 },
+          { month: 'AGO', return: 1.45 },
+          { month: 'SEP', return: -1.87 },
+          { month: 'OCT', return: 2.67 },
+          { month: 'NOV', return: 3.12 },
+          { month: 'DIC', return: 4.23 },
+        ],
+      },
+      {
+        year: 2021,
+        months: [
+          { month: 'ENE', return: 2.34 },
+          { month: 'FEB', return: 1.98 },
+          { month: 'MAR', return: 3.45 },
+          { month: 'ABR', return: 1.67 },
+          { month: 'MAY', return: 2.89 },
+          { month: 'JUN', return: 1.23 },
+          { month: 'JUL', return: 3.76 },
+          { month: 'AGO', return: 2.45 },
+          { month: 'SEP', return: -2.34 },
+          { month: 'OCT', return: 3.21 },
+          { month: 'NOV', return: 2.87 },
+          { month: 'DIC', return: 5.67 },
+        ],
+      },
+      {
+        year: 2022,
+        months: [
+          { month: 'ENE', return: 1.89 },
+          { month: 'FEB', return: 2.45 },
+          { month: 'MAR', return: 3.12 },
+          { month: 'ABR', return: 1.54 },
+          { month: 'MAY', return: 2.76 },
+          { month: 'JUN', return: 1.98 },
+          { month: 'JUL', return: 2.34 },
+          { month: 'AGO', return: 1.67 },
+          { month: 'SEP', return: -1.45 },
+          { month: 'OCT', return: 3.89 },
+          { month: 'NOV', return: 2.12 },
+          { month: 'DIC', return: 6.34 },
+        ],
+      },
+      {
+        year: 2023,
+        months: [
+          { month: 'ENE', return: 2.67 },
+          { month: 'FEB', return: 3.21 },
+          { month: 'MAR', return: 2.89 },
+          { month: 'ABR', return: 1.76 },
+          { month: 'MAY', return: 2.45 },
+          { month: 'JUN', return: 1.34 },
+          { month: 'JUL', return: 3.54 },
+          { month: 'AGO', return: 2.12 },
+          { month: 'SEP', return: -2.67 },
+          { month: 'OCT', return: 4.23 },
+          { month: 'NOV', return: 3.45 },
+          { month: 'DIC', return: 7.89 },
+        ],
+      },
+      {
         year: 2024,
         months: [
-          { month: 'ENE', return: 0 },
-          { month: 'FEB', return: 0 },
-          { month: 'MAR', return: 0 },
-          { month: 'ABR', return: 0 },
-          { month: 'MAY', return: 0 },
-          { month: 'JUN', return: 0 },
-          { month: 'JUL', return: 0 },
-          { month: 'AGO', return: 0 },
-          { month: 'SEP', return: 0 },
-          { month: 'OCT', return: 0 },
-          { month: 'NOV', return: 0 },
-          { month: 'DIC', return: 0 },
+          { month: 'ENE', return: 1.98 },
+          { month: 'FEB', return: 2.76 },
+          { month: 'MAR', return: 3.34 },
+          { month: 'ABR', return: 1.45 },
+          { month: 'MAY', return: 2.89 },
+          { month: 'JUN', return: 1.67 },
+          { month: 'JUL', return: 2.54 },
+          { month: 'AGO', return: 3.21 },
+          { month: 'SEP', return: -1.98 },
+          { month: 'OCT', return: 3.76 },
+          { month: 'NOV', return: 2.45 },
+          { month: 'DIC', return: 8.12 },
+        ],
+      },
+      {
+        year: 2025,
+        months: [
+          { month: 'ENE', return: 1.54 },
+          { month: 'FEB', return: 2.34 },
+          { month: 'MAR', return: 2.98 },
+          { month: 'ABR', return: -1.23 },
+          { month: 'MAY', return: 1.87 },
+          { month: 'JUN', return: 2.45 },
+          { month: 'JUL', return: 1.76 },
+          { month: 'AGO', return: 2.67 },
+          { month: 'SEP', return: 1.34 },
+          { month: 'OCT', return: 1.98 },
+          { month: 'NOV', return: -2.45 },
+          { month: 'DIC', return: -1.87 },
         ],
       },
     ],
-    chartData: generateChartData(114.61, 71),
+    get chartData() {
+      return generateChartData(this.monthlyReturns);
+    },
   },
 ];
 
-function generateChartData(totalReturn: number, months: number) {
-  const data = [];
+function generateChartData(monthlyReturns: { year: number; months: { month: string; return: number }[] }[]) {
+  const data: { date: string; equity: number }[] = [];
   let currentEquity = 0;
-  const avgMonthlyReturn = totalReturn / months;
-  const volatility = 2;
 
-  for (let i = 0; i <= months; i++) {
-    const randomness = (Math.random() - 0.5) * volatility;
-    const monthlyReturn = avgMonthlyReturn + randomness;
-    currentEquity += monthlyReturn;
-
-    const date = new Date();
-    date.setMonth(date.getMonth() - (months - i));
-    
-    data.push({
-      date: date.toLocaleDateString('es-ES', { month: 'short', year: '2-digit' }),
-      equity: parseFloat(currentEquity.toFixed(2)),
+  monthlyReturns.forEach((yearData) => {
+    yearData.months.forEach((monthData) => {
+      currentEquity += monthData.return;
+      
+      // Determinar el mes basado en el nombre del mes
+      const monthIndex = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'].indexOf(monthData.month);
+      
+      const date = new Date(yearData.year, monthIndex);
+      
+      data.push({
+        date: date.toLocaleDateString('es-ES', { month: 'short', year: '2-digit' }),
+        equity: parseFloat(currentEquity.toFixed(2)),
+      });
     });
-  }
+  });
 
   return data;
 }
@@ -607,33 +702,33 @@ export default function PortafoliosPage() {
                 <div className="space-y-3 text-left mb-6">
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">Optimización mensual</span>
+                    <span className="text-muted-foreground">{t('portafoliosPage.features.monthlyOptimization')}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">Gestión de riesgo</span>
+                    <span className="text-muted-foreground">{t('portafoliosPage.features.riskManagement')}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">Soporte 24/7</span>
+                    <span className="text-muted-foreground">{t('portafoliosPage.features.support247')}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">Rentabilidad: <span className="font-bold text-profit">14.47%</span></span>
+                    <span className="text-muted-foreground">{t('portafoliosPage.features.profitability')}: <span className="font-bold text-profit">14.47%</span></span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">Drawdown: <span className="font-bold">0.5%</span></span>
+                    <span className="text-muted-foreground">{t('portafoliosPage.features.drawdown')}: <span className="font-bold">0.5%</span></span>
                   </div>
                 </div>
                 
                 <div className="border-t border-border/40 pt-6 space-y-4">
                   <div>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Precio Alquiler (1 año)</p>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">{t('portafoliosPage.pricing.rentLabel')}</p>
                     <p className="text-3xl font-bold text-foreground">699 <span className="text-lg">€</span></p>
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Precio Compra (Indefinido)</p>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">{t('portafoliosPage.pricing.buyLabel')}</p>
                     <p className="text-3xl font-bold text-profit">899 <span className="text-lg">€</span></p>
                   </div>
                 </div>
@@ -641,7 +736,7 @@ export default function PortafoliosPage() {
               <CardFooter className="flex-col gap-3">
                 <Button variant="outline" className="w-full" asChild>
                   <Link href="/checkout?type=portafolio&name=Portafolio Basic - Alquiler 1 año&price=699&description=3 Robots con optimización mensual&id=basic-rent">
-                    {language === 'es' ? 'Alquilar' : 'Rent'}
+                    {t('portafoliosPage.pricing.rentButton')}
                   </Link>
                 </Button>
                 <Button variant="profit" className="w-full" asChild>
@@ -668,33 +763,33 @@ export default function PortafoliosPage() {
                 <div className="space-y-3 text-left mb-6">
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">Optimización mensual</span>
+                    <span className="text-muted-foreground">{t('portafoliosPage.features.monthlyOptimization')}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">Gestión de riesgo</span>
+                    <span className="text-muted-foreground">{t('portafoliosPage.features.riskManagement')}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">Soporte 24/7</span>
+                    <span className="text-muted-foreground">{t('portafoliosPage.features.support247')}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">Rentabilidad: <span className="font-bold text-profit">14.68%</span></span>
+                    <span className="text-muted-foreground">{t('portafoliosPage.features.profitability')}: <span className="font-bold text-profit">14.68%</span></span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">Drawdown: <span className="font-bold">0.29%</span></span>
+                    <span className="text-muted-foreground">{t('portafoliosPage.features.drawdown')}: <span className="font-bold">0.29%</span></span>
                   </div>
                 </div>
                 
                 <div className="border-t border-border/40 pt-6 space-y-4">
                   <div>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Precio Alquiler (1 año)</p>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">{t('portafoliosPage.pricing.rentLabel')}</p>
                     <p className="text-3xl font-bold text-foreground">899 <span className="text-lg">€</span></p>
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Precio Compra (Indefinido)</p>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">{t('portafoliosPage.pricing.buyLabel')}</p>
                     <p className="text-3xl font-bold text-profit">1699 <span className="text-lg">€</span></p>
                   </div>
                 </div>
@@ -702,7 +797,7 @@ export default function PortafoliosPage() {
               <CardFooter className="flex-col gap-3">
                 <Button variant="outline" className="w-full" asChild>
                   <Link href="/checkout?type=portafolio&name=Portafolio Medium - Alquiler 1 año&price=899&description=6 Robots con optimización mensual&id=medium-rent">
-                    {language === 'es' ? 'Alquilar' : 'Rent'}
+                    {t('portafoliosPage.pricing.rentButton')}
                   </Link>
                 </Button>
                 <Button variant="profit" className="w-full" asChild>
@@ -727,33 +822,33 @@ export default function PortafoliosPage() {
                 <div className="space-y-3 text-left mb-6">
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">Optimización mensual</span>
+                    <span className="text-muted-foreground">{t('portafoliosPage.features.monthlyOptimization')}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">Gestión de riesgo</span>
+                    <span className="text-muted-foreground">{t('portafoliosPage.features.riskManagement')}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">Soporte 24/7</span>
+                    <span className="text-muted-foreground">{t('portafoliosPage.features.support247')}</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">Rentabilidad: <span className="font-bold text-profit">14.24%</span></span>
+                    <span className="text-muted-foreground">{t('portafoliosPage.features.profitability')}: <span className="font-bold text-profit">14.24%</span></span>
                   </div>
                   <div className="flex items-center gap-2 text-sm">
                     <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">Drawdown: <span className="font-bold">0.24%</span></span>
+                    <span className="text-muted-foreground">{t('portafoliosPage.features.drawdown')}: <span className="font-bold">0.24%</span></span>
                   </div>
                 </div>
                 
                 <div className="border-t border-border/40 pt-6 space-y-4">
                   <div>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Precio Alquiler (1 año)</p>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">{t('portafoliosPage.pricing.rentLabel')}</p>
                     <p className="text-3xl font-bold text-foreground">1699 <span className="text-lg">€</span></p>
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">Precio Compra (Indefinido)</p>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">{t('portafoliosPage.pricing.buyLabel')}</p>
                     <p className="text-3xl font-bold text-profit">3299 <span className="text-lg">€</span></p>
                   </div>
                 </div>
@@ -761,7 +856,7 @@ export default function PortafoliosPage() {
               <CardFooter className="flex-col gap-3">
                 <Button variant="outline" className="w-full" asChild>
                   <Link href="/checkout?type=portafolio&name=Portafolio Premium - Alquiler 1 año&price=1699&description=12 Robots con optimización mensual&id=premium-rent">
-                    {language === 'es' ? 'Alquilar' : 'Rent'}
+                    {t('portafoliosPage.pricing.rentButton')}
                   </Link>
                 </Button>
                 <Button variant="profit" className="w-full" asChild>

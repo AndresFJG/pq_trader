@@ -93,22 +93,26 @@ export default function CursosPage() {
   const { t } = useLanguage();
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedLevel, setSelectedLevel] = useState(t('coursesPage.filters.all'));
-  const [selectedTopic, setSelectedTopic] = useState(t('coursesPage.filters.all'));
+  const [selectedLevel, setSelectedLevel] = useState('all');
+  const [selectedTopic, setSelectedTopic] = useState('all');
 
   const levels = [
-    t('coursesPage.filters.all'),
-    t('courses.level.beginner'),
-    t('courses.level.intermediate'),
-    t('courses.level.advanced')
+    { value: 'all', label: t('coursesPage.filters.all') },
+    { value: 'beginner', label: t('courses.level.beginner') },
+    { value: 'intermediate', label: t('courses.level.intermediate') },
+    { value: 'advanced', label: t('courses.level.advanced') }
   ];
-  const topics = [t('coursesPage.filters.all'), 'Python', 'StrategyQuant', 'Risk Management'];
+  const topics = [
+    { value: 'all', label: t('coursesPage.filters.all') },
+    { value: 'Python', label: 'Python' },
+    { value: 'StrategyQuant', label: 'StrategyQuant' },
+    { value: 'Risk Management', label: 'Risk Management' }
+  ];
 
   // Filtrar cursos
   const filteredCourses = courses.filter((course) => {
-    const allText = t('coursesPage.filters.all');
-    const levelMatch = selectedLevel === allText || t(course.levelKey) === selectedLevel;
-    const topicMatch = selectedTopic === allText || course.topics.includes(selectedTopic);
+    const levelMatch = selectedLevel === 'all' || course.levelKey === `courses.level.${selectedLevel}`;
+    const topicMatch = selectedTopic === 'all' || course.topics.includes(selectedTopic);
     return levelMatch && topicMatch;
   });
 
@@ -171,13 +175,13 @@ export default function CursosPage() {
             <div className="flex gap-2 flex-wrap">
               {levels.map((level) => (
                 <Button
-                  key={level}
-                  variant={level === selectedLevel ? 'default' : 'outline'}
+                  key={level.value}
+                  variant={level.value === selectedLevel ? 'default' : 'outline'}
                   size="sm"
-                  onClick={() => setSelectedLevel(level)}
-                  className={level === selectedLevel ? 'bg-profit hover:bg-profit/90' : ''}
+                  onClick={() => setSelectedLevel(level.value)}
+                  className={level.value === selectedLevel ? 'bg-profit hover:bg-profit/90' : ''}
                 >
-                  {level}
+                  {level.label}
                 </Button>
               ))}
             </div>
@@ -186,13 +190,13 @@ export default function CursosPage() {
             <div className="flex gap-2 flex-wrap">
               {topics.map((topic) => (
                 <Button
-                  key={topic}
+                  key={topic.value}
                   variant="ghost"
                   size="sm"
-                  onClick={() => setSelectedTopic(topic)}
-                  className={topic === selectedTopic ? 'text-profit bg-profit/10' : 'text-muted-foreground hover:text-profit'}
+                  onClick={() => setSelectedTopic(topic.value)}
+                  className={topic.value === selectedTopic ? 'text-profit bg-profit/10' : 'text-muted-foreground hover:text-profit'}
                 >
-                  {topic}
+                  {topic.label}
                 </Button>
               ))}
             </div>
@@ -209,8 +213,8 @@ export default function CursosPage() {
               <p className="text-xl text-muted-foreground">{t('coursesPage.noResults')}</p>
               <Button 
                 onClick={() => {
-                  setSelectedLevel(t('coursesPage.filters.all'));
-                  setSelectedTopic(t('coursesPage.filters.all'));
+                  setSelectedLevel('all');
+                  setSelectedTopic('all');
                 }}
                 variant="outline"
                 className="mt-4"

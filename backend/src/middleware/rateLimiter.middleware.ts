@@ -42,3 +42,23 @@ export const paymentLimiter = rateLimit({
     error: 'Demasiadas transacciones, por favor intenta más tarde',
   },
 });
+
+// Webhook limiter
+export const webhookLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 100,
+  message: {
+    success: false,
+    error: 'Too many webhook requests',
+  },
+});
+
+// Password reset limiter
+export const passwordResetLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 3,
+  message: {
+    success: false,
+    error: 'Demasiados intentos de recuperación de contraseña',
+  },
+});

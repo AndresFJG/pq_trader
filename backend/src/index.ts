@@ -14,6 +14,8 @@ import courseRoutes from './routes/course.routes';
 import mentorshipRoutes from './routes/mentorship.routes';
 import paymentRoutes from './routes/paymentRoutes';
 import darwinexRoutes from './routes/darwinex.routes';
+import stripeRoutes from './routes/stripe.routes';
+import paypalRoutes from './routes/paypal.routes';
 
 // Import middleware
 import { errorHandler } from './middleware/error.middleware';
@@ -63,6 +65,8 @@ app.use('/api/courses', courseRoutes);
 app.use('/api/mentorships', mentorshipRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/darwinex', darwinexRoutes);
+app.use('/api/stripe', stripeRoutes);
+app.use('/api/paypal', paypalRoutes);
 
 // Error handling
 app.use(notFound);

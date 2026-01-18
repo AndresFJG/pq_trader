@@ -9,23 +9,27 @@ import { Calendar, Clock, Video, MessageCircle, Users, Award, CheckCircle, Targe
 import Link from 'next/link';
 import { useLanguage } from '@/lib/i18n';
 
-// Profesionales/Mentores
-const mentors = [
+// Profesionales/Mentores - Traducidos
+const getMentors = (language: string) => [
   {
     id: '1',
     name: 'Carlos Martínez',
-    title: 'Fundador & CEO',
-    subtitle: 'Especialista en Trading Algorítmico',
-    bio: 'Más de 12 años de experiencia en mercados financieros. Ex-trader en Goldman Sachs y fundador de PQ Trader. Profesor de Trading Cuantitativo en la Universidad Tecnológica. Ha desarrollado más de 500 estrategias algorítmicas verificadas.',
-    quote: 'El éxito en trading algorítmico está en los datos, no en las emociones.',
+    title: language === 'es' ? 'Fundador & CEO' : 'Founder & CEO',
+    subtitle: language === 'es' ? 'Especialista en Trading Algorítmico' : 'Algorithmic Trading Specialist',
+    bio: language === 'es' 
+      ? 'Más de 12 años de experiencia en mercados financieros. Ex-trader en Goldman Sachs y fundador de PQ Trader. Profesor de Trading Cuantitativo en la Universidad Tecnológica. Ha desarrollado más de 500 estrategias algorítmicas verificadas.'
+      : 'Over 12 years of experience in financial markets. Ex-trader at Goldman Sachs and founder of PQ Trader. Professor of Quantitative Trading at the Technological University. Has developed over 500 verified algorithmic strategies.',
+    quote: language === 'es' 
+      ? 'El éxito en trading algorítmico está en los datos, no en las emociones.'
+      : 'Success in algorithmic trading is in the data, not in emotions.',
     specialties: [
       'Python & Trading',
-      'Backtesting Avanzado',
-      'Estrategias Cuantitativas',
+      language === 'es' ? 'Backtesting Avanzado' : 'Advanced Backtesting',
+      language === 'es' ? 'Estrategias Cuantitativas' : 'Quantitative Strategies',
       'Risk Management',
       'Portfolio Optimization'
     ],
-    experience: '12+ años',
+    experience: language === 'es' ? '12+ años' : '12+ years',
     students: 2500,
     rating: 4.9,
     sessions: 450,
@@ -33,28 +37,37 @@ const mentors = [
     image: '👨‍💼',
     linkedin: 'https://linkedin.com',
     email: 'carlos@pqtrader.com',
-    achievements: [
+    achievements: language === 'es' ? [
       'Ex-Quant Trader Goldman Sachs',
       'Profesor Universitario',
       '500+ estrategias desarrolladas',
       'Speaker internacional'
+    ] : [
+      'Ex-Quant Trader Goldman Sachs',
+      'University Professor',
+      '500+ strategies developed',
+      'International Speaker'
     ]
   },
   {
     id: '2',
     name: 'Ana García',
     title: 'Head of Machine Learning',
-    subtitle: 'Experta en IA aplicada al Trading',
-    bio: 'PhD en Ciencias de la Computación con especialización en Machine Learning. 8 años desarrollando modelos predictivos para fondos hedge. Pionera en aplicación de Deep Learning a mercados financieros.',
-    quote: 'La IA no reemplaza al trader, lo potencia.',
+    subtitle: language === 'es' ? 'Experta en IA aplicada al Trading' : 'AI Expert Applied to Trading',
+    bio: language === 'es'
+      ? 'PhD en Ciencias de la Computación con especialización en Machine Learning. 8 años desarrollando modelos predictivos para fondos hedge. Pionera en aplicación de Deep Learning a mercados financieros.'
+      : 'PhD in Computer Science with specialization in Machine Learning. 8 years developing predictive models for hedge funds. Pioneer in applying Deep Learning to financial markets.',
+    quote: language === 'es' 
+      ? 'La IA no reemplaza al trader, lo potencia.'
+      : 'AI doesn\'t replace the trader, it empowers them.',
     specialties: [
       'Machine Learning',
       'Deep Learning',
-      'NLP para Trading',
+      language === 'es' ? 'NLP para Trading' : 'NLP for Trading',
       'Feature Engineering',
       'Model Optimization'
     ],
-    experience: '8+ años',
+    experience: language === 'es' ? '8+ años' : '8+ years',
     students: 1800,
     rating: 4.8,
     sessions: 320,
@@ -62,10 +75,15 @@ const mentors = [
     image: '👩‍💻',
     linkedin: 'https://linkedin.com',
     email: 'ana@pqtrader.com',
-    achievements: [
+    achievements: language === 'es' ? [
       'PhD Computer Science',
       'Ex-Citadel Securities',
       '15+ papers publicados',
+      'TensorFlow Contributor'
+    ] : [
+      'PhD Computer Science',
+      'Ex-Citadel Securities',
+      '15+ papers published',
       'TensorFlow Contributor'
     ]
   },
@@ -73,9 +91,13 @@ const mentors = [
     id: '3',
     name: 'Roberto Silva',
     title: 'Chief Risk Officer',
-    subtitle: 'Especialista en Gestión de Riesgo',
-    bio: 'Más de 15 años gestionando riesgo en fondos hedge y bancos de inversión. Experto en VaR, stress testing y optimización de portfolios. Ha gestionado portfolios de +$500M.',
-    quote: 'No importa cuán buena sea tu estrategia si no sabes gestionar el riesgo.',
+    subtitle: language === 'es' ? 'Especialista en Gestión de Riesgo' : 'Risk Management Specialist',
+    bio: language === 'es'
+      ? 'Más de 15 años gestionando riesgo en fondos hedge y bancos de inversión. Experto en VaR, stress testing y optimización de portfolios. Ha gestionado portfolios de +$500M.'
+      : 'Over 15 years managing risk in hedge funds and investment banks. Expert in VaR, stress testing, and portfolio optimization. Has managed portfolios of +$500M.',
+    quote: language === 'es'
+      ? 'No importa cuán buena sea tu estrategia si no sabes gestionar el riesgo.'
+      : 'It doesn\'t matter how good your strategy is if you don\'t know how to manage risk.',
     specialties: [
       'Risk Management',
       'Portfolio Theory',
@@ -83,7 +105,7 @@ const mentors = [
       'Position Sizing',
       'Diversification'
     ],
-    experience: '15+ años',
+    experience: language === 'es' ? '15+ años' : '15+ years',
     students: 1200,
     rating: 4.9,
     sessions: 520,
@@ -91,28 +113,37 @@ const mentors = [
     image: '👨‍🏫',
     linkedin: 'https://linkedin.com',
     email: 'roberto@pqtrader.com',
-    achievements: [
+    achievements: language === 'es' ? [
       'Ex-JP Morgan Risk Manager',
       'CFA Charterholder',
       '$500M+ gestionados',
       'Consultor FMI'
+    ] : [
+      'Ex-JP Morgan Risk Manager',
+      'CFA Charterholder',
+      '$500M+ managed',
+      'IMF Consultant'
     ]
   },
   {
     id: '4',
     name: 'Laura Fernández',
     title: 'HFT Specialist',
-    subtitle: 'Experta en High Frequency Trading',
-    bio: '10 años desarrollando sistemas de alta frecuencia. Ex-ingeniera en Jane Street y Tower Research. Especialista en low latency, microestructura de mercado y market making.',
-    quote: 'En HFT, los microsegundos son millones.',
+    subtitle: language === 'es' ? 'Experta en High Frequency Trading' : 'High Frequency Trading Expert',
+    bio: language === 'es'
+      ? '10 años desarrollando sistemas de alta frecuencia. Ex-ingeniera en Jane Street y Tower Research. Especialista en low latency, microestructura de mercado y market making.'
+      : '10 years developing high-frequency systems. Ex-engineer at Jane Street and Tower Research. Specialist in low latency, market microstructure, and market making.',
+    quote: language === 'es'
+      ? 'En HFT, los microsegundos son millones.'
+      : 'In HFT, microseconds are millions.',
     specialties: [
       'C++ & Low Latency',
       'Market Making',
-      'Microestructura',
+      language === 'es' ? 'Microestructura' : 'Microstructure',
       'FPGA Trading',
       'Arbitrage Strategies'
     ],
-    experience: '10+ años',
+    experience: language === 'es' ? '10+ años' : '10+ years',
     students: 800,
     rating: 4.7,
     sessions: 280,
@@ -131,9 +162,13 @@ const mentors = [
     id: '5',
     name: 'David López',
     title: 'Crypto Trading Lead',
-    subtitle: 'Especialista en Criptomonedas',
-    bio: '7 años en mercados cripto. Fundador de un market maker en Binance. Experto en DeFi, arbitraje cross-exchange y trading de volatilidad en derivados cripto.',
-    quote: 'Crypto es el wild west del trading algorítmico.',
+    subtitle: language === 'es' ? 'Especialista en Criptomonedas' : 'Cryptocurrency Specialist',
+    bio: language === 'es'
+      ? '7 años en mercados cripto. Fundador de un market maker en Binance. Experto en DeFi, arbitraje cross-exchange y trading de volatilidad en derivados cripto.'
+      : '7 years in crypto markets. Founder of a market maker on Binance. Expert in DeFi, cross-exchange arbitrage, and volatility trading in crypto derivatives.',
+    quote: language === 'es'
+      ? 'Crypto es el wild west del trading algorítmico.'
+      : 'Crypto is the wild west of algorithmic trading.',
     specialties: [
       'Crypto Trading',
       'DeFi Strategies',
@@ -141,7 +176,7 @@ const mentors = [
       'MEV & Flashbots',
       'Derivatives'
     ],
-    experience: '7+ años',
+    experience: language === 'es' ? '7+ años' : '7+ years',
     students: 1500,
     rating: 4.8,
     sessions: 380,
@@ -208,88 +243,120 @@ const packages = [
   },
 ];
 
-// Mentorías Grupales
-const groupSessions = [
+// Mentorías Grupales - Traducidas
+const getGroupSessions = (language: string) => [
   {
     id: '1',
-    title: 'Introducción al Trading Algorítmico',
+    title: language === 'es' ? 'Introducción al Trading Algorítmico' : 'Introduction to Algorithmic Trading',
     mentor: 'Carlos Martínez',
-    level: 'Principiante',
-    date: '15 Enero 2026',
+    level: language === 'es' ? 'Principiante' : 'Beginner',
+    date: language === 'es' ? '15 Enero 2026' : 'January 15, 2026',
     time: '18:00 - 20:00',
-    duration: '2 horas',
+    duration: language === 'es' ? '2 horas' : '2 hours',
     spots: 8,
     spotsLeft: 3,
     price: 49,
-    topics: [
+    topics: language === 'es' ? [
       'Conceptos básicos de trading algorítmico',
       'Python para trading',
       'Tu primera estrategia',
       'Backtesting básico'
+    ] : [
+      'Basic algorithmic trading concepts',
+      'Python for trading',
+      'Your first strategy',
+      'Basic backtesting'
     ],
-    description: 'Sesión introductoria perfecta para comenzar en el mundo del trading algorítmico. Aprende las bases y desarrolla tu primera estrategia.',
+    description: language === 'es'
+      ? 'Sesión introductoria perfecta para comenzar en el mundo del trading algorítmico. Aprende las bases y desarrolla tu primera estrategia.'
+      : 'Perfect introductory session to start in the world of algorithmic trading. Learn the basics and develop your first strategy.',
   },
   {
     id: '2',
-    title: 'Machine Learning en Trading',
+    title: language === 'es' ? 'Machine Learning en Trading' : 'Machine Learning in Trading',
     mentor: 'Ana García',
-    level: 'Intermedio',
-    date: '18 Enero 2026',
+    level: language === 'es' ? 'Intermedio' : 'Intermediate',
+    date: language === 'es' ? '18 Enero 2026' : 'January 18, 2026',
     time: '19:00 - 21:30',
-    duration: '2.5 horas',
+    duration: language === 'es' ? '2.5 horas' : '2.5 hours',
     spots: 10,
     spotsLeft: 5,
     price: 79,
-    topics: [
+    topics: language === 'es' ? [
       'Modelos predictivos',
       'Feature engineering',
       'Overfitting y validación',
       'Random Forest y XGBoost'
+    ] : [
+      'Predictive models',
+      'Feature engineering',
+      'Overfitting and validation',
+      'Random Forest and XGBoost'
     ],
-    description: 'Aprende a aplicar Machine Learning a tus estrategias. Desde feature engineering hasta modelos avanzados.',
+    description: language === 'es'
+      ? 'Aprende a aplicar Machine Learning a tus estrategias. Desde feature engineering hasta modelos avanzados.'
+      : 'Learn to apply Machine Learning to your strategies. From feature engineering to advanced models.',
   },
   {
     id: '3',
-    title: 'Gestión de Riesgo Avanzada',
+    title: language === 'es' ? 'Gestión de Riesgo Avanzada' : 'Advanced Risk Management',
     mentor: 'Roberto Silva',
-    level: 'Avanzado',
-    date: '22 Enero 2026',
+    level: language === 'es' ? 'Avanzado' : 'Advanced',
+    date: language === 'es' ? '22 Enero 2026' : 'January 22, 2026',
     time: '17:00 - 19:30',
-    duration: '2.5 horas',
+    duration: language === 'es' ? '2.5 horas' : '2.5 hours',
     spots: 6,
     spotsLeft: 2,
     price: 89,
-    topics: [
+    topics: language === 'es' ? [
       'VaR y CVaR',
       'Position sizing óptimo',
       'Portfolio optimization',
       'Stress testing'
+    ] : [
+      'VaR and CVaR',
+      'Optimal position sizing',
+      'Portfolio optimization',
+      'Stress testing'
     ],
-    description: 'Técnicas profesionales de gestión de riesgo. Aprende cómo los fondos hedge protegen su capital.',
+    description: language === 'es'
+      ? 'Técnicas profesionales de gestión de riesgo. Aprende cómo los fondos hedge protegen su capital.'
+      : 'Professional risk management techniques. Learn how hedge funds protect their capital.',
   },
   {
     id: '4',
-    title: 'Trading de Criptomonedas',
+    title: language === 'es' ? 'Trading de Criptomonedas' : 'Cryptocurrency Trading',
     mentor: 'David López',
-    level: 'Intermedio',
-    date: '25 Enero 2026',
+    level: language === 'es' ? 'Intermedio' : 'Intermediate',
+    date: language === 'es' ? '25 Enero 2026' : 'January 25, 2026',
     time: '20:00 - 22:00',
-    duration: '2 horas',
+    duration: language === 'es' ? '2 horas' : '2 hours',
     spots: 12,
     spotsLeft: 7,
     price: 59,
-    topics: [
+    topics: language === 'es' ? [
       'Particularidades del mercado crypto',
       'APIs de exchanges',
       'Estrategias de arbitraje',
       'DeFi y oportunidades'
+    ] : [
+      'Crypto market peculiarities',
+      'Exchange APIs',
+      'Arbitrage strategies',
+      'DeFi and opportunities'
     ],
-    description: 'Domina el mercado crypto. Desde lo básico hasta estrategias avanzadas de arbitraje y DeFi.',
+    description: language === 'es'
+      ? 'Domina el mercado crypto. Desde lo básico hasta estrategias avanzadas de arbitraje y DeFi.'
+      : 'Master the crypto market. From basics to advanced arbitrage and DeFi strategies.',
   },
 ];
 
 export default function MentoriasPage() {
   const { t, language } = useLanguage();
+  
+  // Get translated data
+  const mentors = getMentors(language);
+  const groupSessions = getGroupSessions(language);
   
   const packagesTranslated = [
     {
@@ -494,7 +561,7 @@ export default function MentoriasPage() {
                     <span>{pkg.duration}</span>
                     {pkg.recurring && (
                       <Badge variant="outline" className="ml-2 border-profit/40 text-profit text-xs">
-                        Suscripción Mensual
+                        {language === 'es' ? 'Suscripción Mensual' : 'Monthly Subscription'}
                       </Badge>
                     )}
                   </div>
@@ -536,11 +603,10 @@ export default function MentoriasPage() {
         <div className="container mx-auto max-w-7xl">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Nuestros <span className="text-profit">Profesionales</span>
+              {t('mentorshipsPage.mentors.title')} <span className="text-profit">{t('mentorshipsPage.mentors.titleHighlight')}</span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Aprende de los mejores. Todos nuestros mentores tienen experiencia real en mercados 
-              y han gestionado millones de dólares.
+              {t('mentorshipsPage.mentors.subtitle')}
             </p>
           </div>
 
@@ -563,15 +629,15 @@ export default function MentoriasPage() {
                       <div className="flex justify-center gap-6 mb-6">
                         <div className="text-center">
                           <p className="text-2xl font-bold text-profit">{mentor.students}+</p>
-                          <p className="text-xs text-muted-foreground">Estudiantes</p>
+                          <p className="text-xs text-muted-foreground">{t('mentorshipsPage.labels.students')}</p>
                         </div>
                         <div className="text-center">
                           <p className="text-2xl font-bold text-profit">{mentor.rating}</p>
-                          <p className="text-xs text-muted-foreground">Rating</p>
+                          <p className="text-xs text-muted-foreground">{t('mentorshipsPage.labels.rating')}</p>
                         </div>
                         <div className="text-center">
                           <p className="text-2xl font-bold text-profit">{mentor.sessions}+</p>
-                          <p className="text-xs text-muted-foreground">Sesiones</p>
+                          <p className="text-xs text-muted-foreground">{t('mentorshipsPage.labels.sessions')}</p>
                         </div>
                       </div>
 
@@ -623,7 +689,7 @@ export default function MentoriasPage() {
                     <div className="mb-6">
                       <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
                         <Target className="h-4 w-4 text-profit" />
-                        Especialidades
+                        {t('mentorshipsPage.labels.specialties')}
                       </h4>
                       <div className="flex flex-wrap gap-2">
                         {mentor.specialties.map((specialty) => (
@@ -640,10 +706,10 @@ export default function MentoriasPage() {
                     {/* Price & CTA */}
                     <div className="flex items-center justify-between pt-6 border-t border-border/40">
                       <div>
-                        <p className="text-sm text-muted-foreground mb-1">Desde</p>
+                        <p className="text-sm text-muted-foreground mb-1">{t('mentorshipsPage.labels.priceFrom')}</p>
                         <p className="text-3xl font-bold text-profit">
                           ${mentor.price}
-                          <span className="text-base font-normal text-muted-foreground">/hora</span>
+                          <span className="text-base font-normal text-muted-foreground">/{t('mentorshipsPage.labels.session').toLowerCase()}</span>
                         </p>
                       </div>
                       <Button 
@@ -653,7 +719,7 @@ export default function MentoriasPage() {
                         asChild
                       >
                         <Link href={`/checkout?type=mentoria&name=Sesión con ${mentor.name}&price=${mentor.price}&description=${encodeURIComponent(mentor.subtitle)}&id=mentor-${mentor.id}`}>
-                          Reservar Sesión
+                          {t('mentorshipsPage.labels.bookSession')}
                           <Calendar className="ml-2 h-4 w-4 group-hover:scale-110 transition-transform" />
                         </Link>
                       </Button>
@@ -671,10 +737,10 @@ export default function MentoriasPage() {
         <div className="container mx-auto max-w-7xl">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              Mentorías <span className="text-profit">Grupales</span>
+              {t('mentorshipsPage.groupSessions.title')} <span className="text-profit">{t('mentorshipsPage.groupSessions.titleHighlight')}</span>
             </h2>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Talleres en vivo con grupos reducidos. Aprende junto a otros traders y ahorra hasta 70% vs sesiones individuales.
+              {t('mentorshipsPage.groupSessions.subtitle')}
             </p>
           </div>
 
@@ -711,7 +777,7 @@ export default function MentoriasPage() {
                   <p className="text-muted-foreground mb-6">{session.description}</p>
                   
                   <div className="mb-6">
-                    <h4 className="text-sm font-semibold text-foreground mb-3">Temas a tratar:</h4>
+                    <h4 className="text-sm font-semibold text-foreground mb-3">{t('mentorshipsPage.groupSessions.topicsTitle')}</h4>
                     <ul className="space-y-2">
                       {session.topics.map((topic, idx) => (
                         <li key={idx} className="flex items-start gap-2 text-sm">
@@ -726,7 +792,7 @@ export default function MentoriasPage() {
                     <div>
                       <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
                         <Users className="h-4 w-4" />
-                        <span>{session.spotsLeft} de {session.spots} lugares disponibles</span>
+                        <span>{session.spotsLeft} {t('mentorshipsPage.groupSessions.spotsOf')} {session.spots} {t('mentorshipsPage.groupSessions.spotsLeft')}</span>
                       </div>
                       <p className="text-3xl font-bold text-profit">
                         ${session.price}
@@ -739,10 +805,10 @@ export default function MentoriasPage() {
                       asChild={session.spotsLeft > 0}
                     >
                       {session.spotsLeft === 0 ? (
-                        'Agotado'
+                        t('mentorshipsPage.groupSessions.soldOut')
                       ) : (
                         <Link href={`/checkout?type=mentoria-grupal&name=${encodeURIComponent(session.title)}&price=${session.price}&description=${encodeURIComponent(session.description)}&id=${session.id}`}>
-                          Reservar Plaza
+                          {t('mentorshipsPage.groupSessions.reserveButton')}
                         </Link>
                       )}
                     </Button>
@@ -756,29 +822,29 @@ export default function MentoriasPage() {
           <Card className="bg-gradient-to-r from-profit/5 to-background border-profit/20">
             <CardContent className="p-8">
               <h3 className="text-2xl font-bold text-foreground mb-6 text-center">
-                ¿Por qué elegir mentorías grupales?
+                {t('mentorshipsPage.groupSessions.whyGroup')}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="text-center">
                   <div className="w-16 h-16 bg-profit/10 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Users className="h-8 w-8 text-profit" />
                   </div>
-                  <h4 className="font-semibold text-foreground mb-2">Networking</h4>
-                  <p className="text-sm text-muted-foreground">Conoce a otros traders y crea tu red profesional</p>
+                  <h4 className="font-semibold text-foreground mb-2">{t('mentorshipsPage.groupSessions.whyGroupBenefits.networking.title')}</h4>
+                  <p className="text-sm text-muted-foreground">{t('mentorshipsPage.groupSessions.whyGroupBenefits.networking.desc')}</p>
                 </div>
                 <div className="text-center">
                   <div className="w-16 h-16 bg-profit/10 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Target className="h-8 w-8 text-profit" />
                   </div>
-                  <h4 className="font-semibold text-foreground mb-2">Precio Accesible</h4>
-                  <p className="text-sm text-muted-foreground">Hasta 70% más económico que sesiones individuales</p>
+                  <h4 className="font-semibold text-foreground mb-2">{t('mentorshipsPage.groupSessions.whyGroupBenefits.affordable.title')}</h4>
+                  <p className="text-sm text-muted-foreground">{t('mentorshipsPage.groupSessions.whyGroupBenefits.affordable.desc')}</p>
                 </div>
                 <div className="text-center">
                   <div className="w-16 h-16 bg-profit/10 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Video className="h-8 w-8 text-profit" />
                   </div>
-                  <h4 className="font-semibold text-foreground mb-2">Grabaciones</h4>
-                  <p className="text-sm text-muted-foreground">Acceso de por vida a todas las grabaciones</p>
+                  <h4 className="font-semibold text-foreground mb-2">{t('mentorshipsPage.groupSessions.whyGroupBenefits.recordings.title')}</h4>
+                  <p className="text-sm text-muted-foreground">{t('mentorshipsPage.groupSessions.whyGroupBenefits.recordings.desc')}</p>
                 </div>
               </div>
             </CardContent>
@@ -791,10 +857,10 @@ export default function MentoriasPage() {
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              ¿Cómo Funciona?
+              {t('mentorshipsPage.howItWorks.title')}
             </h2>
             <p className="text-lg text-muted-foreground">
-              Proceso simple y directo para comenzar tu mentoría
+              {t('mentorshipsPage.howItWorks.subtitle')}
             </p>
           </div>
 
@@ -803,26 +869,26 @@ export default function MentoriasPage() {
               { 
                 step: '1', 
                 icon: Users,
-                title: 'Elige tu Mentor', 
-                desc: 'Selecciona el profesional que mejor se adapte a tus objetivos y nivel' 
+                title: t('mentorshipsPage.howItWorks.steps.step1.title'), 
+                desc: t('mentorshipsPage.howItWorks.steps.step1.desc') 
               },
               { 
                 step: '2', 
                 icon: Calendar,
-                title: 'Reserva Fecha', 
-                desc: 'Elige el horario que más te convenga. Disponibilidad flexible' 
+                title: t('mentorshipsPage.howItWorks.steps.step2.title'), 
+                desc: t('mentorshipsPage.howItWorks.steps.step2.desc') 
               },
               { 
                 step: '3', 
                 icon: BookOpen,
-                title: 'Prepara tu Sesión', 
-                desc: 'Envía tus dudas, código o proyecto previo para aprovechar al máximo' 
+                title: t('mentorshipsPage.howItWorks.steps.step3.title'), 
+                desc: t('mentorshipsPage.howItWorks.steps.step3.desc') 
               },
               { 
                 step: '4', 
                 icon: Rocket,
-                title: 'Aprende y Crece', 
-                desc: 'Sesión en vivo 1-a-1 con feedback personalizado y plan de acción' 
+                title: t('mentorshipsPage.howItWorks.steps.step4.title'), 
+                desc: t('mentorshipsPage.howItWorks.steps.step4.desc') 
               },
             ].map((item) => (
               <div key={item.step} className="text-center">
@@ -847,35 +913,35 @@ export default function MentoriasPage() {
         <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Preguntas Frecuentes
+              {t('mentorshipsPage.faqs.title')}
             </h2>
           </div>
 
           <div className="space-y-4">
             {[
               {
-                q: '¿Necesito tener conocimientos previos?',
-                a: 'No necesariamente. Tenemos mentores especializados en todos los niveles, desde principiantes hasta traders avanzados. Durante la primera sesión evaluaremos tu nivel y diseñaremos un plan personalizado.'
+                q: t('mentorshipsPage.faqs.items.q1.q'),
+                a: t('mentorshipsPage.faqs.items.q1.a')
               },
               {
-                q: '¿Las sesiones son grabadas?',
-                a: 'Sí, todas las sesiones se graban automáticamente y quedan disponibles para que puedas repasarlas cuando quieras. El material es tuyo para siempre.'
+                q: t('mentorshipsPage.faqs.items.q2.q'),
+                a: t('mentorshipsPage.faqs.items.q2.a')
               },
               {
-                q: '¿Qué plataformas y herramientas aprenderé?',
-                a: 'Depende de tu mentor y especialización. Python, TradingView, MetaTrader, QuantConnect, Interactive Brokers API, y más. Todo se adapta a tus objetivos.'
+                q: t('mentorshipsPage.faqs.items.q3.q'),
+                a: t('mentorshipsPage.faqs.items.q3.a')
               },
               {
-                q: '¿Puedo cambiar de mentor?',
-                a: 'Absolutamente. Si sientes que otro mentor se ajusta mejor a tus necesidades, puedes cambiar sin costo adicional.'
+                q: t('mentorshipsPage.faqs.items.q4.q'),
+                a: t('mentorshipsPage.faqs.items.q4.a')
               },
               {
-                q: '¿Hay garantía de resultados?',
-                a: 'El trading tiene riesgos inherentes y no podemos garantizar rentabilidad. Lo que sí garantizamos es enseñarte las mejores prácticas, herramientas y estrategias utilizadas por profesionales.'
+                q: t('mentorshipsPage.faqs.items.q5.q'),
+                a: t('mentorshipsPage.faqs.items.q5.a')
               },
               {
-                q: '¿Recibiré certificado?',
-                a: 'Sí, al completar el programa de mentoría mensual recibirás un certificado verificable que avala tus conocimientos en trading algorítmico.'
+                q: t('mentorshipsPage.faqs.items.q6.q'),
+                a: t('mentorshipsPage.faqs.items.q6.a')
               }
             ].map((faq, idx) => (
               <Card key={idx} className="border-border/40">
@@ -898,21 +964,21 @@ export default function MentoriasPage() {
       <section className="py-16 px-4 bg-gradient-to-r from-profit/10 to-background">
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            ¿Listo para dar el siguiente paso?
+            {t('mentorshipsPage.cta.title')}
           </h2>
           <p className="text-lg text-muted-foreground mb-8">
-            Únete a más de 5,000 estudiantes que ya están operando de manera profesional
+            {t('mentorshipsPage.cta.subtitle')}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button variant="profit" size="lg" className="group" asChild>
               <Link href="/mentorias#planes">
-                Comenzar Mentoría
+                {t('mentorshipsPage.cta.startButton')}
                 <Rocket className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </Button>
             <Button variant="outline" size="lg" asChild>
               <a href="mailto:contacto@pqtrader.com">
-                Agendar Llamada Gratis
+                {t('mentorshipsPage.cta.callButton')}
                 <MessageCircle className="ml-2 h-5 w-5" />
               </a>
             </Button>

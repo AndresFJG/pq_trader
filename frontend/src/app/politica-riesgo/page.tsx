@@ -195,6 +195,83 @@ export default function PoliticaRiesgoPage() {
                 </p>
               </CardContent>
             </Card>
+
+            {/* Divulgaciones Adicionales */}
+            <div className="mt-12 pt-8 border-t border-border">
+              <h2 className="text-3xl font-bold mb-6 text-center">Divulgaciones Adicionales</h2>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle>Declaración de Riesgos</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3 text-sm text-muted-foreground">
+                  <p>
+                    La operación de futuros y forex sobrelleva riesgos substanciales y no es para
+                    todos los inversionistas. Un inversionista, podría, potencialmente perder todo o
+                    más de la inversión inicial. Capital de Riesgo, es dinero que puede ser perdido,
+                    sin poner en juego la seguridad financiera o estilo de vida de la persona. Solo
+                    capital de riesgo debe ser utilizado para trading, y solo aquellas personas con
+                    suficiente capital de riesgo deben considerar trading. <strong>Resultados pasados,
+                    no son necesariamente indicativos de resultados futuros.</strong>
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Declaración de Resultados Hipotéticos</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3 text-sm text-muted-foreground">
+                  <p>
+                    Resultados hipotéticos de rendimiento deben tener muchas limitaciones
+                    inherentes, algunas de las cuales se describen a continuación. <strong>No se debe hacer
+                    representación de que alguna de las cuentas va o es probable que tenga resultados
+                    similares a los mostrados</strong>; de hecho, hay diferencias frecuentes entre los resultados
+                    hipotéticos y los resultados actuales obtenidos por cualquier programa de trading.
+                  </p>
+                  <p>
+                    Una de las limitaciones de resultados hipotéticos de rendimiento es el hecho de
+                    que son preparados con los beneficios en retrospectiva. Además, trading
+                    hipotético no involucra riesgo financiero, y ningún record de trading hipotético puede
+                    considerar el riesgo financiero de operaciones reales. Por ejemplo, la capacidad
+                    de resistir pérdidas o de adherirse a un programa de trading particular sin
+                    importar pérdidas son puntos materiales los cuales pueden afectar de manera
+                    substancial resultados de trading real.
+                  </p>
+                  <p>
+                    Hay muchos factores relacionados a los mercados
+                    en general, o a la implementación de cualquier programa de trading especifico,
+                    los cuales no pueden ser todos considerados en la preparación de resultados
+                    hipotéticos, todos estos, pueden afectar los resultados de trading de forma adversa.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Declaración de Testimonios</CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  <p>
+                    Los testimonios que aparecen en esta página web pueden no ser representativos de
+                    otros clientes o clientes y <strong>no es garantía de rendimiento o éxito en el futuro</strong>.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Declaración de la Sala de Operaciones en Directo</CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  <p>
+                    Esta presentación sólo tiene fines educativos y las opiniones expresadas son las
+                    del presentador. <strong>Todas las operaciones presentadas deben
+                    considerarse hipotéticas</strong> y no debe esperarse que se reproduzcan en una cuenta real.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </section>
