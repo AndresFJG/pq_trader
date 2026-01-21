@@ -1,7 +1,7 @@
 import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.middleware';
 import paypalService from '../services/paypal.service';
-import User from '../models/User.model';
+// import User from '../models/User.model'; // TODO: Migrar a Supabase UserService
 import { logger, logTransaction, logSecurity } from '../utils/logger';
 
 /**

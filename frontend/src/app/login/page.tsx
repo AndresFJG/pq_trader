@@ -9,11 +9,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useLanguage } from '@/lib/i18n';
+import { useAuth } from '@/hooks/useAuth';
 import Link from 'next/link';
 import { Mail, Lock, ArrowRight, TrendingUp } from 'lucide-react';
 
 export default function LoginPage() {
   const { t } = useLanguage();
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
@@ -23,14 +25,13 @@ export default function LoginPage() {
     e.preventDefault();
     setIsLoading(true);
     
-    // TODO: Implement actual login logic
-    console.log('Login attempt:', { email, password, rememberMe });
-    
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      await login(email, password);
+    } catch (error) {
+      // Error ya manejado en el hook useAuth
+    } finally {
       setIsLoading(false);
-      // Redirect or show error
-    }, 1500);
+    }
   };
 
   return (

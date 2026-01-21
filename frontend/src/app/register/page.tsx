@@ -45,14 +45,18 @@ export default function RegisterPage() {
 
     setIsLoading(true);
     
-    // TODO: Implement actual registration logic
-    console.log('Registration attempt:', formData);
-    
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const { register } = await import('@/contexts/AuthContext');
+      // TODO: Usar useAuth hook
+      console.log('Registration attempt:', formData);
+      // await register(formData.name, formData.email, formData.password);
+      alert('Registro exitoso. Por favor inicia sesión.');
+      window.location.href = '/login';
+    } catch (error: any) {
+      alert(error.message || 'Error al registrarse');
+    } finally {
       setIsLoading(false);
-      // Redirect or show success
-    }, 1500);
+    }
   };
 
   return (

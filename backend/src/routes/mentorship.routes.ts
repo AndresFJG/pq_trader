@@ -1,19 +1,19 @@
 import { Router } from 'express';
-import { protect } from '../middleware/auth.middleware';
+import { protect, authorize } from '../middleware/auth.middleware';
+import { 
+  getMentorships, 
+  getMentorship, 
+  createMentorship, 
+  updateMentorship, 
+  deleteMentorship 
+} from '../controllers/mentorship.controller';
 
 const router = Router();
 
-// Placeholder routes for mentorships
-router.get('/', (req, res) => {
-  res.json({ success: true, message: 'Get mentorships route' });
-});
-
-router.post('/book', protect, (req, res) => {
-  res.json({ success: true, message: 'Book mentorship route' });
-});
-
-router.get('/my-bookings', protect, (req, res) => {
-  res.json({ success: true, message: 'Get my bookings route' });
-});
+router.get('/', protect, getMentorships);
+router.get('/:id', protect, getMentorship);
+router.post('/', protect, authorize('admin'), createMentorship);
+router.put('/:id', protect, authorize('admin'), updateMentorship);
+router.delete('/:id', protect, authorize('admin'), deleteMentorship);
 
 export default router;

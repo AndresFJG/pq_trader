@@ -1,26 +1,16 @@
 import { Router } from 'express';
 import { protect, authorize } from '../middleware/auth.middleware';
+import { getUsers, getUser, updateUser, deleteUser } from '../controllers/user.controller';
 
 const router = Router();
 
-// Placeholder routes - implement controllers as needed
-router.get('/profile', protect, (req, res) => {
-  res.json({ success: true, message: 'User profile route' });
-});
+// Admin routes
+router.get('/', protect, authorize('admin'), getUsers);
+router.get('/:id', protect, authorize('admin'), getUser);
+router.put('/:id', protect, authorize('admin'), updateUser);
+router.delete('/:id', protect, authorize('admin'), deleteUser);
 
-router.put('/profile', protect, (req, res) => {
-  res.json({ success: true, message: 'Update profile route' });
-});
-
-router.get('/', protect, authorize('admin'), (req, res) => {
-  res.json({ success: true, message: 'Get all users route' });
-});
-
-router.get('/:id', protect, authorize('admin'), (req, res) => {
-  res.json({ success: true, message: 'Get user route' });
-});
-
-router.delete('/:id', protect, authorize('admin'), (req, res) => {
+router.delete('/:id', protect, authorize('admin'), (_req, res) => {
   res.json({ success: true, message: 'Delete user route' });
 });
 

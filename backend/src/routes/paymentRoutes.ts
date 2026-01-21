@@ -5,7 +5,7 @@ import {
   handleWebhook,
   getPaymentStatus 
 } from '../controllers/paymentController';
-import { protect } from '../middleware/authMiddleware';
+import { protect } from '../middleware/auth.middleware';
 
 const router = Router();
 

@@ -59,7 +59,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem('refreshToken', refreshToken);
         setUser(user);
         toast.success('¡Bienvenido de nuevo!');
-        router.push('/dashboard');
+        
+        // Redirigir según rol
+        if (user.role === 'admin') {
+          router.push('/admin');
+        } else {
+          router.push('/dashboard');
+        }
       }
     } catch (error: any) {
       toast.error(error.response?.data?.error || 'Error al iniciar sesión');

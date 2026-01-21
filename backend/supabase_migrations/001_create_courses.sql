@@ -1,0 +1,13 @@
+-- Insertar datos de cursos del frontend
+-- Tabla courses ya existe con columnas: id, title, slug, description, long_description, instructor_id, 
+-- category, level, duration_hours, thumbnail, video_url, price, discount_price, is_published, 
+-- enrollment_count, rating, created_at, updated_at
+
+INSERT INTO courses (title, slug, description, long_description, level, price, duration_hours, thumbnail, is_published, enrollment_count, rating, category) VALUES
+('Curso Básico de Trading Algorítmico', 'curso-basico-trading-algoritmico', 'Este curso está diseñado para guiarte desde los fundamentos del mercado hasta el lanzamiento de sistemas automatizados.', 'Aprende trading algorítmico desde cero. Incluye análisis técnico, gestión de riesgo, backtesting y automatización con MT5.', 'beginner', 290.00, 40, 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3', TRUE, 245, 4.8, 'Trading Básico'),
+('StrategyQuant X Masterclass', 'strategyquant-x-masterclass', 'Domina StrategyQuant X y crea estrategias rentables sin programar.', 'Curso completo de StrategyQuant X. Aprende a crear, optimizar y exportar estrategias sin necesidad de programar.', 'intermediate', 300.00, 30, 'https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f', TRUE, 189, 4.9, 'StrategyQuant'),
+('Trading con fxDreema', 'trading-fxdreema', 'Aprende a crear Expert Advisors visuales con fxDreema Builder.', 'Curso completo de fxDreema para crear EAs visuales, indicadores personalizados y estrategias de grid trading.', 'beginner', 600.00, 50, 'https://images.unsplash.com/photo-1460925895917-afdab827c52f', TRUE, 156, 4.7, 'fxDreema'),
+('Análisis de Datos Avanzado para Trading', 'analisis-datos-avanzado-trading', 'Walk Forward Analysis, Montecarlo y QuantAnalyzer para validar sistemas.', 'Curso avanzado de validación de estrategias con WFA, simulaciones Montecarlo y análisis con QuantAnalyzer.', 'advanced', 600.00, 60, 'https://images.unsplash.com/photo-1551288049-bebda4e38f71', TRUE, 98, 4.9, 'Análisis Avanzado'),
+('Gestión de Riesgo Profesional', 'gestion-riesgo-profesional', 'Aprende a gestionar el riesgo como los profesionales.', 'Curso de gestión de riesgo avanzada: position sizing, Kelly Criterion, drawdown control y risk-adjusted returns.', 'intermediate', 199.00, 25, 'https://images.unsplash.com/photo-1579532537598-459ecdaf39cc', TRUE, 178, 4.7, 'Gestión de Riesgo'),
+('Python para Trading', 'python-para-trading', 'Automatiza tu trading con Python, pandas y APIs.', 'Aprende Python aplicado al trading: backtesting, análisis de datos con pandas, integración con APIs de brokers.', 'intermediate', 350.00, 45, 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5', TRUE, 312, 4.8, 'Programación')
+ON CONFLICT (slug) DO NOTHING;

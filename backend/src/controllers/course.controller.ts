@@ -1,25 +1,31 @@
 import { Response } from 'express';
-import Course from '../models/Course.model';
+import { supabase } from '../config/supabase';
+import { logger } from '../utils/logger';
 import { AuthRequest } from '../middleware/auth.middleware';
 
 // @desc    Get all courses
 // @route   GET /api/courses
 // @access  Public
-export const getCourses = async (req: AuthRequest, res: Response): Promise<void> => {
+export const getCourses = async (_req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const courses = await Course.find({ published: true })
-      .populate('instructor', 'name avatar')
-      .sort('-createdAt');
+    const { data, error } = await supabase
+      .from('courses')
+      .select('*')
+      .eq('is_published', true)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
 
     res.json({
       success: true,
-      count: courses.length,
-      data: courses,
+      count: data?.length || 0,
+      data: data || [],
     });
   } catch (error: any) {
+    logger.error('Error fetching courses:', error);
     res.status(500).json({
       success: false,
-      error: error.message,
+      error: error.message || 'Error al obtener cursos',
     });
   }
 };
@@ -29,11 +35,15 @@ export const getCourses = async (req: AuthRequest, res: Response): Promise<void>
 // @access  Public
 export const getCourse = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const course = await Course.findById(req.params.id)
-      .populate('instructor', 'name avatar')
-      .populate('lessons');
+    const { data, error } = await supabase
+      .from('courses')
+      .select('*')
+      .eq('id', req.params.id)
+      .single();
 
-    if (!course) {
+    if (error) throw error;
+
+    if (!data) {
       res.status(404).json({
         success: false,
         error: 'Curso no encontrado',
@@ -43,12 +53,13 @@ export const getCourse = async (req: AuthRequest, res: Response): Promise<void> 
 
     res.json({
       success: true,
-      data: course,
+      data,
     });
   } catch (error: any) {
+    logger.error('Error fetching course:', error);
     res.status(500).json({
       success: false,
-      error: error.message,
+      error: error.message || 'Error al obtener el curso',
     });
   }
 };
@@ -58,18 +69,23 @@ export const getCourse = async (req: AuthRequest, res: Response): Promise<void> 
 // @access  Private/Admin
 export const createCourse = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    req.body.instructor = req.user!._id;
+    const { data, error } = await supabase
+      .from('courses')
+      .insert([req.body])
+      .select()
+      .single();
 
-    const course = await Course.create(req.body);
+    if (error) throw error;
 
     res.status(201).json({
       success: true,
-      data: course,
+      data,
     });
   } catch (error: any) {
+    logger.error('Error creating course:', error);
     res.status(500).json({
       success: false,
-      error: error.message,
+      error: error.message || 'Error al crear el curso',
     });
   }
 };
@@ -79,12 +95,16 @@ export const createCourse = async (req: AuthRequest, res: Response): Promise<voi
 // @access  Private/Admin
 export const updateCourse = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const course = await Course.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const { data, error } = await supabase
+      .from('courses')
+      .update(req.body)
+      .eq('id', req.params.id)
+      .select()
+      .single();
 
-    if (!course) {
+    if (error) throw error;
+
+    if (!data) {
       res.status(404).json({
         success: false,
         error: 'Curso no encontrado',
@@ -94,12 +114,13 @@ export const updateCourse = async (req: AuthRequest, res: Response): Promise<voi
 
     res.json({
       success: true,
-      data: course,
+      data,
     });
   } catch (error: any) {
+    logger.error('Error updating course:', error);
     res.status(500).json({
       success: false,
-      error: error.message,
+      error: error.message || 'Error al actualizar el curso',
     });
   }
 };
@@ -109,24 +130,22 @@ export const updateCourse = async (req: AuthRequest, res: Response): Promise<voi
 // @access  Private/Admin
 export const deleteCourse = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const course = await Course.findByIdAndDelete(req.params.id);
+    const { error } = await supabase
+      .from('courses')
+      .delete()
+      .eq('id', req.params.id);
 
-    if (!course) {
-      res.status(404).json({
-        success: false,
-        error: 'Curso no encontrado',
-      });
-      return;
-    }
+    if (error) throw error;
 
     res.json({
       success: true,
       data: {},
     });
   } catch (error: any) {
+    logger.error('Error deleting course:', error);
     res.status(500).json({
       success: false,
-      error: error.message,
+      error: error.message || 'Error al eliminar el curso',
     });
   }
 };
@@ -136,41 +155,16 @@ export const deleteCourse = async (req: AuthRequest, res: Response): Promise<voi
 // @access  Private
 export const enrollCourse = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const course = await Course.findById(req.params.id);
-
-    if (!course) {
-      res.status(404).json({
-        success: false,
-        error: 'Curso no encontrado',
-      });
-      return;
-    }
-
-    // Check if already enrolled
-    if (req.user!.enrolledCourses.includes(course._id)) {
-      res.status(400).json({
-        success: false,
-        error: 'Ya estás inscrito en este curso',
-      });
-      return;
-    }
-
-    // Add course to user's enrolled courses
-    req.user!.enrolledCourses.push(course._id);
-    await req.user!.save();
-
-    // Increment enrolled count
-    course.enrolled += 1;
-    await course.save();
-
-    res.json({
-      success: true,
-      data: course,
+    // TODO: Implement enrollments table
+    res.status(501).json({
+      success: false,
+      error: 'Funcionalidad pendiente de implementar',
     });
   } catch (error: any) {
+    logger.error('Error enrolling in course:', error);
     res.status(500).json({
       success: false,
-      error: error.message,
+      error: error.message || 'Error al inscribirse en el curso',
     });
   }
 };

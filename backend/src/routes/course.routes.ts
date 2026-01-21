@@ -8,13 +8,12 @@ import {
   enrollCourse,
 } from '../controllers/course.controller';
 import { protect, authorize } from '../middleware/auth.middleware';
-import { validate, courseSchema } from '../middleware/validation.middleware';
 
 const router = Router();
 
 router.get('/', getCourses);
 router.get('/:id', getCourse);
-router.post('/', protect, authorize('admin', 'mentor'), validate(courseSchema), createCourse);
+router.post('/', protect, authorize('admin', 'mentor'), createCourse);
 router.put('/:id', protect, authorize('admin', 'mentor'), updateCourse);
 router.delete('/:id', protect, authorize('admin'), deleteCourse);
 router.post('/:id/enroll', protect, enrollCourse);

@@ -9,83 +9,9 @@ import { Clock, Users, Star, BookOpen, TrendingUp, Award } from 'lucide-react';
 import { CourseDetailsModal } from '@/components/modals/CourseDetailsModal';
 import { useLanguage } from '@/lib/i18n';
 
-// Mock data - en producción vendría de la API
-const courses = [
-  {
-    id: '1',
-    titleKey: 'courses.list.basicAlgo.title',
-    descriptionKey: 'courses.list.basicAlgo.description',
-    instructor: 'Carlos Martínez',
-    price: 290,
-    duration: 6,
-    students: 245,
-    rating: 4.8,
-    levelKey: 'courses.level.beginner',
-    topics: ['MT5', 'Backtesting', 'Estadística', 'Automatización'],
-    modules: [
-      'courses.list.basicAlgo.module1',
-      'courses.list.basicAlgo.module2',
-      'courses.list.basicAlgo.module3',
-      'courses.list.basicAlgo.module4',
-      'courses.list.basicAlgo.module5',
-      'courses.list.basicAlgo.module6',
-    ],
-  },
-  {
-    id: '2',
-    titleKey: 'courses.list.strategyquant.title',
-    descriptionKey: 'courses.list.strategyquant.description',
-    instructor: 'Ana García',
-    price: 300,
-    duration: 5,
-    students: 189,
-    rating: 4.9,
-    levelKey: 'courses.level.intermediate',
-    topics: ['StrategyQuant', 'Optimización', 'Robustez', 'Exportación'],
-    modules: [
-      'courses.list.strategyquant.module1',
-      'courses.list.strategyquant.module2',
-      'courses.list.strategyquant.module3',
-      'courses.list.strategyquant.module4',
-      'courses.list.strategyquant.module5',
-    ],
-  },
-  {
-    id: '3',
-    titleKey: 'courses.list.fxdreema.title',
-    descriptionKey: 'courses.list.fxdreema.description',
-    instructor: 'Roberto Silva',
-    price: 600,
-    duration: 10,
-    students: 156,
-    rating: 4.7,
-    levelKey: 'courses.level.beginner',
-    topics: ['fxDreema', 'Indicadores', 'Grid Trading', 'EAs'],
-    modules: [
-      'courses.list.fxdreema.module1',
-      'courses.list.fxdreema.module2',
-      'courses.list.fxdreema.module3',
-    ],
-  },
-  {
-    id: '4',
-    titleKey: 'courses.list.advancedData.title',
-    descriptionKey: 'courses.list.advancedData.description',
-    instructor: 'Carlos Martínez',
-    price: 600,
-    duration: 10,
-    students: 98,
-    rating: 4.9,
-    levelKey: 'courses.level.advanced',
-    topics: ['WFA', 'Montecarlo', 'QuantAnalyzer', 'VPS'],
-    modules: [
-      'courses.list.advancedData.module1',
-      'courses.list.advancedData.module2',
-      'courses.list.advancedData.module3',
-      'courses.list.advancedData.module4',
-    ],
-  },
-];
+// TODO: Conectar con API real - GET /api/courses
+// Datos ahora vienen de la base de datos Supabase
+const courses: any[] = [];
 
 type Course = typeof courses[0];
 

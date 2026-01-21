@@ -3,9 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';
 import { Providers } from '@/components/providers';
 import { Toaster } from 'react-hot-toast';
-import { FloatingButtons } from '@/components/ui/FloatingButtons';
-import { CookieBanner } from '@/components/legal/CookieBanner';
-import { AIChat } from '@/components/chat/AIChat';
+import { ConditionalUI } from '@/components/layout/ConditionalUI';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -94,7 +92,6 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           {children}
-          <FloatingButtons />
           <Toaster
             position="top-right"
             toastOptions={{
@@ -118,8 +115,7 @@ export default function RootLayout({
               },
             }}
           />
-          <CookieBanner />
-          <AIChat />
+          <ConditionalUI />
         </Providers>
       </body>
     </html>

@@ -9,53 +9,8 @@ import { useLanguage } from '@/lib/i18n';
 export function Courses() {
   const { t, language } = useLanguage();
   
-  // Mock data - En producción vendrá de la API
-  const courses = [
-    {
-      id: '1',
-      titleKey: 'courses.list.basicAlgo.title',
-      descriptionKey: 'courses.list.basicAlgo.description',
-      price: 290,
-      duration: 6,
-      levelKey: 'courses.level.beginner',
-      enrolled: 245,
-      rating: 4.8,
-      thumbnail: '/courses/basic-algo.jpg',
-    },
-    {
-      id: '2',
-      titleKey: 'courses.list.strategyquant.title',
-      descriptionKey: 'courses.list.strategyquant.description',
-      price: 300,
-      duration: 5,
-      levelKey: 'courses.level.intermediate',
-      enrolled: 189,
-      rating: 4.9,
-      thumbnail: '/courses/sqx.jpg',
-    },
-    {
-      id: '3',
-      titleKey: 'courses.list.fxdreema.title',
-      descriptionKey: 'courses.list.fxdreema.description',
-      price: 600,
-      duration: 10,
-      levelKey: 'courses.level.beginner',
-      enrolled: 156,
-      rating: 4.7,
-      thumbnail: '/courses/fxdreema.jpg',
-    },
-  {
-    id: '4',
-    titleKey: 'courses.list.advancedData.title',
-    descriptionKey: 'courses.list.advancedData.description',
-    price: 600,
-    duration: 10,
-    levelKey: 'courses.level.advanced',
-    enrolled: 98,
-    rating: 4.9,
-    thumbnail: '/courses/advanced-data.jpg',
-  },
-];
+  // TODO: Conectar con API real - GET /api/courses (featured)
+  const courses: any[] = [];
   
   return (
     <section className="py-20 px-4">

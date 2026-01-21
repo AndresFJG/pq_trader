@@ -10,44 +10,9 @@ import { useLanguage } from '@/lib/i18n';
 import { TrendingUp, Shield, BarChart3, Zap, CheckCircle, ExternalLink, Award } from 'lucide-react';
 import Link from 'next/link';
 
-// Mock data - mismo que en TrackRecords.tsx
-const portfoliosData = [
-  {
-    name: 'JATA',
-    totalReturn: 18.45,
-    period: 'Ene 15, 2024 - Dic 12, 2025',
-    maxDrawdown: -5.3,
-    sharpeRatio: 2.12,
-    winRate: 66.8,
-    darwinexUrl: 'https://www.darwinexzero.com/es/darwin/JATA/performance',
-    monthlyReturns: [
-      {
-        year: 2024,
-        months: [
-          { month: 'ENE', return: 1.24 },
-          { month: 'FEB', return: 2.15 },
-          { month: 'MAR', return: 1.89 },
-          { month: 'ABR', return: 0.75 },
-          { month: 'MAY', return: 1.45 },
-          { month: 'JUN', return: 0.92 },
-          { month: 'JUL', return: 1.67 },
-          { month: 'AGO', return: 2.34 },
-          { month: 'SEP', return: 1.12 },
-          { month: 'OCT', return: 0.88 },
-          { month: 'NOV', return: 1.98 },
-          { month: 'DIC', return: 2.54 },
-        ],
-      },
-      {
-        year: 2025,
-        months: [
-          { month: 'ENE', return: 0.64 },
-          { month: 'FEB', return: 1.23 },
-          { month: 'MAR', return: 0.95 },
-          { month: 'ABR', return: -0.82 },
-          { month: 'MAY', return: 0.77 },
-          { month: 'JUN', return: 1.34 },
-          { month: 'JUL', return: 0.56 },
+// TODO: Conectar con API de Darwinex real
+// Los portfolios vienen directamente de Darwinex API
+const portfoliosData: any[] = [];
           { month: 'AGO', return: 1.45 },
           { month: 'SEP', return: 0.89 },
           { month: 'OCT', return: 0.42 },

@@ -1,53 +1,72 @@
 # 🚀 PQ Trader
 
-**Plataforma profesional de trading para mentorías, cursos y visualización de resultados en tiempo real**
+**Plataforma profesional de educación en trading algorítmico con resultados verificados**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)](https://www.typescriptlang.org/)
 [![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-20-green)](https://nodejs.org/)
+[![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-green)](https://supabase.com/)
 
 ## 📋 Descripción
 
-PQ Trader es una plataforma integral diseñada específicamente para traders profesionales que desean:
+PQ Trader es una plataforma educativa completa para traders que ofrece:
 
-- 📚 **Vender cursos y mentorías** de trading algorítmico
-- 📊 **Mostrar resultados reales** integrados con Darwinex
-- 💳 **Gestionar pagos automáticos** mensuales con Stripe
-- 👥 **Administrar usuarios** con roles y permisos
-- 🔒 **Seguridad de nivel empresarial** con rate limiting y validaciones
+- 📚 **Cursos de trading algorítmico** con certificación
+- 🎓 **Mentorías personalizadas** 1-on-1 y grupales  
+- 📊 **Resultados verificados** integrados con Darwinex
+- 💳 **Pagos seguros** con Stripe
+- 🌐 **Soporte multiidioma** (ES/EN)
 
 ## 🎯 Características Principales
 
-### Para Usuarios
-- ✅ Registro y autenticación segura (JWT + bcrypt)
-- 💰 Sistema de suscripciones mensuales automáticas
-- 📖 Acceso a cursos y material educativo
-- 📈 Visualización de portafolios y resultados de Darwinex
-- 🎓 Reserva de mentorías personalizadas
-- 💳 Checkout optimizado con diseño de trading
+### Para Estudiantes
+- ✅ Acceso a cursos estructurados de trading
+- 🎓 Mentorías con traders profesionales
+- 📈 Visualización de resultados reales verificados
+- 💳 Suscripciones flexibles y pagos seguros
+- 📱 Experiencia responsive en todos los dispositivos
 
 ### Para Administradores
 - 👨‍💼 Panel de administración completo
-- 📊 Dashboard con métricas y analytics
-- 💵 Gestión de pagos y suscripciones
-- 📚 Creación y gestión de cursos
-- 👥 Administración de usuarios y roles
-- 📧 Sistema de notificaciones
+- 📊 Dashboard con métricas en tiempo real
+- 💵 Gestión de pagos y transacciones
+- 📚 Gestión de cursos y mentorías
+- 👥 Administración de usuarios
 
 ### Técnicas
 - 🔐 Autenticación JWT con refresh tokens
-- 🛡️ Rate limiting para prevenir abusos
-- 🔒 Seguridad con Helmet, CORS y validaciones
-- 🧪 Tests unitarios y de integración
-- 📱 Diseño responsive con Tailwind CSS
-- ⚡ Optimización de rendimiento con Next.js 14
-- 🔄 Webhooks de Stripe para sincronización de pagos
+- 🛡️ Rate limiting y seguridad avanzada
+- 🗄️ Base de datos PostgreSQL (Supabase)
+- ⚡ Next.js 14 con App Router
+- 🎨 UI moderna con Tailwind CSS + shadcn/ui
+- 🔄 Webhooks de Stripe
 
-## 🏗️ Arquitectura del Proyecto
+## 🏗️ Arquitectura
 
 ```
 pq_trader/
+├── backend/              # API REST (Node + Express + TypeScript)
+│   ├── src/
+│   │   ├── config/      # Configuraciones (Supabase, Stripe)
+│   │   ├── controllers/ # Lógica de negocio
+│   │   ├── middleware/  # Auth, errors, rate-limit
+│   │   ├── routes/      # Rutas de API
+│   │   ├── services/    # Servicios externos
+│   │   ├── types/       # TypeScript types
+│   │   └── utils/       # Utilidades
+│   └── supabase_migrations/  # SQL migrations
+│
+├── frontend/            # Next.js 14 + TypeScript
+│   └── src/
+│       ├── app/        # App Router (páginas)
+│       ├── components/ # Componentes React
+│       ├── hooks/      # Custom hooks
+│       ├── lib/        # i18n, utils, SEO
+│       └── services/   # API clients
+│
+└── docs/               # Documentación técnica
+```
 ├── frontend/                 # Next.js 14 + TypeScript
 │   ├── src/
 │   │   ├── app/             # App Router de Next.js

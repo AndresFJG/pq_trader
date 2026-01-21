@@ -494,10 +494,10 @@ export default function StrategyQuantPage() {
             <CardContent className="p-12">
               <div className="text-center mb-8">
                 <Badge className="mb-4 bg-profit text-background">
-                  Club Exclusivo
+                  Comunidad Exclusiva
                 </Badge>
                 <h2 className="text-4xl font-bold mb-4">
-                  Club StrategyQuant PQ Trader
+                  Comunidad de Trading algorítmico
                 </h2>
                 <p className="text-xl text-muted-foreground mb-8">
                   Aprende a dominar la plataforma con sesiones en vivo, plantillas exclusivas y soporte personalizado
@@ -513,19 +513,7 @@ export default function StrategyQuantPage() {
                   <ul className="space-y-3">
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-profit mt-0.5 flex-shrink-0" />
-                      <span className="text-sm">4 sesiones mensuales en vivo (grupos reducidos)</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="h-4 w-4 text-profit mt-0.5 flex-shrink-0" />
                       <span className="text-sm">Biblioteca de plantillas y workflows optimizados</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="h-4 w-4 text-profit mt-0.5 flex-shrink-0" />
-                      <span className="text-sm">Estrategias verificadas listas para usar</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="h-4 w-4 text-profit mt-0.5 flex-shrink-0" />
-                      <span className="text-sm">Soporte técnico prioritario</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <CheckCircle className="h-4 w-4 text-profit mt-0.5 flex-shrink-0" />
@@ -539,17 +527,6 @@ export default function StrategyQuantPage() {
                 </div>
 
                 <div className="bg-surface/30 rounded-lg p-6">
-                  <div className="text-center mb-6">
-                    <p className="text-sm text-muted-foreground mb-2">Inversión mensual</p>
-                    <div className="flex items-baseline justify-center gap-2">
-                      <span className="text-5xl font-bold text-profit">$150</span>
-                      <span className="text-muted-foreground">/mes</span>
-                    </div>
-                    <Badge variant="outline" className="mt-3 border-profit/40 text-profit">
-                      Sin permanencia
-                    </Badge>
-                  </div>
-
                   <Link href="/mentorias#club-strategyquant" className="block">
                     <Button variant="profit" size="lg" className="w-full">
                       Comenzar Ahora

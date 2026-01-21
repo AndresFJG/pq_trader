@@ -5,36 +5,8 @@ import { formatPercentage, getPercentageColor } from '@/lib/utils';
 import { TrendingUp, TrendingDown, Activity } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
 
-// Mock data - En producción vendrá de la API de Darwinex
-const portfolios = [
-  {
-    id: '1',
-    name: 'PQT.Alpha',
-    return: 24.5,
-    drawdown: -8.2,
-    sharpeRatio: 2.45,
-    winRate: 68.4,
-    trades: 342,
-  },
-  {
-    id: '2',
-    name: 'PQT.Momentum',
-    return: 18.3,
-    drawdown: -6.1,
-    sharpeRatio: 2.12,
-    winRate: 64.2,
-    trades: 289,
-  },
-  {
-    id: '3',
-    name: 'PQT.Conservative',
-    return: 12.7,
-    drawdown: -4.3,
-    sharpeRatio: 2.89,
-    winRate: 71.5,
-    trades: 156,
-  },
-];
+// TODO: Conectar con API real - GET /api/portfolios o Darwinex API
+const portfolios: any[] = [];
 
 export function Darwinex() {
   const { t, language } = useLanguage();

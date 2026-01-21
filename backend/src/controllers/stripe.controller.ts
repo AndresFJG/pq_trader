@@ -2,7 +2,7 @@ import { Response } from 'express';
 import Stripe from 'stripe';
 import { AuthRequest } from '../middleware/auth.middleware';
 import stripeService from '../services/stripe-secure.service';
-import User from '../models/User.model';
+// import User from '../models/User.model'; // TODO: Migrar a Supabase UserService
 import { logger, logTransaction, logSecurity } from '../utils/logger';
 
 /**

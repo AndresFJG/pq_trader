@@ -1,31 +1,46 @@
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+  return twMerge(clsx(inputs))
 }
 
-export function formatCurrency(amount: number, currency: string = 'USD'): string {
-  return new Intl.NumberFormat('es-ES', {
-    style: 'currency',
-    currency,
-  }).format(amount);
+/**
+ * Formatea un número como porcentaje con signo
+ * @param value - Número a formatear
+ * @returns String formateado (ej: "+23.5%" o "-5.2%")
+ */
+export function formatPercentage(value: number): string {
+  const sign = value >= 0 ? '+' : '';
+  return `${sign}${value.toFixed(2)}%`;
 }
 
-export function formatDate(date: Date | string): string {
-  return new Intl.DateTimeFormat('es-ES', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }).format(new Date(date));
-}
-
-export function formatPercentage(value: number, decimals: number = 2): string {
-  return `${value >= 0 ? '+' : ''}${value.toFixed(decimals)}%`;
-}
-
+/**
+ * Obtiene la clase de color según si el porcentaje es positivo o negativo
+ * @param value - Número a evaluar
+ * @returns Clase de Tailwind para el color
+ */
 export function getPercentageColor(value: number): string {
-  if (value > 0) return 'text-profit';
-  if (value < 0) return 'text-loss';
-  return 'text-neutral';
+  return value >= 0 ? 'text-profit' : 'text-loss';
+}
+
+/**
+ * Formatea un número como moneda USD
+ * @param value - Número a formatear
+ * @returns String formateado (ej: "$1,234.56")
+ */
+export function formatCurrency(value: number): string {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(value);
+}
+
+/**
+ * Formatea un número con separadores de miles
+ * @param value - Número a formatear
+ * @returns String formateado (ej: "1,234")
+ */
+export function formatNumber(value: number): string {
+  return new Intl.NumberFormat('en-US').format(value);
 }
