@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { UserService } from '../services/user.service';
 import { AuthRequest } from '../middleware/auth.middleware';
-import { generateToken, generateRefreshToken } from '../utils/jwt';
+import { generateToken, generateRefreshToken, verifyRefreshToken } from '../utils/jwt';
 
 // NOTA: generateToken y generateRefreshToken ahora se importan de ../utils/jwt
 
@@ -143,10 +143,15 @@ export const refreshToken = async (req: Request, res: Response): Promise<void> =
     }
 
     try {
-      const decoded = jwt.verify(
-        refreshToken,
-        process.env.JWT_REFRESH_SECRET!
-      ) as { id: string };
+      const decoded = verifyRefreshToken(refreshToken);
+
+      if (!decoded) {
+        res.status(401).json({
+          success: false,
+          error: 'Token inválido',
+        });
+        return;
+      }
 
       const user = await UserService.findById(decoded.id);
 

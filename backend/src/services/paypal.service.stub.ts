@@ -33,6 +33,19 @@ const PayPalService = {
       }]
     };
   },
+
+  async getOrderDetails(orderId: string): Promise<any> {
+    return {
+      id: orderId,
+      status: 'APPROVED',
+      purchase_units: [{
+        amount: {
+          value: '100.00',
+          currency_code: 'EUR'
+        }
+      }]
+    };
+  },
   
   async createSubscription(data: any): Promise<any> {
     return {
@@ -48,8 +61,21 @@ const PayPalService = {
       status: 'CANCELLED'
     };
   },
-  
+
+  async refundPayment(captureId: string, amount: any): Promise<any> {
+    return {
+      id: 'REFUND_' + Date.now(),
+      status: 'COMPLETED',
+      amount: amount
+    };
+  },
+
   async verifyWebhook(payload: any, headers: any): Promise<boolean> {
+    // Siempre retorna true en desarrollo
+    return true;
+  },
+
+  async verifyWebhookSignature(payload: any, headers: any): Promise<boolean> {
     // Siempre retorna true en desarrollo
     return true;
   }

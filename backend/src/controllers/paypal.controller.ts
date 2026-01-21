@@ -23,15 +23,13 @@ export const createOrder = async (req: AuthRequest, res: Response): Promise<void
       return;
     }
 
-    const order = await paypalService.createOrder(
+    const order = await paypalService.createOrder({
       amount,
       currency,
-      {
-        userId: userId?.toString(),
-        plan,
-        email: req.user?.email,
-      }
-    );
+      userId: userId?.toString(),
+      plan,
+      email: req.user?.email,
+    });
 
     res.status(201).json({
       success: true,
