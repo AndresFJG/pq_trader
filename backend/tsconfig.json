@@ -22,7 +22,6 @@
     "noUnusedParameters": false,
     "noImplicitReturns": false,
     "noFallthroughCasesInSwitch": false,
-    "suppressImplicitAnyIndexErrors": true,
     "noImplicitThis": false,
     "strictPropertyInitialization": false
   },
