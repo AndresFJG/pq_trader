@@ -1,7 +1,8 @@
 import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.middleware';
-import paypalService from '../services/paypal.service';
-// import User from '../models/User.model'; // TODO: Migrar a Supabase UserService
+import paypalService from '../services/paypal.service.stub';
+import { UserService } from '../services/user.service';
+// PayPal service temporalmente deshabilitado - usando stub
 import { logger, logTransaction, logSecurity } from '../utils/logger';
 
 /**
@@ -64,7 +65,7 @@ export const captureOrder = async (req: AuthRequest, res: Response): Promise<voi
     const capture = await paypalService.captureOrder(orderId);
 
     // Actualizar usuario si es necesario
-    const user = await User.findById(userId);
+    const user = await UserService.findById(userId);
     if (user) {
       // Aquí puedes actualizar el tier de suscripción o lo que necesites
       logTransaction('PAYPAL_PAYMENT_CAPTURED', {

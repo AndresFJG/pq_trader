@@ -24,3 +24,5 @@ export class PayPalService {
     return false;
   }
 }
+
+export default PayPalService;

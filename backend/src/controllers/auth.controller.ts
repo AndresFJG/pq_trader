@@ -1,25 +1,10 @@
 import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
 import { UserService } from '../services/user.service';
 import { AuthRequest } from '../middleware/auth.middleware';
+import { generateToken, generateRefreshToken } from '../utils/jwt';
 
-// Generate JWT Token
-const generateToken = (id: string): string => {
-  return jwt.sign(
-    { id }, 
-    process.env.JWT_SECRET || 'default_secret',
-    { expiresIn: '1d' }
-  );
-};
+// NOTA: generateToken y generateRefreshToken ahora se importan de ../utils/jwt
 
-// Generate Refresh Token
-const generateRefreshToken = (id: string): string => {
-  return jwt.sign(
-    { id }, 
-    process.env.JWT_REFRESH_SECRET || 'default_refresh_secret',
-    { expiresIn: '7d' }
-  );
-};
 
 // @desc    Register user
 // @route   POST /api/auth/register

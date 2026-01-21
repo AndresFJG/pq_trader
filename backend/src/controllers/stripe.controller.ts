@@ -2,7 +2,7 @@ import { Response } from 'express';
 import Stripe from 'stripe';
 import { AuthRequest } from '../middleware/auth.middleware';
 import stripeService from '../services/stripe-secure.service';
-// import User from '../models/User.model'; // TODO: Migrar a Supabase UserService
+import { UserService } from '../services/user.service';
 import { logger, logTransaction, logSecurity } from '../utils/logger';
 
 /**
@@ -16,7 +16,7 @@ export const createCustomer = async (req: AuthRequest, res: Response): Promise<v
     const userId = req.user?._id;
 
     // Verificar si ya tiene un customer
-    const user = await User.findById(userId);
+    const user = await UserService.findById(userId);
     if (user?.stripeCustomerId) {
       res.status(400).json({
         success: false,
@@ -32,7 +32,7 @@ export const createCustomer = async (req: AuthRequest, res: Response): Promise<v
     );
 
     // Guardar customer ID en el usuario
-    await User.findByIdAndUpdate(userId, {
+    await UserService.findByIdAndUpdate(userId, {
       stripeCustomerId: customer.id,
     });
 
@@ -64,7 +64,7 @@ export const createSubscription = async (req: AuthRequest, res: Response): Promi
     const { priceId } = req.body;
     const userId = req.user?._id;
 
-    const user = await User.findById(userId);
+    const user = await UserService.findById(userId);
     if (!user) {
       res.status(404).json({
         success: false,
@@ -97,7 +97,7 @@ export const createSubscription = async (req: AuthRequest, res: Response): Promi
     );
 
     // Actualizar usuario con subscription ID
-    await User.findByIdAndUpdate(userId, {
+    await UserService.findByIdAndUpdate(userId, {
       stripeSubscriptionId: subscription.id,
       subscriptionStatus: subscription.status,
     });
@@ -140,7 +140,7 @@ export const createPaymentIntent = async (req: AuthRequest, res: Response): Prom
       return;
     }
 
-    const user = await User.findById(userId);
+    const user = await UserService.findById(userId);
     if (!user) {
       res.status(404).json({
         success: false,
@@ -202,7 +202,7 @@ export const cancelSubscription = async (req: AuthRequest, res: Response): Promi
     const { immediately = false } = req.body;
     const userId = req.user?._id;
 
-    const user = await User.findById(userId);
+    const user = await UserService.findById(userId);
     if (!user?.stripeSubscriptionId) {
       res.status(404).json({
         success: false,
@@ -217,7 +217,7 @@ export const cancelSubscription = async (req: AuthRequest, res: Response): Promi
     );
 
     // Actualizar estado en el usuario
-    await User.findByIdAndUpdate(userId, {
+    await UserService.findByIdAndUpdate(userId, {
       subscriptionStatus: immediately ? 'canceled' : 'canceling',
     });
 
@@ -250,7 +250,7 @@ export const reactivateSubscription = async (req: AuthRequest, res: Response): P
   try {
     const userId = req.user?._id;
 
-    const user = await User.findById(userId);
+    const user = await UserService.findById(userId);
     if (!user?.stripeSubscriptionId) {
       res.status(404).json({
         success: false,
@@ -263,7 +263,7 @@ export const reactivateSubscription = async (req: AuthRequest, res: Response): P
       user.stripeSubscriptionId
     );
 
-    await User.findByIdAndUpdate(userId, {
+    await UserService.findByIdAndUpdate(userId, {
       subscriptionStatus: subscription.status,
     });
 
@@ -296,7 +296,7 @@ export const createCheckoutSession = async (req: AuthRequest, res: Response): Pr
     const { priceId, successUrl, cancelUrl } = req.body;
     const userId = req.user?._id;
 
-    const user = await User.findById(userId);
+    const user = await UserService.findById(userId);
     if (!user) {
       res.status(404).json({
         success: false,
@@ -358,7 +358,7 @@ export const createBillingPortal = async (req: AuthRequest, res: Response): Prom
     const { returnUrl } = req.body;
     const userId = req.user?._id;
 
-    const user = await User.findById(userId);
+    const user = await UserService.findById(userId);
     if (!user?.stripeCustomerId) {
       res.status(404).json({
         success: false,
@@ -419,7 +419,7 @@ export const handleWebhook = async (req: AuthRequest, res: Response): Promise<vo
         const userId = subscription.metadata?.userId;
 
         if (userId) {
-          await User.findByIdAndUpdate(userId, {
+          await UserService.findByIdAndUpdate(userId, {
             stripeSubscriptionId: subscription.id,
             subscriptionStatus: subscription.status,
             subscriptionTier: subscription.metadata?.tier || 'basic',
@@ -439,7 +439,7 @@ export const handleWebhook = async (req: AuthRequest, res: Response): Promise<vo
         const userId = subscription.metadata?.userId;
 
         if (userId) {
-          await User.findByIdAndUpdate(userId, {
+          await UserService.findByIdAndUpdate(userId, {
             subscriptionStatus: 'canceled',
             stripeSubscriptionId: null,
           });
@@ -459,7 +459,7 @@ export const handleWebhook = async (req: AuthRequest, res: Response): Promise<vo
         if (subscription) {
           const user = await User.findOne({ stripeSubscriptionId: subscription });
           if (user) {
-            await User.findByIdAndUpdate(user._id, {
+            await UserService.findByIdAndUpdate(user._id, {
               subscriptionStatus: 'active',
             });
 
@@ -482,7 +482,7 @@ export const handleWebhook = async (req: AuthRequest, res: Response): Promise<vo
         if (subscription) {
           const user = await User.findOne({ stripeSubscriptionId: subscription });
           if (user) {
-            await User.findByIdAndUpdate(user._id, {
+            await UserService.findByIdAndUpdate(user._id, {
               subscriptionStatus: 'past_due',
             });
 
