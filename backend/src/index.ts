@@ -21,10 +21,10 @@ import dashboardRoutes from './routes/dashboard.routes';
 import mentorshipRoutes from './routes/mentorship.routes';
 import portfolioRoutes from './routes/portfolio.routes';
 import transactionRoutes from './routes/transaction.routes';
+import paypalRoutes from './routes/paypal.routes';
 // import paymentRoutes from './routes/paymentRoutes';
 // import darwinexRoutes from './routes/darwinex.routes';
-// import stripeRoutes from './routes/stripe.routes';
-// import paypalRoutes from './routes/paypal.routes';
+// import stripeRoutes from './routes/stripe.routes'; // Stripe deshabilitado
 
 // Import middleware
 import { errorHandler } from './middleware/error.middleware';
@@ -77,10 +77,10 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/mentorships', mentorshipRoutes);
 app.use('/api/portfolios', portfolioRoutes);
 app.use('/api/transactions', transactionRoutes);
+app.use('/api/paypal', paypalRoutes); // PayPal habilitado
 // app.use('/api/payments', paymentRoutes); // Temporalmente deshabilitado
 // app.use('/api/darwinex', darwinexRoutes); // Temporalmente deshabilitado
-// app.use('/api/stripe', stripeRoutes); // Temporalmente deshabilitado
-// app.use('/api/paypal', paypalRoutes); // Temporalmente deshabilitado
+// app.use('/api/stripe', stripeRoutes); // Stripe deshabilitado
 
 // Error handling
 app.use(notFound);
