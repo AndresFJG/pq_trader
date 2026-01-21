@@ -32,7 +32,7 @@ export const protect = async (
 
     try {
       // Verify token
-      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { id: string };
+      const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { id: number };
 
       // Get user from token
       const user = await UserService.findById(decoded.id);

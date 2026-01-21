@@ -1,18 +1,8 @@
 import { supabase } from '../config/supabase';
 import bcrypt from 'bcryptjs';
+import { User } from '../types/database.types';
 
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-  role: 'admin' | 'user' | 'mentor';
-  subscription_tier: 'free' | 'basic' | 'premium' | 'enterprise';
-  subscription_status: 'active' | 'canceled' | 'past_due' | 'trialing' | 'none';
-  is_email_verified: boolean;
-  created_at: string;
-  updated_at: string;
-}
+export { User } from '../types/database.types';
 
 export class UserService {
   /**
@@ -73,7 +63,7 @@ export class UserService {
   /**
    * Buscar usuario por ID
    */
-  static async findById(id: string): Promise<User | null> {
+  static async findById(id: string | number): Promise<User | null> {
     const { data, error } = await supabase
       .from('users')
       .select('*')

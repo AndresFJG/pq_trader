@@ -8,7 +8,7 @@
     "strict": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
+    "forceConsistentCasingInFileNames": false,
     "resolveJsonModule": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
@@ -23,7 +23,9 @@
     "noImplicitReturns": false,
     "noFallthroughCasesInSwitch": false,
     "noImplicitThis": false,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "strictBindCallApply": false,
+    "alwaysStrict": false
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "**/*.test.ts"],
