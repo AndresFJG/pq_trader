@@ -215,7 +215,7 @@ export default function DashboardPage() {
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-sm text-muted-foreground">Plan Actual</span>
                         <Badge variant="secondary" className="text-xs">
-                          {user.subscriptionTier || 'Free'}
+                          {user.subscription?.plan || 'Free'}
                         </Badge>
                       </div>
                       <p className="text-sm text-muted-foreground">

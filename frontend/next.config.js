@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // output: 'export', // Comentado para mejor rendimiento en desarrollo
   images: {
     unoptimized: true,
     domains: ['localhost', 'api.pqtrader.com', 'darwinex.com', 'images.unsplash.com'],
@@ -19,7 +18,14 @@ const nextConfig = {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     NEXT_PUBLIC_STRIPE_PUBLIC_KEY: process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY,
   },
-  // trailingSlash: true, // Solo necesario para export estático
+  // Permitir errores de TypeScript en build (para desarrollo)
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+  // Permitir warnings de ESLint
+  eslint: {
+    ignoreDuringBuilds: false,
+  },
 };
 
 module.exports = nextConfig;

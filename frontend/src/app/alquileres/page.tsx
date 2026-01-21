@@ -317,7 +317,7 @@ export default function AlquileresPage() {
                 {t('alquileresPage.cta.subtitle')}
               </p>
               <Link href="/mentorias">
-                <Button variant="profit" size="lg">
+                <Button className="bg-profit hover:bg-profit/90 text-white" size="lg">
                   {t('alquileresPage.cta.button')}
                 </Button>
               </Link>
