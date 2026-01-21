@@ -11,7 +11,7 @@ export class EmailService {
   private transporter: Transporter;
 
   constructor() {
-    this.transporter = nodemailer.createTransporter({
+    this.transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST || 'smtp.sendgrid.net',
       port: parseInt(process.env.SMTP_PORT || '587'),
       secure: false,

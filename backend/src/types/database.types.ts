@@ -23,6 +23,7 @@ export type TransactionStatus = 'pending' | 'completed' | 'failed' | 'refunded';
 
 export interface User {
   id: number;
+  _id?: number; // Alias para compatibilidad con código MongoDB
   name: string;
   email: string;
   password: string;

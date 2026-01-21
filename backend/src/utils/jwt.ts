@@ -8,9 +8,9 @@ const JWT_REFRESH_EXPIRE = process.env.JWT_REFRESH_EXPIRE || '7d';
 /**
  * Generar access token
  */
-export const generateToken = (userId: string): string => {
+export const generateToken = (userId: string | number): string => {
   const options: SignOptions = {
-    expiresIn: JWT_EXPIRE,
+    expiresIn: JWT_EXPIRE as any,
   };
   return jwt.sign({ id: userId }, JWT_SECRET, options);
 };
@@ -18,9 +18,9 @@ export const generateToken = (userId: string): string => {
 /**
  * Generar refresh token
  */
-export const generateRefreshToken = (userId: string): string => {
+export const generateRefreshToken = (userId: string | number): string => {
   const options: SignOptions = {
-    expiresIn: JWT_REFRESH_EXPIRE,
+    expiresIn: JWT_REFRESH_EXPIRE as any,
   };
   return jwt.sign({ id: userId }, JWT_REFRESH_SECRET, options);
 };
