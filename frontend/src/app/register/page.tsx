@@ -9,11 +9,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useLanguage } from '@/lib/i18n';
+import { useAuth } from '@/hooks/useAuth';
 import Link from 'next/link';
 import { Mail, Lock, User, ArrowRight, TrendingUp, Shield } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 export default function RegisterPage() {
   const { t } = useLanguage();
+  const { register: registerUser } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -33,27 +36,24 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Validación de UI (solo para mejorar UX, el backend valida todo)
     if (formData.password !== formData.confirmPassword) {
-      alert(t('registerPage.form.passwordMismatch'));
+      toast.error('Las contraseñas no coinciden');
       return;
     }
 
     if (!acceptTerms) {
-      alert(t('registerPage.form.acceptTermsRequired'));
+      toast.error('Debes aceptar los términos y condiciones');
       return;
     }
 
     setIsLoading(true);
     
     try {
-      const { register } = await import('@/contexts/AuthContext');
-      // TODO: Usar useAuth hook
-      console.log('Registration attempt:', formData);
-      // await register(formData.name, formData.email, formData.password);
-      alert('Registro exitoso. Por favor inicia sesión.');
-      window.location.href = '/login';
+      await registerUser(formData.name, formData.email, formData.password);
     } catch (error: any) {
-      alert(error.message || 'Error al registrarse');
+      // El error ya se maneja en useAuth con toast
+      console.error('Registration error:', error);
     } finally {
       setIsLoading(false);
     }

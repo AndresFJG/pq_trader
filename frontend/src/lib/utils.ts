@@ -11,6 +11,9 @@ export function cn(...inputs: ClassValue[]) {
  * @returns String formateado (ej: "+23.5%" o "-5.2%")
  */
 export function formatPercentage(value: number): string {
+  if (value === null || value === undefined || isNaN(value)) {
+    return '0.00%';
+  }
   const sign = value >= 0 ? '+' : '';
   return `${sign}${value.toFixed(2)}%`;
 }
@@ -21,6 +24,9 @@ export function formatPercentage(value: number): string {
  * @returns Clase de Tailwind para el color
  */
 export function getPercentageColor(value: number): string {
+  if (value === null || value === undefined || isNaN(value)) {
+    return 'text-muted-foreground';
+  }
   return value >= 0 ? 'text-profit' : 'text-loss';
 }
 

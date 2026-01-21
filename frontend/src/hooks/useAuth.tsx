@@ -60,11 +60,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(user);
         toast.success('¡Bienvenido de nuevo!');
         
-        // Redirigir según rol
+        // Solo redirigir a admin si es admin, usuarios normales se quedan en home
         if (user.role === 'admin') {
           router.push('/admin');
         } else {
-          router.push('/dashboard');
+          router.push('/');
         }
       }
     } catch (error: any) {
@@ -87,7 +87,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem('refreshToken', refreshToken);
         setUser(user);
         toast.success('¡Cuenta creada exitosamente!');
-        router.push('/dashboard');
+        router.push('/');
       }
     } catch (error: any) {
       toast.error(error.response?.data?.error || 'Error al registrarse');

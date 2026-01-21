@@ -77,15 +77,6 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body;
 
-    // Validate credentials
-    if (!email || !password) {
-      res.status(400).json({
-        success: false,
-        error: 'Por favor proporciona email y contraseña',
-      });
-      return;
-    }
-
     // Check user
     const user = await UserService.findByEmail(email);
 

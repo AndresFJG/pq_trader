@@ -6,10 +6,10 @@ export interface User {
   name: string;
   email: string;
   password: string;
-  role: 'admin' | 'user' | 'instructor';
-  subscription_tier: 'free' | 'basic' | 'premium' | 'vip';
-  subscription_status: 'active' | 'inactive' | 'cancelled' | 'past_due';
-  is_verified: boolean;
+  role: 'admin' | 'user' | 'mentor';
+  subscription_tier: 'free' | 'basic' | 'premium' | 'enterprise';
+  subscription_status: 'active' | 'canceled' | 'past_due' | 'trialing' | 'none';
+  is_email_verified: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -22,7 +22,7 @@ export class UserService {
     name: string;
     email: string;
     password: string;
-    role?: 'admin' | 'user' | 'instructor';
+    role?: 'admin' | 'user' | 'mentor';
   }): Promise<User> {
     const passwordHash = await bcrypt.hash(data.password, 10);
 
@@ -35,8 +35,8 @@ export class UserService {
           password: passwordHash,
           role: data.role || 'user',
           subscription_tier: 'free',
-          subscription_status: 'inactive',
-          is_verified: false,
+          subscription_status: 'none',
+          is_email_verified: false,
         },
       ])
       .select()

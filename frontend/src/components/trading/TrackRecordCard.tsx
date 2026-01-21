@@ -142,7 +142,7 @@ export function TrackRecordCard({ data, className }: TrackRecordCardProps) {
           <div className="bg-background/50 rounded-lg p-4 text-center border border-border/30">
             <Activity className="h-5 w-5 mx-auto mb-2 text-muted-foreground" />
             <p className="text-xs text-muted-foreground mb-1">Sharpe Ratio</p>
-            <p className="text-lg font-bold text-foreground">{data.sharpeRatio.toFixed(2)}</p>
+            <p className="text-lg font-bold text-foreground">{(data.sharpeRatio || 0).toFixed(2)}</p>
           </div>
           <div className="bg-background/50 rounded-lg p-4 text-center border border-border/30">
             <Activity className="h-5 w-5 mx-auto mb-2 text-muted-foreground" />

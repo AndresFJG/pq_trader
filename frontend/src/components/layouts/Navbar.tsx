@@ -11,7 +11,7 @@ import { useLanguage } from '@/lib/i18n';
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const { t } = useLanguage();
 
   return (
@@ -26,22 +26,22 @@ export function Navbar() {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link href="/cursos" className="text-foreground hover:text-profit transition">
+            <Link href="/cursos" className="text-foreground hover:text-profit transition" prefetch={true}>
               {t('nav.courses')}
             </Link>
-            <Link href="/mentorias" className="text-foreground hover:text-profit transition">
+            <Link href="/mentorias" className="text-foreground hover:text-profit transition" prefetch={true}>
               {t('nav.mentorships')}
             </Link>
-            <Link href="/strategyquant" className="text-foreground hover:text-profit transition">
+            <Link href="/strategyquant" className="text-foreground hover:text-profit transition" prefetch={true}>
               {t('nav.strategyquant')}
             </Link>
-            <Link href="/portafolios" className="text-foreground hover:text-profit transition">
+            <Link href="/portafolios" className="text-foreground hover:text-profit transition" prefetch={true}>
               {t('nav.portfolios')}
             </Link>
-            <Link href="/alquileres" className="text-foreground hover:text-profit transition">
+            <Link href="/alquileres" className="text-foreground hover:text-profit transition" prefetch={true}>
               {t('nav.rentals')}
             </Link>
-            <Link href="/blog" className="text-foreground hover:text-profit transition">
+            <Link href="/blog" className="text-foreground hover:text-profit transition" prefetch={true}>
               {t('nav.blog')}
             </Link>
           </div>
@@ -50,10 +50,21 @@ export function Navbar() {
           <div className="hidden md:flex items-center space-x-3">
             <LanguageToggle />
             <ThemeToggle />
-            {user ? (
-              <Link href="/dashboard">
-                <Button variant="profit">Dashboard</Button>
-              </Link>
+            {loading ? (
+              <div className="flex items-center space-x-3">
+                <div className="h-10 w-24 bg-secondary/50 animate-pulse rounded-md" />
+                <div className="h-10 w-32 bg-secondary/50 animate-pulse rounded-md" />
+              </div>
+            ) : user ? (
+              user.role === 'admin' ? (
+                <Link href="/admin">
+                  <Button variant="profit">Admin Panel</Button>
+                </Link>
+              ) : (
+                <Link href="/dashboard">
+                  <Button variant="profit">Dashboard</Button>
+                </Link>
+              )
             ) : (
               <>
                 <Link href="/login">
@@ -122,12 +133,25 @@ export function Navbar() {
               Blog
             </Link>
             <div className="pt-4 space-y-2">
-              {user ? (
-                <Link href="/dashboard" onClick={() => setIsOpen(false)}>
-                  <Button variant="profit" className="w-full">
-                    Dashboard
-                  </Button>
-                </Link>
+              {loading ? (
+                <>
+                  <div className="h-10 w-full bg-secondary/50 animate-pulse rounded-md" />
+                  <div className="h-10 w-full bg-secondary/50 animate-pulse rounded-md" />
+                </>
+              ) : user ? (
+                user.role === 'admin' ? (
+                  <Link href="/admin" onClick={() => setIsOpen(false)}>
+                    <Button variant="profit" className="w-full">
+                      Admin Panel
+                    </Button>
+                  </Link>
+                ) : (
+                  <Link href="/dashboard" onClick={() => setIsOpen(false)}>
+                    <Button variant="profit" className="w-full">
+                      Dashboard
+                    </Button>
+                  </Link>
+                )
               ) : (
                 <>
                   <Link href="/login" onClick={() => setIsOpen(false)}>

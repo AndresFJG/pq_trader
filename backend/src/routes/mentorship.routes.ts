@@ -2,7 +2,8 @@ import { Router } from 'express';
 import { protect, authorize } from '../middleware/auth.middleware';
 import { 
   getMentorships, 
-  getMentorship, 
+  getMentorship,
+  getFeaturedMentorships,
   createMentorship, 
   updateMentorship, 
   deleteMentorship 
@@ -10,10 +11,11 @@ import {
 
 const router = Router();
 
-router.get('/', protect, getMentorships);
-router.get('/:id', protect, getMentorship);
-router.post('/', protect, authorize('admin'), createMentorship);
-router.put('/:id', protect, authorize('admin'), updateMentorship);
+router.get('/', getMentorships);
+router.get('/featured', getFeaturedMentorships);
+router.get('/:id', getMentorship);
+router.post('/', protect, authorize('admin', 'mentor'), createMentorship);
+router.put('/:id', protect, authorize('admin', 'mentor'), updateMentorship);
 router.delete('/:id', protect, authorize('admin'), deleteMentorship);
 
 export default router;

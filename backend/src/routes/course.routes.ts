@@ -2,6 +2,7 @@ import { Router } from 'express';
 import {
   getCourses,
   getCourse,
+  getFeaturedCourses,
   createCourse,
   updateCourse,
   deleteCourse,
@@ -12,6 +13,7 @@ import { protect, authorize } from '../middleware/auth.middleware';
 const router = Router();
 
 router.get('/', getCourses);
+router.get('/featured', getFeaturedCourses);
 router.get('/:id', getCourse);
 router.post('/', protect, authorize('admin', 'mentor'), createCourse);
 router.put('/:id', protect, authorize('admin', 'mentor'), updateCourse);

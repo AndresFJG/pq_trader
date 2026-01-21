@@ -14,6 +14,8 @@ import {
   LogOut,
   Menu,
   X,
+  Home,
+  ArrowLeft,
 } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
@@ -132,6 +134,18 @@ export function AdminSidebar() {
               );
             })}
           </nav>
+
+          {/* Go to Home Button */}
+          <div className="px-4 pb-4">
+            <Link
+              href="/"
+              onClick={() => setIsMobileOpen(false)}
+              className="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+            >
+              <Home className="h-5 w-5" />
+              Ir al Home
+            </Link>
+          </div>
 
           {/* User Section */}
           <div className="p-4 border-t border-gray-200 dark:border-gray-700">

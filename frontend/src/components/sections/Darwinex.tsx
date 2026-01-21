@@ -1,15 +1,62 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { formatPercentage, getPercentageColor } from '@/lib/utils';
 import { TrendingUp, TrendingDown, Activity } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
-
-// TODO: Conectar con API real - GET /api/portfolios o Darwinex API
-const portfolios: any[] = [];
+import { portfolioService, Portfolio } from '@/services/portfolioService';
 
 export function Darwinex() {
   const { t, language } = useLanguage();
+  const [portfolios, setPortfolios] = useState<Portfolio[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadPortfolios();
+  }, []);
+
+  const loadPortfolios = async () => {
+    try {
+      const data = await portfolioService.getFeaturedPortfolios();
+      // Limitar a 3 para esta sección
+      setPortfolios(data.slice(0, 3));
+    } catch (error) {
+      console.error('Error loading portfolios:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <section className="py-20 px-4 bg-secondary/20">
+        <div className="container mx-auto text-center">
+          <p className="text-muted-foreground">Cargando portafolios...</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (portfolios.length === 0) {
+    return (
+      <section className="py-20 px-4 bg-secondary/20">
+        <div className="container mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4">
+              {t('darwinex.title')} <span className="text-profit">{t('darwinex.titleHighlight')}</span>
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              {t('darwinex.subtitle')}
+            </p>
+          </div>
+          <div className="text-center py-12 bg-secondary/30 rounded-lg">
+            <p className="text-muted-foreground">No hay portafolios disponibles en este momento</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
   
   return (
     <section className="py-20 px-4 bg-secondary/20">
@@ -29,8 +76,8 @@ export function Darwinex() {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-xl">{portfolio.name}</CardTitle>
-                  <div className={`p-2 rounded-lg ${portfolio.return > 0 ? 'bg-profit/10' : 'bg-loss/10'}`}>
-                    {portfolio.return > 0 ? (
+                  <div className={`p-2 rounded-lg ${portfolio.roi > 0 ? 'bg-profit/10' : 'bg-loss/10'}`}>
+                    {portfolio.roi > 0 ? (
                       <TrendingUp className="h-5 w-5 text-profit" />
                     ) : (
                       <TrendingDown className="h-5 w-5 text-loss" />
@@ -42,8 +89,8 @@ export function Darwinex() {
                 {/* Return */}
                 <div>
                   <div className="text-sm text-muted-foreground mb-1">{t('darwinex.annualReturn')}</div>
-                  <div className={`text-3xl font-bold ${getPercentageColor(portfolio.return)}`}>
-                    {formatPercentage(portfolio.return)}
+                  <div className={`text-3xl font-bold ${getPercentageColor(portfolio.roi)}`}>
+                    {formatPercentage(portfolio.roi)}
                   </div>
                 </div>
 
@@ -57,17 +104,17 @@ export function Darwinex() {
                   </div>
                   <div>
                     <div className="text-xs text-muted-foreground">{t('darwinex.sharpeRatio')}</div>
-                    <div className="text-sm font-semibold">{portfolio.sharpeRatio.toFixed(2)}</div>
+                    <div className="text-sm font-semibold">{portfolio.sharpe_ratio.toFixed(2)}</div>
                   </div>
                   <div>
                     <div className="text-xs text-muted-foreground">{t('darwinex.winRate')}</div>
                     <div className="text-sm font-semibold text-profit">
-                      {portfolio.winRate.toFixed(1)}%
+                      {portfolio.win_rate.toFixed(1)}%
                     </div>
                   </div>
                   <div>
                     <div className="text-xs text-muted-foreground">{t('darwinex.trades')}</div>
-                    <div className="text-sm font-semibold">{portfolio.trades}</div>
+                    <div className="text-sm font-semibold">{portfolio.total_trades}</div>
                   </div>
                 </div>
 

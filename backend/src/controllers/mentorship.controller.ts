@@ -7,7 +7,32 @@ export const getMentorships = async (req: AuthRequest, res: Response): Promise<v
     const { data: mentorships, error } = await supabase
       .from('mentorships')
       .select('*')
+      .eq('is_active', true)
       .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    res.json({
+      success: true,
+      count: mentorships?.length || 0,
+      data: mentorships
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+};
+
+export const getFeaturedMentorships = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const { data: mentorships, error } = await supabase
+      .from('mentorships')
+      .select('*')
+      .eq('is_active', true)
+      .order('enrolled_count', { ascending: false })
+      .limit(3);
 
     if (error) throw error;
 

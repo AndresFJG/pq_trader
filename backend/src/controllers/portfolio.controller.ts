@@ -7,7 +7,32 @@ export const getPortfolios = async (req: AuthRequest, res: Response): Promise<vo
     const { data: portfolios, error } = await supabase
       .from('portfolios')
       .select('*')
+      .eq('status', 'active')
       .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    res.json({
+      success: true,
+      count: portfolios?.length || 0,
+      data: portfolios
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+};
+
+export const getFeaturedPortfolios = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const { data: portfolios, error } = await supabase
+      .from('portfolios')
+      .select('*')
+      .eq('status', 'active')
+      .order('roi', { ascending: false })
+      .limit(6);
 
     if (error) throw error;
 
