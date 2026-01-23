@@ -8,6 +8,7 @@ import {
 } from '../controllers/paypal.controller';
 import { protect, authorize } from '../middleware/auth.middleware';
 import { paymentLimiter, webhookLimiter } from '../middleware/rateLimiter.middleware';
+import { idempotency } from '../middleware/idempotency.middleware';
 import { validate } from '../middleware/validate.middleware';
 import {
   createPayPalOrderSchema,
@@ -27,7 +28,8 @@ router.post('/webhook', webhookLimiter, handleWebhook);
 router.use(protect); // Todas las rutas siguientes requieren autenticación
 router.use(paymentLimiter); // Rate limiting para pagos
 
-router.post('/order', validate(createPayPalOrderSchema), createOrder);
+// 🔒 Idempotencia: Previene pagos duplicados
+router.post('/order', idempotency, validate(createPayPalOrderSchema), createOrder);
 router.post('/order/:orderId/capture', captureOrder);
 router.get('/order/:orderId', getOrderDetails);
 

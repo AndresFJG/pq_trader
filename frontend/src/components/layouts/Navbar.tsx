@@ -2,17 +2,24 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { Menu, X, TrendingUp } from 'lucide-react';
+import { Menu, X, TrendingUp, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import { LanguageToggle } from '@/components/theme/LanguageToggle';
 import { useLanguage } from '@/lib/i18n';
+import { useRouter } from 'next/navigation';
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, loading } = useAuth();
+  const { user, loading, logout } = useAuth();
   const { t } = useLanguage();
+  const router = useRouter();
+
+  const handleLogout = () => {
+    logout();
+    router.push('/');
+  };
 
   return (
     <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-border">
@@ -56,15 +63,20 @@ export function Navbar() {
                 <div className="h-10 w-32 bg-secondary/50 animate-pulse rounded-md" />
               </div>
             ) : user ? (
-              user.role === 'admin' ? (
-                <Link href="/admin">
-                  <Button variant="profit">Admin Panel</Button>
-                </Link>
-              ) : (
-                <Link href="/dashboard">
-                  <Button variant="profit">Dashboard</Button>
-                </Link>
-              )
+              <>
+                {user.role === 'admin' ? (
+                  <Link href="/admin">
+                    <Button variant="profit">Admin Panel</Button>
+                  </Link>
+                ) : (
+                  <Link href="/dashboard">
+                    <Button variant="profit">Dashboard</Button>
+                  </Link>
+                )}
+                <Button variant="ghost" size="icon" onClick={handleLogout}>
+                  <LogOut className="h-5 w-5" />
+                </Button>
+              </>
             ) : (
               <>
                 <Link href="/login">
@@ -139,19 +151,32 @@ export function Navbar() {
                   <div className="h-10 w-full bg-secondary/50 animate-pulse rounded-md" />
                 </>
               ) : user ? (
-                user.role === 'admin' ? (
-                  <Link href="/admin" onClick={() => setIsOpen(false)}>
-                    <Button variant="profit" className="w-full">
-                      Admin Panel
-                    </Button>
-                  </Link>
-                ) : (
-                  <Link href="/dashboard" onClick={() => setIsOpen(false)}>
-                    <Button variant="profit" className="w-full">
-                      Dashboard
-                    </Button>
-                  </Link>
-                )
+                <>
+                  {user.role === 'admin' ? (
+                    <Link href="/admin" onClick={() => setIsOpen(false)}>
+                      <Button variant="profit" className="w-full">
+                        Admin Panel
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Link href="/dashboard" onClick={() => setIsOpen(false)}>
+                      <Button variant="profit" className="w-full">
+                        Dashboard
+                      </Button>
+                    </Link>
+                  )}
+                  <Button 
+                    variant="outline" 
+                    className="w-full" 
+                    onClick={() => {
+                      setIsOpen(false);
+                      handleLogout();
+                    }}
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Cerrar Sesión
+                  </Button>
+                </>
               ) : (
                 <>
                   <Link href="/login" onClick={() => setIsOpen(false)}>

@@ -20,7 +20,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal, Edit, Trash2, Eye, Users, Loader2 } from 'lucide-react';
+import { Edit, Eye, MoreHorizontal, Trash2, Users, BookOpen, Loader2 } from 'lucide-react';
+import Link from 'next/link';
 import { Card } from '@/components/ui/card';
 import { CourseFormDialog } from './CourseFormDialog';
 import { CourseViewDialog } from './CourseViewDialog';
@@ -198,6 +199,13 @@ export function CoursesTable({ searchQuery }: CoursesTableProps) {
                             <Edit className="h-4 w-4 mr-2" />
                             Editar
                           </DropdownMenuItem>
+                          <DropdownMenuItem asChild>
+                            <Link href={`/admin/courses/${course.id}/lessons`}>
+                              <BookOpen className="h-4 w-4 mr-2" />
+                              Gestionar Lecciones
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
                           <DropdownMenuItem
                             onClick={() => handleDelete(course.id)}
                             className="text-red-600 dark:text-red-400"

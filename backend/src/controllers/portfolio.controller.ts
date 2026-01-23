@@ -153,3 +153,36 @@ export const deletePortfolio = async (req: AuthRequest, res: Response): Promise<
     });
   }
 };
+
+export const getMyPortfolios = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      res.status(401).json({
+        success: false,
+        error: 'No autorizado'
+      });
+      return;
+    }
+
+    const { data: portfolios, error } = await supabase
+      .from('portfolios')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    res.json({
+      success: true,
+      count: portfolios?.length || 0,
+      data: portfolios
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+};

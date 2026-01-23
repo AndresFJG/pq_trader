@@ -4,23 +4,63 @@ import { Navbar } from '@/components/layouts/Navbar';
 import { Footer } from '@/components/layouts/Footer';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, Download, Mail, Home } from 'lucide-react';
+import { CheckCircle, Download, Mail, Home, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 import Confetti from 'react-confetti';
 import { useEffect, useState } from 'react';
+import api from '@/lib/api';
+import toast from 'react-hot-toast';
 
 function SuccessContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get('session_id');
   const [showConfetti, setShowConfetti] = useState(true);
+  const [isProcessing, setIsProcessing] = useState(true);
+  const [enrollmentCreated, setEnrollmentCreated] = useState(false);
 
   useEffect(() => {
     // Detener confetti después de 5 segundos
     const timer = setTimeout(() => setShowConfetti(false), 5000);
     return () => clearTimeout(timer);
   }, []);
+
+  // Verificar sesión y crear enrollment
+  useEffect(() => {
+    const verifyAndCreateEnrollment = async () => {
+      if (!sessionId) {
+        setIsProcessing(false);
+        return;
+      }
+
+      try {
+        console.log('🔍 Verificando sesión:', sessionId);
+        
+        const response = await api.post('/stripe/verify-session', { sessionId });
+        
+        if (response.data.success) {
+          console.log('✅ Enrollment procesado:', response.data);
+          setEnrollmentCreated(true);
+          toast.success('¡Acceso al curso activado!');
+        }
+      } catch (error: any) {
+        console.error('❌ Error verificando sesión:', error);
+        
+        // No mostrar error si el enrollment ya existe
+        if (error.response?.data?.alreadyEnrolled) {
+          setEnrollmentCreated(true);
+          toast.success('Ya tienes acceso a este curso');
+        } else {
+          toast.error('Error al activar el acceso. Recarga la página o contacta con soporte.');
+        }
+      } finally {
+        setIsProcessing(false);
+      }
+    };
+
+    verifyAndCreateEnrollment();
+  }, [sessionId]);
 
   return (
     <main className="min-h-screen bg-background">
@@ -39,7 +79,11 @@ function SuccessContent() {
         <div className="container mx-auto max-w-4xl">
           <div className="text-center mb-12">
             <div className="inline-flex items-center justify-center w-24 h-24 bg-profit/10 border-4 border-profit rounded-full mb-6">
-              <CheckCircle className="h-12 w-12 text-profit" />
+              {isProcessing ? (
+                <Loader2 className="h-12 w-12 text-profit animate-spin" />
+              ) : (
+                <CheckCircle className="h-12 w-12 text-profit" />
+              )}
             </div>
             
             <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
@@ -47,7 +91,12 @@ function SuccessContent() {
             </h1>
             
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-2">
-              Tu compra ha sido procesada correctamente
+              {isProcessing 
+                ? 'Activando tu acceso al curso...'
+                : enrollmentCreated 
+                  ? 'Tu compra ha sido procesada y tienes acceso al curso'
+                  : 'Tu compra ha sido procesada correctamente'
+              }
             </p>
             
             {sessionId && (

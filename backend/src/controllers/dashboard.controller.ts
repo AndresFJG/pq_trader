@@ -252,7 +252,7 @@ export const getRecentTransactions = async (req: Request, res: Response): Promis
       success: true,
       data: data?.map((transaction) => ({
         id: transaction.id,
-        productName: transaction.metadata?.product_name || 'N/A',
+        productName: transaction.metadata?.productName || transaction.metadata?.product_name || 'N/A',
         amount: transaction.amount,
         status: transaction.status,
         createdAt: transaction.created_at,

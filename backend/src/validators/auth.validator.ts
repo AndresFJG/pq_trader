@@ -173,23 +173,21 @@ export const createBillingPortalSchema = Joi.object({
  */
 
 export const createPayPalOrderSchema = Joi.object({
-  amount: Joi.number()
-    .min(0.5)
-    .max(999999)
+  productId: Joi.alternatives()
+    .try(
+      Joi.number().integer().positive(),
+      Joi.string()
+    )
     .required()
     .messages({
-      'number.min': VALIDATION_MESSAGES.AMOUNT.MIN,
-      'number.max': VALIDATION_MESSAGES.AMOUNT.MAX,
-      'any.required': VALIDATION_MESSAGES.AMOUNT.REQUIRED,
+      'any.required': 'El ID del producto es requerido',
     }),
   currency: Joi.string()
     .valid(...SUPPORTED_CURRENCIES.map(c => c.toUpperCase()))
-    .default('USD')
+    .default('EUR')
     .messages({
       'any.only': VALIDATION_MESSAGES.CURRENCY.INVALID,
     }),
-  plan: Joi.string()
-    .optional(),
 });
 
 export const refundPaymentSchema = Joi.object({

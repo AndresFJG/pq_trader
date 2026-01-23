@@ -20,11 +20,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { MoreHorizontal, Edit, Trash2, Eye, Loader2, Clock } from 'lucide-react';
+import { MoreHorizontal, Edit, Trash2, Eye, Loader2, Clock, Calendar } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { MentorshipFormDialog } from './MentorshipFormDialog';
 import { MentorshipViewDialog } from './MentorshipViewDialog';
 import { api } from '@/lib/api';
+import Link from 'next/link';
 
 interface Mentorship {
   id: string;
@@ -175,6 +176,13 @@ export function MentorshipsTable({ searchQuery }: MentorshipsTableProps) {
                           <Edit className="h-4 w-4 mr-2" />
                           Editar
                         </DropdownMenuItem>
+                        <Link href={`/admin/mentorships/${mentorship.id}/sessions`}>
+                          <DropdownMenuItem>
+                            <Calendar className="h-4 w-4 mr-2" />
+                            Gestionar Sesiones
+                          </DropdownMenuItem>
+                        </Link>
+                        <DropdownMenuSeparator />
                         <DropdownMenuItem
                           onClick={() => handleDelete(mentorship.id)}
                           className="text-red-600 dark:text-red-400"

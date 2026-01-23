@@ -40,6 +40,20 @@ export function CheckoutForm({
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('card');
   const [detectedLocation, setDetectedLocation] = useState<string>('');
   const [isLoadingLocation, setIsLoadingLocation] = useState(true);
+  const [idempotencyKey, setIdempotencyKey] = useState<string>('');
+
+  // Generar idempotency key única al montar el componente
+  useEffect(() => {
+    // Generar UUID v4
+    const generateUUID = () => {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+        const r = (Math.random() * 16) | 0;
+        const v = c === 'x' ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      });
+    };
+    setIdempotencyKey(generateUUID());
+  }, []);
 
   // Usar moneda externa si está disponible, sino usar interna
   const selectedCurrency = externalSelectedCurrency || internalSelectedCurrency;
@@ -110,47 +124,209 @@ export function CheckoutForm({
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    
+    // Formateo automático para fecha de vencimiento
+    if (name === 'cardExpiry') {
+      // Eliminar caracteres no numéricos
+      let formatted = value.replace(/\D/g, '');
+      
+      // Limitar a 4 dígitos
+      if (formatted.length > 4) {
+        formatted = formatted.slice(0, 4);
+      }
+      
+      // Agregar "/" después de los primeros 2 dígitos
+      if (formatted.length >= 2) {
+        formatted = formatted.slice(0, 2) + '/' + formatted.slice(2);
+      }
+      
+      setFormData({
+        ...formData,
+        [name]: formatted,
+      });
+      return;
+    }
+    
+    // Formateo automático para número de tarjeta
+    if (name === 'cardNumber') {
+      // Eliminar caracteres no numéricos
+      let formatted = value.replace(/\D/g, '');
+      
+      // Limitar a 16 dígitos
+      if (formatted.length > 16) {
+        formatted = formatted.slice(0, 16);
+      }
+      
+      // Agregar espacios cada 4 dígitos
+      formatted = formatted.match(/.{1,4}/g)?.join(' ') || formatted;
+      
+      setFormData({
+        ...formData,
+        [name]: formatted,
+      });
+      return;
+    }
+    
+    // Formateo para CVV (solo números)
+    if (name === 'cardCVV') {
+      const formatted = value.replace(/\D/g, '');
+      setFormData({
+        ...formData,
+        [name]: formatted,
+      });
+      return;
+    }
+    
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
     });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Prevenir doble submit
+    if (loading) {
+      return;
+    }
+
     setLoading(true);
     setError('');
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/payments/create-payment-intent`, {
+      // Validaciones básicas
+      if (!formData.name || !formData.email) {
+        setError(t('checkout.fillRequired'));
+        setLoading(false);
+        return;
+      }
+
+      // Si es PayPal, redirigir a PayPal
+      if (selectedPaymentMethod === 'paypal') {
+        await handlePayPalPayment();
+        return;
+      }
+
+      // Si es Stripe (tarjeta), crear Checkout Session
+      if (selectedPaymentMethod === 'card') {
+        await handleStripePayment();
+        return;
+      }
+
+      // Otros métodos de pago no implementados
+      setError('Método de pago no soportado');
+      setLoading(false);
+    } catch (err: any) {
+      setError(err.message || 'Hubo un error procesando tu pago');
+      setLoading(false);
+    }
+  };
+
+  /**
+   * Manejar pago con Stripe (redirige a Stripe Checkout)
+   */
+  const handleStripePayment = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        setError(t('checkout.loginRequired') || 'Debes iniciar sesión');
+        router.push('/login?redirect=' + encodeURIComponent(window.location.pathname));
+        setLoading(false);
+        return;
+      }
+
+      // Calcular monto total con IVA
+      const convertedPrice = getConvertedPrice();
+      const totalWithTax = convertedPrice * 1.21;
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/stripe/checkout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
-          productType,
           productId,
           productName,
-          amount: Math.round(getConvertedPrice() * 100), // En centavos
-          currency: selectedCurrency,
-          paymentMethod: selectedPaymentMethod,
-          customerEmail: formData.email,
-          customerName: formData.name,
-          customerCountry: formData.country,
+          productType,
+          amount: totalWithTax,
+          currency: selectedCurrency.toLowerCase(),
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Error procesando el pago');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Error creando sesión de pago');
       }
 
       const data = await response.json();
 
-      // Redirigir a página de éxito
-      router.push('/checkout/success');
-    } catch (err: any) {
-      setError(err.message || 'Hubo un error procesando tu pago');
-    } finally {
+      if (data.success && data.data.url) {
+        // Redirigir a Stripe Checkout
+        window.location.href = data.data.url;
+      } else {
+        throw new Error('No se recibió URL de pago');
+      }
+    } catch (error: any) {
+      console.error('Stripe payment error:', error);
+      setError(error.message || 'Error al procesar el pago con Stripe');
+      setLoading(false);
+    }
+  };
+
+  /**
+   * Manejar pago con PayPal
+   */
+  const handlePayPalPayment = async () => {
+    // Prevenir doble clic
+    if (loading) {
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
+    try {
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        setError(t('checkout.loginRequired') || 'Debes iniciar sesión');
+        router.push('/login?redirect=' + encodeURIComponent(window.location.pathname));
+        setLoading(false);
+        return;
+      }
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/paypal/order`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+          'Idempotency-Key': idempotencyKey,
+        },
+        body: JSON.stringify({
+          productId: productId, // Solo enviar el ID, el backend calcula el precio
+          currency: selectedCurrency,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.error || 'Error creating PayPal order');
+      }
+
+      // Redirigir a PayPal para aprobar el pago
+      if (result.data.approvalUrl) {
+        window.location.href = result.data.approvalUrl;
+      } else {
+        throw new Error('No approval URL received from PayPal');
+      }
+    } catch (error: any) {
+      console.error('PayPal payment error:', error);
+      setError(error.message || 'Error al procesar el pago con PayPal');
       setLoading(false);
     }
   };
@@ -210,62 +386,31 @@ export function CheckoutForm({
           {/* Métodos de Pago */}
           <div className="space-y-3">
             <Label className="text-base font-semibold">{t('checkout.paymentMethod')}</Label>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 gap-4">
               <button
                 type="button"
                 onClick={() => setSelectedPaymentMethod('card')}
-                className={`p-4 rounded-lg border-2 transition-all ${
+                className={`p-6 rounded-lg border-2 transition-all ${
                   selectedPaymentMethod === 'card'
                     ? 'border-profit bg-profit/5'
                     : 'border-border hover:border-profit/50'
                 }`}
               >
-                <CreditCard className="h-5 w-5 mx-auto mb-2" />
+                <CreditCard className="h-6 w-6 mx-auto mb-2" />
                 <div className="text-sm font-medium">{t('checkout.card')}</div>
+                <div className="text-xs text-muted-foreground mt-1">Stripe</div>
               </button>
               <button
                 type="button"
                 onClick={() => setSelectedPaymentMethod('paypal')}
-                className={`p-4 rounded-lg border-2 transition-all ${
+                className={`p-6 rounded-lg border-2 transition-all ${
                   selectedPaymentMethod === 'paypal'
                     ? 'border-profit bg-profit/5'
                     : 'border-border hover:border-profit/50'
                 }`}
               >
                 <div className="text-lg font-bold mb-1">{t('checkout.paypal')}</div>
-              </button>
-              <button
-                type="button"
-                onClick={() => setSelectedPaymentMethod('google-pay')}
-                className={`p-4 rounded-lg border-2 transition-all ${
-                  selectedPaymentMethod === 'google-pay'
-                    ? 'border-profit bg-profit/5'
-                    : 'border-border hover:border-profit/50'
-                }`}
-              >
-                <div className="text-sm font-bold mb-1">{t('checkout.googlePay')}</div>
-              </button>
-              <button
-                type="button"
-                onClick={() => setSelectedPaymentMethod('apple-pay')}
-                className={`p-4 rounded-lg border-2 transition-all ${
-                  selectedPaymentMethod === 'apple-pay'
-                    ? 'border-profit bg-profit/5'
-                    : 'border-border hover:border-profit/50'
-                }`}
-              >
-                <div className="text-sm font-bold mb-1">{t('checkout.applePay')}</div>
-              </button>
-              <button
-                type="button"
-                onClick={() => setSelectedPaymentMethod('sepa')}
-                className={`p-4 rounded-lg border-2 transition-all ${
-                  selectedPaymentMethod === 'sepa'
-                    ? 'border-profit bg-profit/5'
-                    : 'border-border hover:border-profit/50'
-                }`}
-              >
-                <div className="text-sm font-bold mb-1">{t('checkout.sepa')}</div>
+                <div className="text-xs text-muted-foreground">Pago seguro</div>
               </button>
             </div>
           </div>
@@ -350,10 +495,11 @@ export function CheckoutForm({
                       id="cardExpiry"
                       name="cardExpiry"
                       type="text"
+                      inputMode="numeric"
                       required
                       value={formData.cardExpiry}
                       onChange={handleChange}
-                      placeholder="MM/AA"
+                      placeholder="12/34"
                       maxLength={5}
                     />
                   </div>

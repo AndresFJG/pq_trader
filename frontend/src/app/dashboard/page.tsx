@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { Navbar } from '@/components/layouts/Navbar';
@@ -24,10 +24,18 @@ import {
   Star
 } from 'lucide-react';
 import Link from 'next/link';
+import api from '@/lib/api';
+import toast from 'react-hot-toast';
 
 export default function DashboardPage() {
   const router = useRouter();
   const { user, loading } = useAuth();
+  const [myCourses, setMyCourses] = useState<any[]>([]);
+  const [myBookings, setMyBookings] = useState<any[]>([]);
+  const [myPortfolios, setMyPortfolios] = useState<any[]>([]);
+  const [loadingCourses, setLoadingCourses] = useState(true);
+  const [loadingBookings, setLoadingBookings] = useState(true);
+  const [loadingPortfolios, setLoadingPortfolios] = useState(true);
 
   useEffect(() => {
     if (!loading) {
@@ -38,6 +46,67 @@ export default function DashboardPage() {
       }
     }
   }, [user, loading, router]);
+
+  // Obtener cursos comprados
+  useEffect(() => {
+    const fetchMyCourses = async () => {
+      try {
+        const response = await api.get('/enrollments/my-courses');
+        if (response.data.success) {
+          setMyCourses(response.data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+        toast.error('Error al cargar tus cursos');
+      } finally {
+        setLoadingCourses(false);
+      }
+    };
+
+    if (user && user.role !== 'admin') {
+      fetchMyCourses();
+    }
+  }, [user]);
+
+  // Obtener reservas de mentorías
+  useEffect(() => {
+    const fetchMyBookings = async () => {
+      try {
+        const response = await api.get('/mentorships/bookings/my-bookings');
+        if (response.data.success) {
+          setMyBookings(response.data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching bookings:', error);
+      } finally {
+        setLoadingBookings(false);
+      }
+    };
+
+    if (user && user.role !== 'admin') {
+      fetchMyBookings();
+    }
+  }, [user]);
+
+  // Obtener portafolios
+  useEffect(() => {
+    const fetchMyPortfolios = async () => {
+      try {
+        const response = await api.get('/portfolios/my-portfolios');
+        if (response.data.success) {
+          setMyPortfolios(response.data.data);
+        }
+      } catch (error) {
+        console.error('Error fetching portfolios:', error);
+      } finally {
+        setLoadingPortfolios(false);
+      }
+    };
+
+    if (user && user.role !== 'admin') {
+      fetchMyPortfolios();
+    }
+  }, [user]);
 
   if (loading) {
     return (
@@ -77,9 +146,9 @@ export default function DashboardPage() {
                 <BookOpen className="h-4 w-4 text-profit" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">0</div>
+                <div className="text-2xl font-bold">{myCourses.length}</div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Ningún curso en progreso
+                  {myCourses.length === 0 ? 'Ningún curso en progreso' : `${myCourses.length} curso${myCourses.length > 1 ? 's' : ''} disponible${myCourses.length > 1 ? 's' : ''}`}
                 </p>
               </CardContent>
             </Card>
@@ -92,9 +161,14 @@ export default function DashboardPage() {
                 <Calendar className="h-4 w-4 text-blue-600" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">--</div>
+                <div className="text-2xl font-bold">
+                  {myBookings.filter(b => b.status === 'confirmed').length}
+                </div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Sin mentorías programadas
+                  {myBookings.filter(b => b.status === 'confirmed').length === 0 
+                    ? 'Sin mentorías programadas' 
+                    : `${myBookings.filter(b => b.status === 'confirmed').length} reservada${myBookings.filter(b => b.status === 'confirmed').length > 1 ? 's' : ''}`
+                  }
                 </p>
               </CardContent>
             </Card>
@@ -145,59 +219,193 @@ export default function DashboardPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-center py-12">
-                    <BookOpen className="h-16 w-16 mx-auto text-muted-foreground/30 mb-4" />
-                    <h3 className="text-lg font-semibold mb-2">No tienes cursos activos</h3>
-                    <p className="text-muted-foreground mb-4">
-                      Explora nuestro catálogo y comienza tu viaje de aprendizaje
-                    </p>
-                    <Link href="/cursos">
-                      <Button variant="profit">
-                        Explorar Cursos
-                        <ChevronRight className="ml-2 h-4 w-4" />
-                      </Button>
-                    </Link>
-                  </div>
+                  {loadingCourses ? (
+                    <div className="text-center py-12">
+                      <Loader2 className="h-8 w-8 animate-spin mx-auto text-profit mb-2" />
+                      <p className="text-sm text-muted-foreground">Cargando tus cursos...</p>
+                    </div>
+                  ) : myCourses.length === 0 ? (
+                    <div className="text-center py-12">
+                      <BookOpen className="h-16 w-16 mx-auto text-muted-foreground/30 mb-4" />
+                      <h3 className="text-lg font-semibold mb-2">No tienes cursos activos</h3>
+                      <p className="text-muted-foreground mb-4">
+                        Explora nuestro catálogo y comienza tu viaje de aprendizaje
+                      </p>
+                      <Link href="/cursos">
+                        <Button variant="profit">
+                          Explorar Cursos
+                          <ChevronRight className="ml-2 h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {myCourses.map((course) => (
+                        <Link key={course.id} href={`/cursos/${course.slug || course.id}/learn`}>
+                          <div className="flex gap-4 p-4 rounded-lg border border-border/40 hover:border-profit/50 transition-colors cursor-pointer group">
+                            <div className="w-20 h-20 bg-gradient-to-br from-profit/20 to-profit/5 rounded-lg flex items-center justify-center flex-shrink-0">
+                              <BookOpen className="h-8 w-8 text-profit" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-semibold group-hover:text-profit transition-colors mb-1">
+                                {course.title}
+                              </h4>
+                              <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
+                                {course.description}
+                              </p>
+                              <div className="flex items-center gap-4 text-xs">
+                                <Badge variant="secondary" className="text-xs">{course.level}</Badge>
+                                {course.progress > 0 && (
+                                  <div className="flex items-center gap-2">
+                                    <Progress value={course.progress} className="w-20 h-2" />
+                                    <span className="text-profit font-medium">{course.progress}%</span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                            <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-profit transition-colors flex-shrink-0" />
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
-              {/* Recommended Courses */}
+              {/* Mentorías Reservadas */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Star className="h-5 w-5 text-yellow-500" />
-                    Cursos Recomendados
+                    <Calendar className="h-5 w-5 text-blue-600" />
+                    Mis Mentorías
                   </CardTitle>
                   <CardDescription>
-                    Basado en tus intereses
+                    Próximas sesiones reservadas
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    {/* Course Item */}
-                    <Link href="/cursos">
-                      <div className="flex gap-4 p-4 rounded-lg border border-border/40 hover:border-profit/50 transition-colors cursor-pointer group">
-                        <div className="w-20 h-20 bg-gradient-to-br from-profit/20 to-profit/5 rounded-lg flex items-center justify-center flex-shrink-0">
-                          <BookOpen className="h-8 w-8 text-profit" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <h4 className="font-semibold group-hover:text-profit transition-colors mb-1">
-                            Trading para Principiantes
-                          </h4>
-                          <p className="text-sm text-muted-foreground mb-2">
-                            Aprende los fundamentos del trading desde cero
-                          </p>
-                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                            <Clock className="h-3 w-3" />
-                            8 semanas
-                            <span>•</span>
-                            <Badge variant="secondary" className="text-xs">Principiante</Badge>
+                  {loadingBookings ? (
+                    <div className="text-center py-12">
+                      <Loader2 className="h-8 w-8 animate-spin mx-auto text-profit mb-2" />
+                      <p className="text-sm text-muted-foreground">Cargando mentorías...</p>
+                    </div>
+                  ) : myBookings.length === 0 ? (
+                    <div className="text-center py-12">
+                      <Calendar className="h-16 w-16 mx-auto text-muted-foreground/30 mb-4" />
+                      <h3 className="text-lg font-semibold mb-2">No tienes mentorías reservadas</h3>
+                      <p className="text-muted-foreground mb-4">
+                        Reserva una sesión personalizada con expertos
+                      </p>
+                      <Link href="/mentorias">
+                        <Button variant="profit">
+                          Explorar Mentorías
+                          <ChevronRight className="ml-2 h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {myBookings.filter(b => b.status === 'confirmed').map((booking) => (
+                        <div key={booking.id} className="flex gap-4 p-4 rounded-lg border border-border/40 hover:border-blue-500/50 transition-colors">
+                          <div className="w-20 h-20 bg-gradient-to-br from-blue-500/20 to-blue-500/5 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <Calendar className="h-8 w-8 text-blue-600" />
                           </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-semibold mb-1">
+                              {booking.mentorship_title}
+                            </h4>
+                            <p className="text-sm text-muted-foreground mb-2">
+                              {booking.session_title}
+                            </p>
+                            <div className="flex items-center gap-4 text-xs">
+                              <div className="flex items-center gap-1">
+                                <Calendar className="h-3 w-3 text-muted-foreground" />
+                                {new Date(booking.session_date).toLocaleDateString('es-ES')}
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <Clock className="h-3 w-3 text-muted-foreground" />
+                                {booking.start_time}
+                              </div>
+                              <Badge variant="secondary" className="text-xs">
+                                {booking.status}
+                              </Badge>
+                            </div>
+                          </div>
+                          {booking.meeting_link && (
+                            <a href={booking.meeting_link} target="_blank" rel="noopener noreferrer">
+                              <Button size="sm" variant="outline">
+                                Unirse
+                              </Button>
+                            </a>
+                          )}
                         </div>
-                        <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-profit transition-colors" />
-                      </div>
-                    </Link>
-                  </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Mis Portafolios */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <BarChart3 className="h-5 w-5 text-orange-600" />
+                    Mis Portafolios
+                  </CardTitle>
+                  <CardDescription>
+                    Seguimiento de estrategias
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {loadingPortfolios ? (
+                    <div className="text-center py-12">
+                      <Loader2 className="h-8 w-8 animate-spin mx-auto text-profit mb-2" />
+                      <p className="text-sm text-muted-foreground">Cargando portafolios...</p>
+                    </div>
+                  ) : myPortfolios.length === 0 ? (
+                    <div className="text-center py-12">
+                      <BarChart3 className="h-16 w-16 mx-auto text-muted-foreground/30 mb-4" />
+                      <h3 className="text-lg font-semibold mb-2">No tienes portafolios</h3>
+                      <p className="text-muted-foreground mb-4">
+                        Crea y sigue tus estrategias de trading
+                      </p>
+                      <Link href="/portafolios">
+                        <Button variant="profit">
+                          Crear Portafolio
+                          <ChevronRight className="ml-2 h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {myPortfolios.map((portfolio) => (
+                        <Link key={portfolio.id} href={`/portafolios/${portfolio.id}`}>
+                          <div className="flex gap-4 p-4 rounded-lg border border-border/40 hover:border-orange-500/50 transition-colors cursor-pointer group">
+                            <div className="w-20 h-20 bg-gradient-to-br from-orange-500/20 to-orange-500/5 rounded-lg flex items-center justify-center flex-shrink-0">
+                              <BarChart3 className="h-8 w-8 text-orange-600" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-semibold group-hover:text-profit transition-colors mb-1">
+                                {portfolio.name}
+                              </h4>
+                              <p className="text-sm text-muted-foreground mb-2 line-clamp-1">
+                                {portfolio.strategy}
+                              </p>
+                              <div className="flex items-center gap-4 text-xs">
+                                <div className={`font-medium ${portfolio.total_return >= 0 ? 'text-profit' : 'text-loss'}`}>
+                                  {portfolio.total_return >= 0 ? '+' : ''}{portfolio.total_return}%
+                                </div>
+                                <span className="text-muted-foreground">
+                                  {portfolio.trades_count || 0} operaciones
+                                </span>
+                              </div>
+                            </div>
+                            <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-profit transition-colors flex-shrink-0" />
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>

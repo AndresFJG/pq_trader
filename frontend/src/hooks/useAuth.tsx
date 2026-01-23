@@ -68,7 +68,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       }
     } catch (error: any) {
-      toast.error(error.response?.data?.error || 'Error al iniciar sesión');
+      // Manejo específico de errores según el código HTTP
+      if (error.response?.status === 401) {
+        toast.error('❌ Usuario o contraseña incorrectos. Por favor, verifica tus credenciales.', {
+          duration: 4000,
+          position: 'top-center',
+          style: {
+            background: '#FF3B30',
+            color: '#fff',
+            fontWeight: '600',
+            padding: '16px 24px',
+            borderRadius: '12px',
+          },
+          icon: '🔒',
+        });
+      } else if (error.response?.status === 400) {
+        toast.error('Datos inválidos. Revisa el formulario.', {
+          duration: 3000,
+        });
+      } else if (error.response?.status === 500) {
+        toast.error('Error del servidor. Intenta nuevamente más tarde.', {
+          duration: 3000,
+        });
+      } else {
+        toast.error(error.response?.data?.error || 'Error al iniciar sesión. Verifica tu conexión.', {
+          duration: 3000,
+        });
+      }
       throw error;
     }
   };
@@ -86,11 +112,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem('token', token);
         localStorage.setItem('refreshToken', refreshToken);
         setUser(user);
-        toast.success('¡Cuenta creada exitosamente!');
+        toast.success('🎉 ¡Cuenta creada exitosamente!', {
+          duration: 3000,
+          position: 'top-center',
+          style: {
+            background: '#00C853',
+            color: '#fff',
+            fontWeight: '600',
+            padding: '16px 24px',
+            borderRadius: '12px',
+          },
+        });
         router.push('/');
       }
     } catch (error: any) {
-      toast.error(error.response?.data?.error || 'Error al registrarse');
+      if (error.response?.status === 400) {
+        toast.error('❌ Este correo ya está registrado. Intenta iniciar sesión.', {
+          duration: 4000,
+          position: 'top-center',
+          style: {
+            background: '#FF3B30',
+            color: '#fff',
+            fontWeight: '600',
+            padding: '16px 24px',
+            borderRadius: '12px',
+          },
+        });
+      } else {
+        toast.error(error.response?.data?.error || 'Error al registrarse. Intenta nuevamente.', {
+          duration: 3000,
+        });
+      }
       throw error;
     }
   };

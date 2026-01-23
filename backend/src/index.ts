@@ -12,19 +12,23 @@ dotenv.config();
 import { connectSupabase } from './config/supabase';
 import { closeDatabase } from './config/database';
 import { logger } from './utils/logger';
+import TransactionService from './services/transaction.service';
 
 // Import routes
 import authRoutes from './routes/auth.routes';
 import userRoutes from './routes/user.routes';
 import courseRoutes from './routes/course.routes';
+import lessonRoutes from './routes/lesson.routes';
 import dashboardRoutes from './routes/dashboard.routes';
 import mentorshipRoutes from './routes/mentorship.routes';
+import mentorshipSessionRoutes from './routes/mentorshipSession.routes';
 import portfolioRoutes from './routes/portfolio.routes';
 import transactionRoutes from './routes/transaction.routes';
 import paypalRoutes from './routes/paypal.routes';
-// import paymentRoutes from './routes/paymentRoutes';
+import paymentRoutes from './routes/payment.routes';
+import stripeRoutes from './routes/stripe.routes';
+import enrollmentRoutes from './routes/enrollment.routes';
 // import darwinexRoutes from './routes/darwinex.routes';
-// import stripeRoutes from './routes/stripe.routes'; // Stripe deshabilitado
 
 // Import middleware
 import { errorHandler } from './middleware/error.middleware';
@@ -73,14 +77,18 @@ app.get('/health', (_req: Request, res: Response) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/courses', courseRoutes);
+app.use('/api/courses/:courseId/lessons', lessonRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/mentorships', mentorshipRoutes);
+app.use('/api/mentorships/:mentorshipId/sessions', mentorshipSessionRoutes);
+app.use('/api/mentorships', mentorshipSessionRoutes); // Para rutas sin mentorshipId (bookings)
 app.use('/api/portfolios', portfolioRoutes);
 app.use('/api/transactions', transactionRoutes);
-app.use('/api/paypal', paypalRoutes); // PayPal habilitado
-// app.use('/api/payments', paymentRoutes); // Temporalmente deshabilitado
+app.use('/api/paypal', paypalRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/api/stripe', stripeRoutes);
+app.use('/api/enrollments', enrollmentRoutes);
 // app.use('/api/darwinex', darwinexRoutes); // Temporalmente deshabilitado
-// app.use('/api/stripe', stripeRoutes); // Stripe deshabilitado
 
 // Error handling
 app.use(notFound);
@@ -98,6 +106,18 @@ process.on('SIGINT', async () => {
   await closeDatabase();
   process.exit(0);
 });
+
+// 🕒 Cron job: Cancelar transacciones pendientes antiguas cada 10 minutos
+setInterval(async () => {
+  try {
+    const cancelled = await TransactionService.cancelExpiredPendingTransactions();
+    if (cancelled > 0) {
+      logger.info(`🧹 Auto-cancelled ${cancelled} expired pending transactions`);
+    }
+  } catch (error: any) {
+    logger.error('Error in transaction cleanup cron:', error);
+  }
+}, 10 * 60 * 1000); // 10 minutos
 
 // Start server
 if (process.env.NODE_ENV !== 'test') {

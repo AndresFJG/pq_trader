@@ -4,6 +4,7 @@ import {
   getPortfolios, 
   getPortfolio,
   getFeaturedPortfolios,
+  getMyPortfolios,
   createPortfolio, 
   updatePortfolio, 
   deletePortfolio 
@@ -11,8 +12,9 @@ import {
 
 const router = Router();
 
-router.get('/', getPortfolios);
 router.get('/featured', getFeaturedPortfolios);
+router.get('/my-portfolios', protect, getMyPortfolios);
+router.get('/', getPortfolios);
 router.get('/:id', getPortfolio);
 router.post('/', protect, createPortfolio);
 router.put('/:id', protect, authorize('admin'), updatePortfolio);
