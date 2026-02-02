@@ -1,0 +1,16 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /checkout/success
+Disallow: /checkout/cancel
+Disallow: /_next/
+
+User-agent: Googlebot
+Allow: /
+Disallow: /api/
+Disallow: /checkout/success
+Disallow: /checkout/cancel
+
+Sitemap: https://pqtraders.com/sitemap.xml

@@ -24,6 +24,6 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    sitemap: 'https://pqtrader.com/sitemap.xml',
+    sitemap: 'https://pqtraders.com/sitemap.xml',
   };
 }

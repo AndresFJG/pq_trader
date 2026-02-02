@@ -1,0 +1,22 @@
+{
+  "name": "PQ Trader",
+  "short_name": "PQTrader",
+  "description": "Cursos y Mentorías de Trading Algorítmico",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A0F14",
+  "theme_color": "#00C853",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-icon.svg",
+      "sizes": "180x180",
+      "type": "image/svg+xml"
+    }
+  ]
+}

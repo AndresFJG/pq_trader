@@ -8,13 +8,13 @@ import { ConditionalUI } from '@/components/layout/ConditionalUI';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://pqtrader.com'),
+  metadataBase: new URL('https://pqtraders.com'),
   title: {
     default: 'PQ Trader - Cursos y Mentorías de Trading Algorítmico | Aprende con Expertos',
     template: '%s | PQ Trader'
   },
   description:
-    'Domina el trading algorítmico con mentorías personalizadas 1-a-1, cursos profesionales y portafolios verificados. Resultados reales, estrategias probadas. +1000 traders formados.',
+    'Domina el trading algorítmico con mentorías personalizadas 1-a-1, cursos profesionales y portafolios verificados en Darwinex. Resultados reales, estrategias probadas. +500 traders formados.',
   keywords: [
     'trading algorítmico',
     'cursos de trading',
@@ -30,9 +30,14 @@ export const metadata: Metadata = {
     'portafolios de trading',
     'trading profesional',
     'análisis técnico',
-    'trading sistemático'
+    'trading sistemático',
+    'MetaTrader',
+    'StrategyQuant',
+    'trading bot',
+    'señales de trading',
+    'mentorías personalizadas'
   ],
-  authors: [{ name: 'PQ Trader', url: 'https://pqtrader.com' }],
+  authors: [{ name: 'PQ Trader', url: 'https://pqtraders.com' }],
   creator: 'PQ Trader',
   publisher: 'PQ Trader',
   formatDetection: {
@@ -40,14 +45,25 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
+    ],
+    apple: [
+      { url: '/apple-icon.svg', type: 'image/svg+xml' },
+    ],
+  },
+  manifest: '/manifest.json',
   openGraph: {
     type: 'website',
     locale: 'es_ES',
-    url: 'https://pqtrader.com',
+    alternateLocale: ['en_US'],
+    url: 'https://pqtraders.com',
     siteName: 'PQ Trader',
     title: 'PQ Trader - Cursos y Mentorías de Trading Algorítmico',
     description:
-      'Domina el trading algorítmico con mentorías 1-a-1, cursos profesionales y portafolios verificados. +1000 traders formados.',
+      'Domina el trading algorítmico con mentorías 1-a-1, cursos profesionales y portafolios verificados en Darwinex. +500 traders formados con resultados reales.',
     images: [
       {
         url: '/og-image.jpg',
@@ -59,14 +75,16 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
+    site: '@pqtrader',
     title: 'PQ Trader - Cursos y Mentorías de Trading Algorítmico',
-    description: 'Domina el trading algorítmico con expertos. Mentorías 1-a-1 y cursos profesionales.',
+    description: 'Domina el trading algorítmico con expertos. Mentorías 1-a-1, cursos profesionales y portafolios verificados en Darwinex.',
     images: ['/og-image.jpg'],
     creator: '@pqtrader',
   },
   robots: {
     index: true,
     follow: true,
+    nocache: false,
     googleBot: {
       index: true,
       follow: true,
@@ -75,6 +93,10 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  alternates: {
+    canonical: 'https://pqtraders.com',
+  },
+  category: 'finance',
   verification: {
     google: 'tu-codigo-google-search-console',
     // yandex: 'tu-codigo-yandex',
