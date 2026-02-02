@@ -175,7 +175,7 @@ export function TrackRecordCard({ data, className }: TrackRecordCardProps) {
               </thead>
               <tbody>
                 {data.monthlyReturns.map((yearData) => {
-                  const yearTotal = yearData.months.reduce((sum, m) => sum + m.return, 0);
+                  const yearTotal = yearData.months.reduce((sum, m) => sum + (m.return || 0), 0);
                   return (
                     <tr key={yearData.year} className="border-b border-border/20">
                       <td className="py-2 px-2 font-medium text-foreground">{yearData.year}</td>
