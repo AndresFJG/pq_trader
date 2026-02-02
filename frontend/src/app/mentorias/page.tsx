@@ -46,7 +46,7 @@ const packages = [
     popular: true,
   },
   {
-    name: 'Club de Trading StrategyQuant',
+    name: 'Club PQ Trader',
     duration: 'Mensual',
     description: 'Comunidad exclusiva en Skool - Laboratorio de Trading con StrategyQuant',
     price: 150,
@@ -230,7 +230,7 @@ export default function MentoriasPage() {
       popular: true,
     },
     {
-      name: language === 'es' ? 'Club de Trading StrategyQuant' : 'StrategyQuant Trading Club',
+      name: language === 'es' ? 'Club PQ Trader' : 'PQ Trader Club',
       duration: language === 'es' ? 'Mensual' : 'Monthly',
       description: language === 'es'
         ? 'Comunidad exclusiva en Skool - Laboratorio de Trading con StrategyQuant'
@@ -311,36 +311,37 @@ export default function MentoriasPage() {
                 : 'Personalized 1-on-1 sessions focused on your specific needs'}
             </p>
             
-            {/* Mentorship Topics Grid */}
-            <div className="mb-16">
-              <div className="mb-10">
-                <h3 className="text-2xl font-bold text-foreground mb-2">
+            {/* Mentorship Topics - Professional List */}
+            <div className="mb-12 max-w-4xl mx-auto">
+              <div className="mb-6 text-center">
+                <h3 className="text-lg font-semibold text-foreground mb-1">
                   {language === 'es' ? 'Temas Disponibles para Mentoría' : 'Available Mentorship Topics'}
                 </h3>
-                <p className="text-muted-foreground">
+                <p className="text-sm text-muted-foreground/70">
                   {language === 'es' 
                     ? 'Elige los temas específicos en los que deseas recibir mentoría de nuestros expertos'
                     : 'Choose the specific topics you want to receive mentoring on from our experts'}
                 </p>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {mentorshipTopics.map((topic) => {
-                  const IconComponent = topic.icon;
-                  return (
-                    <div key={topic.id} className="group relative">
-                      <div className="absolute inset-0 bg-gradient-to-r from-profit/5 to-profit/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      <Card className="relative border-border/40 hover:border-profit/40 transition-all duration-300 h-full">
-                        <CardContent className="pt-8 pb-6 flex flex-col">
-                          <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-profit/10 mb-4 group-hover:bg-profit/20 transition-colors">
-                            <IconComponent className="w-6 h-6 text-profit" />
-                          </div>
-                          <h4 className="font-semibold text-foreground mb-2">{topic.title}</h4>
-                          <p className="text-sm text-muted-foreground leading-relaxed">{topic.description}</p>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  );
-                })}
+              <div className="bg-surface/30 border border-border/40 rounded-lg p-6">
+                <div className="grid md:grid-cols-2 gap-x-8 gap-y-3">
+                  {mentorshipTopics.map((topic) => {
+                    const IconComponent = topic.icon;
+                    return (
+                      <div 
+                        key={topic.id} 
+                        className="flex items-center gap-3 py-2"
+                      >
+                        <div className="flex-shrink-0">
+                          <IconComponent className="w-4 h-4 text-profit/70" />
+                        </div>
+                        <div className="min-w-0">
+                          <span className="text-sm font-medium text-foreground">{topic.title}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </div>

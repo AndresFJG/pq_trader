@@ -23,7 +23,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    checkAuth();
+    // Solo verificar auth si no estamos en rutas públicas
+    const publicRoutes = ['/login', '/register', '/forgot-password'];
+    const isPublicRoute = publicRoutes.some(route => window.location.pathname.startsWith(route));
+    
+    if (!isPublicRoute) {
+      checkAuth();
+    } else {
+      setLoading(false);
+    }
   }, []);
 
   const checkAuth = async () => {
@@ -35,6 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     } catch (error) {
       // Usuario no autenticado, no hacer nada
+      setUser(null);
     } finally {
       setLoading(false);
     }

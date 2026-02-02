@@ -14,7 +14,7 @@ const envSchema = z.object({
   PORT: z.string().default('4000').transform(Number).pipe(z.number().int().positive()),
   
   // CORS
-  CORS_ORIGIN: z.string().url().optional().default('http://localhost:3000'),
+  CORS_ORIGIN: z.string().default('http://localhost:3000'),
   FRONTEND_URL: z.string().url().optional().default('http://localhost:3000'),
   
   // Database
@@ -90,7 +90,10 @@ export const config = {
     isProduction: env.NODE_ENV === 'production',
   },
   cors: {
-    origin: env.CORS_ORIGIN,
+    // Permitir una URL o múltiples URLs separadas por comas
+    origin: env.CORS_ORIGIN.includes(',') 
+      ? env.CORS_ORIGIN.split(',').map(url => url.trim())
+      : env.CORS_ORIGIN,
   },
   database: {
     url: env.DATABASE_URL,
