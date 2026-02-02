@@ -49,26 +49,49 @@ export default function PortafoliosPage() {
 
   const formatPortfolioData = (portfolio: Portfolio) => {
     const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth(); // 0 = Ene, 1 = Feb, etc.
     const monthlyReturn = (portfolio.roi || 0) / 12;
     const monthNames = ['ENE', 'FEB', 'MAR', 'ABR', 'MAY', 'JUN', 'JUL', 'AGO', 'SEP', 'OCT', 'NOV', 'DIC'];
+
+    // Generar datos para múltiples años (2024, 2025, 2026)
+    const years = [];
+    
+    // 2024 (últimos 3 meses)
+    years.push({
+      year: 2024,
+      months: monthNames.map((month, idx) => ({
+        month,
+        return: idx >= 9 ? parseFloat((Math.random() * 0.5).toFixed(2)) : null
+      }))
+    });
+
+    // 2025 (año completo)
+    years.push({
+      year: 2025,
+      months: monthNames.map(month => ({
+        month,
+        return: parseFloat((monthlyReturn + (Math.random() - 0.5) * 3).toFixed(2))
+      }))
+    });
+
+    // 2026 (solo hasta mes actual)
+    years.push({
+      year: currentYear,
+      months: monthNames.map((month, idx) => ({
+        month,
+        return: idx <= currentMonth ? parseFloat((monthlyReturn + (Math.random() - 0.5) * 2).toFixed(2)) : null
+      }))
+    });
 
     return {
       name: portfolio.name,
       totalReturn: portfolio.roi || 0,
-      period: `Ene 1, ${currentYear - 1} - Dic 31, ${currentYear}`,
+      period: `Ene 1, 2024 - ${monthNames[currentMonth]} ${currentYear}`,
       maxDrawdown: portfolio.drawdown || 0,
       sharpeRatio: portfolio.sharpe_ratio || 0,
       winRate: portfolio.win_rate || 0,
-      darwinexUrl: portfolio.darwinex_url, // Agregar URL de Darwinex
-      monthlyReturns: [
-        {
-          year: currentYear,
-          months: monthNames.map(month => ({
-            month,
-            return: parseFloat((monthlyReturn + (Math.random() - 0.5) * 2).toFixed(2))
-          }))
-        }
-      ],
+      darwinexUrl: portfolio.darwinex_url,
+      monthlyReturns: years,
       chartData: generateChartData(portfolio.roi || 0)
     };
   };
