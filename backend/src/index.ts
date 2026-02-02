@@ -29,6 +29,7 @@ import enrollmentRoutes from './routes/enrollment.routes';
 import uploadRoutes from './routes/upload.routes';
 import mentorshipBookingRoutes from './routes/mentorshipBooking.routes';
 import mentorScheduleRoutes from './routes/mentorSchedule.routes';
+import blogRoutes from './routes/blog.routes';
 import { healthCheck, detailedHealthCheck, readinessCheck, livenessCheck } from './controllers/health.controller';
 // import darwinexRoutes from './routes/darwinex.routes';
 
@@ -93,6 +94,7 @@ app.use('/api/stripe', stripeRoutes);
 app.use('/api/enrollments', enrollmentRoutes);
 app.use('/api/mentorship-bookings', mentorshipBookingRoutes);
 app.use('/api/mentor-schedules', mentorScheduleRoutes);
+app.use('/api/blog', blogRoutes);
 // app.use('/api/darwinex', darwinexRoutes); // Temporalmente deshabilitado
 
 // Error handling
