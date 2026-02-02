@@ -1,12 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
 
-export default function PayPalReturnPage() {
+function PayPalReturnContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
@@ -115,5 +115,25 @@ export default function PayPalReturnPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function PayPalReturnPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-b from-background to-muted flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <div className="mx-auto mb-4">
+              <Loader2 className="h-16 w-16 text-profit animate-spin" />
+            </div>
+            <CardTitle className="text-2xl">Procesando pago...</CardTitle>
+            <CardDescription>Por favor espera un momento</CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    }>
+      <PayPalReturnContent />
+    </Suspense>
   );
 }
