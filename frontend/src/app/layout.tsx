@@ -4,6 +4,7 @@ import './globals.css';
 import { Providers } from '@/components/providers';
 import { Toaster } from 'react-hot-toast';
 import { ConditionalUI } from '@/components/layout/ConditionalUI';
+import { getOrganizationSchema } from '@/lib/schema';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -66,10 +67,11 @@ export const metadata: Metadata = {
       'Domina el trading algorítmico con mentorías 1-a-1, cursos profesionales y portafolios verificados en Darwinex. +500 traders formados con resultados reales.',
     images: [
       {
-        url: '/og-image.jpg',
+        url: '/og-image.svg',
         width: 1200,
         height: 630,
         alt: 'PQ Trader - Trading Algorítmico',
+        type: 'image/svg+xml',
       },
     ],
   },
@@ -78,7 +80,7 @@ export const metadata: Metadata = {
     site: '@pqtrader',
     title: 'PQ Trader - Cursos y Mentorías de Trading Algorítmico',
     description: 'Domina el trading algorítmico con expertos. Mentorías 1-a-1, cursos profesionales y portafolios verificados en Darwinex.',
-    images: ['/og-image.jpg'],
+    images: ['/og-image.svg'],
     creator: '@pqtrader',
   },
   robots: {
@@ -109,8 +111,16 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const organizationSchema = getOrganizationSchema();
+
   return (
     <html lang="es" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+      </head>
       <body className={inter.className}>
         <Providers>
           {children}

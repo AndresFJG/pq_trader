@@ -5,6 +5,7 @@ import { Navbar } from '@/components/layouts/Navbar';
 import { Footer } from '@/components/layouts/Footer';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Breadcrumbs } from '@/components/ui/breadcrumbs';
 import { Clock, Users, Star, BookOpen, TrendingUp, Award, ArrowRight } from 'lucide-react';
 import { CourseDetailsModal } from '@/components/modals/CourseDetailsModal';
 import { useLanguage } from '@/lib/i18n';
@@ -12,7 +13,7 @@ import { courseService, Course } from '@/services/courseService';
 import Link from 'next/link';
 
 export default function CursosPage() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
@@ -74,12 +75,22 @@ export default function CursosPage() {
       
       {/* Hero Section */}
       <section className="pt-32 pb-16 px-4 bg-gradient-to-b from-background to-background/50">
-        <div className="container mx-auto max-w-7xl text-center">
-          <div className="inline-flex items-center gap-2 bg-profit/10 border border-profit/20 rounded-full px-4 py-2 mb-6">
-            <BookOpen className="h-4 w-4 text-profit" />
-            <span className="text-sm text-profit font-medium">{t('coursesPage.badge')}</span>
-          </div>
+        <div className="container mx-auto max-w-7xl">
+          {/* Breadcrumbs */}
+          <Breadcrumbs 
+            className="mb-8"
+            items={[
+              { label: language === 'es' ? 'Inicio' : 'Home', href: '/' },
+              { label: language === 'es' ? 'Cursos' : 'Courses' },
+            ]}
+          />
           
+          <div className="text-center">
+            <div className="inline-flex items-center gap-2 bg-profit/10 border border-profit/20 rounded-full px-4 py-2 mb-6">
+              <BookOpen className="h-4 w-4 text-profit" />
+              <span className="text-sm text-profit font-medium">{t('coursesPage.badge')}</span>
+            </div>
+            
           <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6">
             {t('coursesPage.title')} <span className="text-profit">{t('coursesPage.titleHighlight')}</span>
           </h1>
@@ -109,6 +120,7 @@ export default function CursosPage() {
               </p>
               <p className="text-sm text-muted-foreground">{t('coursesPage.stats.contentHours')}</p>
             </div>
+          </div>
           </div>
         </div>
       </section>
