@@ -13,7 +13,7 @@ import {
   CheckCircle2,
   ArrowLeft,
 } from 'lucide-react';
-import Navbar from '@/components/layouts/Navbar';
+import { Navbar } from '@/components/layouts/Navbar';
 import api from '@/lib/api';
 import toast from 'react-hot-toast';
 import { useAuth } from '@/contexts/AuthContext';
