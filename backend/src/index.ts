@@ -39,6 +39,9 @@ import { notFound } from './middleware/notFound.middleware';
 const app: Application = express();
 const PORT = config.server.port;
 
+// Trust proxy - Required for Railway/Heroku/etc. (behind reverse proxy)
+app.set('trust proxy', 1);
+
 // Supabase connection via HTTPS (puerto 443 - no bloqueado por ISP)
 connectSupabase()
   .then(() => logger.info('✅ Database Ready'))
