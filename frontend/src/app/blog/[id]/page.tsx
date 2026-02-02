@@ -6,19 +6,75 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/lib/i18n';
-import { Calendar, Clock, User, ArrowLeft, Share2, BookmarkPlus, ThumbsUp } from 'lucide-react';
+import { Calendar, Clock, User, ArrowLeft, Share2, BookmarkPlus, BookOpen, TrendingUp, BarChart } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import Image from 'next/image';
 
-const blogPosts = {
+interface BlogPost {
+  title: { es: string; en: string };
+  excerpt: { es: string; en: string };
+  author: string;
+  date: string;
+  category: string;
+  readTime: string;
+  image: string;
+  coverImage?: string;
+  learningPoints?: { es: string[]; en: string[] };
+  tableOfContents?: { es: string[]; en: string[] };
+  content: { es: string; en: string };
+}
+
+const blogPosts: Record<string, BlogPost> = {
   '1': {
-    titleKey: 'blogPage.posts.post1.title',
-    excerptKey: 'blogPage.posts.post1.excerpt',
-    authorKey: 'blogPage.posts.post1.author',
+    title: {
+      es: 'Cómo Empezar con Trading Algorítmico en 2025',
+      en: 'How to Start with Algorithmic Trading in 2025'
+    },
+    excerpt: {
+      es: 'Guía completa para principiantes que quieren adentrarse en el mundo del trading algorítmico.',
+      en: 'Complete guide for beginners who want to dive into the world of algorithmic trading.'
+    },
+    author: 'Carlos Martínez',
     date: '2025-12-10',
     category: 'Principiantes',
     readTime: '8 min',
     image: '📚',
+    coverImage: 'https://images.unsplash.com/photo-1642790106117-e829e14a795f?w=1200&h=600&fit=crop',
+    learningPoints: {
+      es: [
+        'Fundamentos del trading algorítmico y sus ventajas competitivas',
+        'Herramientas esenciales: Python, MetaTrader y plataformas de backtesting',
+        'Cómo diseñar tu primera estrategia de trading automatizado',
+        'Mejores prácticas de backtesting y validación de estrategias',
+        'Gestión de riesgo aplicada al trading algorítmico'
+      ],
+      en: [
+        'Fundamentals of algorithmic trading and its competitive advantages',
+        'Essential tools: Python, MetaTrader and backtesting platforms',
+        'How to design your first automated trading strategy',
+        'Best practices for backtesting and strategy validation',
+        'Risk management applied to algorithmic trading'
+      ]
+    },
+    tableOfContents: {
+      es: [
+        '¿Qué es el Trading Algorítmico?',
+        'Ventajas del Trading Algorítmico',
+        'Primeros Pasos',
+        'Herramientas Esenciales',
+        'Tu Primera Estrategia',
+        'Conclusión'
+      ],
+      en: [
+        'What is Algorithmic Trading?',
+        'Advantages of Algorithmic Trading',
+        'Getting Started',
+        'Essential Tools',
+        'Your First Strategy',
+        'Conclusion'
+      ]
+    },
     content: {
       es: `
         <h2>Introducción al Trading Algorítmico</h2>
@@ -95,13 +151,34 @@ const blogPosts = {
     }
   },
   '2': {
-    titleKey: 'blogPage.posts.post2.title',
-    excerptKey: 'blogPage.posts.post2.excerpt',
-    authorKey: 'blogPage.posts.post2.author',
+    title: {
+      es: 'Python vs R: ¿Cuál es Mejor para Trading?',
+      en: 'Python vs R: Which is Better for Trading?'
+    },
+    excerpt: {
+      es: 'Comparativa detallada entre Python y R para análisis cuantitativo y desarrollo de estrategias.',
+      en: 'Detailed comparison between Python and R for quantitative analysis and strategy development.'
+    },
+    author: 'Ana García',
     date: '2025-12-08',
     category: 'Herramientas',
     readTime: '6 min',
     image: '🐍',
+    coverImage: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&h=600&fit=crop',
+    learningPoints: {
+      es: [
+        'Comparación exhaustiva entre Python y R',
+        'Librerías esenciales para trading cuantitativo',
+        'Casos de uso específicos para cada lenguaje',
+        'Rendimiento y ecosistema de herramientas'
+      ],
+      en: [
+        'Comprehensive comparison between Python and R',
+        'Essential libraries for quantitative trading',
+        'Specific use cases for each language',
+        'Performance and tool ecosystem'
+      ]
+    },
     content: {
       es: `<h2>Python para Trading: Librerías Esenciales</h2>
         <p>Python se ha convertido en el lenguaje de programación preferido para trading algorítmico. Descubre las librerías más importantes que todo trader cuantitativo debe conocer.</p>`,
@@ -110,13 +187,34 @@ const blogPosts = {
     }
   },
   '3': {
-    titleKey: 'blogPage.posts.post3.title',
-    excerptKey: 'blogPage.posts.post3.excerpt',
-    authorKey: 'blogPage.posts.post3.author',
+    title: {
+      es: 'Machine Learning en Trading: Casos Reales',
+      en: 'Machine Learning in Trading: Real Cases'
+    },
+    excerpt: {
+      es: 'Exploramos 5 casos de uso reales de ML en trading algorítmico con ejemplos de código.',
+      en: 'We explore 5 real use cases of ML in algorithmic trading with code examples.'
+    },
+    author: 'Roberto Silva',
     date: '2025-12-05',
     category: 'Machine Learning',
     readTime: '12 min',
     image: '🤖',
+    coverImage: 'https://images.unsplash.com/photo-1555255707-c07966088b7b?w=1200&h=600&fit=crop',
+    learningPoints: {
+      es: [
+        'Aplicaciones prácticas de Machine Learning en trading',
+        'Modelos de predicción de precios y clasificación',
+        'Gestión de features y overfitting',
+        'Estrategias basadas en redes neuronales'
+      ],
+      en: [
+        'Practical applications of Machine Learning in trading',
+        'Price prediction and classification models',
+        'Feature management and overfitting',
+        'Neural network-based strategies'
+      ]
+    },
     content: {
       es: `<h2>Machine Learning aplicado al Trading</h2>
         <p>El aprendizaje automático está transformando el trading cuantitativo. Aprende cómo aplicar técnicas de ML para mejorar tus estrategias de trading.</p>`,
@@ -139,9 +237,11 @@ export default function BlogPostPage() {
         <Navbar />
         <section className="pt-32 pb-16 px-4">
           <div className="container mx-auto max-w-4xl text-center">
-            <h1 className="text-4xl font-bold mb-4">Artículo no encontrado</h1>
+            <h1 className="text-4xl font-bold mb-4">
+              {language === 'es' ? 'Artículo no encontrado' : 'Article not found'}
+            </h1>
             <Link href="/blog">
-              <Button>Volver al Blog</Button>
+              <Button>{language === 'es' ? 'Volver al Blog' : 'Back to Blog'}</Button>
             </Link>
           </div>
         </section>
@@ -150,7 +250,11 @@ export default function BlogPostPage() {
     );
   }
 
+  const title = post.title[language as keyof typeof post.title] || post.title.es;
+  const excerpt = post.excerpt[language as keyof typeof post.excerpt] || post.excerpt.es;
   const content = post.content[language as keyof typeof post.content] || post.content.es;
+  const learningPoints = post.learningPoints?.[language as keyof typeof post.learningPoints] || post.learningPoints?.es || [];
+  const tableOfContents = post.tableOfContents?.[language as keyof typeof post.tableOfContents] || post.tableOfContents?.es || [];
 
   return (
     <main className="min-h-screen bg-background">
@@ -158,7 +262,7 @@ export default function BlogPostPage() {
       
       {/* Article Header */}
       <article className="pt-32 pb-16 px-4">
-        <div className="container mx-auto max-w-4xl">
+        <div className="container mx-auto max-w-6xl">
           {/* Breadcrumbs */}
           <nav className="flex items-center gap-2 text-sm text-muted-foreground mb-8">
             <Link href="/" className="hover:text-profit transition-colors">
@@ -169,7 +273,7 @@ export default function BlogPostPage() {
               Blog
             </Link>
             <span>/</span>
-            <span className="text-foreground">Artículo</span>
+            <span className="text-foreground">{language === 'es' ? 'Artículo' : 'Article'}</span>
           </nav>
 
           {/* Post Meta */}
@@ -177,8 +281,10 @@ export default function BlogPostPage() {
             <Badge className="mb-4 bg-profit/10 text-profit border-profit/20">
               {post.category}
             </Badge>
+            <h1 className="text-4xl lg:text-5xl font-bold mb-4">{title}</h1>
+            <p className="text-xl text-muted-foreground mb-6">{excerpt}</p>
             
-            <div className="flex items-center gap-4 text-sm text-muted-foreground mb-8">
+            <div className="flex items-center gap-6 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
                 <span>{post.date}</span>
@@ -189,46 +295,126 @@ export default function BlogPostPage() {
               </div>
               <div className="flex items-center gap-2">
                 <User className="h-4 w-4" />
-                <span>PQ Trader Team</span>
+                <span>{post.author}</span>
               </div>
             </div>
           </div>
 
-          {/* Content */}
-          <Card className="border-border/40">
-            <CardContent className="p-8 lg:p-12">
-              <div 
-                className="prose prose-invert prose-lg max-w-none
-                  prose-headings:text-foreground prose-headings:font-bold
-                  prose-h2:text-3xl prose-h2:mt-8 prose-h2:mb-4
-                  prose-h3:text-2xl prose-h3:mt-6 prose-h3:mb-3
-                  prose-p:text-muted-foreground prose-p:leading-relaxed prose-p:mb-4
-                  prose-strong:text-profit prose-strong:font-semibold
-                  prose-ul:my-4 prose-ul:list-disc prose-ul:pl-6
-                  prose-ol:my-4 prose-ol:list-decimal prose-ol:pl-6
-                  prose-li:text-muted-foreground prose-li:my-2"
-                dangerouslySetInnerHTML={{ __html: content }}
+          {/* Cover Image */}
+          {post.coverImage && (
+            <div className="relative w-full h-[400px] rounded-xl overflow-hidden mb-12">
+              <Image
+                src={post.coverImage}
+                alt={title}
+                fill
+                className="object-cover"
+                priority
               />
-            </CardContent>
-          </Card>
+            </div>
+          )}
+
+          {/* Two Column Layout */}
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Main Content */}
+            <div className="lg:col-span-2">
+              <Card className="border-border/40">
+                <CardContent className="p-8 lg:p-12">
+                  <div 
+                    className="prose prose-invert prose-lg max-w-none
+                      prose-headings:text-foreground prose-headings:font-bold
+                      prose-h2:text-3xl prose-h2:mt-8 prose-h2:mb-4
+                      prose-h3:text-2xl prose-h3:mt-6 prose-h3:mb-3
+                      prose-p:text-muted-foreground prose-p:leading-relaxed prose-p:mb-4
+                      prose-strong:text-profit prose-strong:font-semibold
+                      prose-ul:my-4 prose-ul:list-disc prose-ul:pl-6
+                      prose-ol:my-4 prose-ol:list-decimal prose-ol:pl-6
+                      prose-li:text-muted-foreground prose-li:my-2"
+                    dangerouslySetInnerHTML={{ __html: content }}
+                  />
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Sidebar */}
+            <div className="lg:col-span-1">
+              <div className="sticky top-24 space-y-6">
+                {/* Learning Points */}
+                {learningPoints.length > 0 && (
+                  <Card className="border-profit/20 bg-profit/5">
+                    <CardHeader>
+                      <div className="flex items-center gap-2 mb-2">
+                        <BookOpen className="h-5 w-5 text-profit" />
+                        <CardTitle className="text-lg">
+                          {language === 'es' ? '¿Qué aprenderás?' : 'What will you learn?'}
+                        </CardTitle>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="space-y-3">
+                        {learningPoints.map((point, index) => (
+                          <li key={index} className="flex items-start gap-2 text-sm">
+                            <TrendingUp className="h-4 w-4 text-profit mt-0.5 flex-shrink-0" />
+                            <span className="text-muted-foreground">{point}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {/* Table of Contents */}
+                {tableOfContents.length > 0 && (
+                  <Card className="border-border/40">
+                    <CardHeader>
+                      <div className="flex items-center gap-2 mb-2">
+                        <BarChart className="h-5 w-5 text-profit" />
+                        <CardTitle className="text-lg">
+                          {language === 'es' ? 'Contenido' : 'Contents'}
+                        </CardTitle>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="space-y-2">
+                        {tableOfContents.map((item, index) => (
+                          <li key={index} className="text-sm text-muted-foreground hover:text-profit transition-colors cursor-pointer">
+                            {index + 1}. {item}
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {/* Share Actions */}
+                <Card className="border-border/40">
+                  <CardHeader>
+                    <CardTitle className="text-lg">
+                      {language === 'es' ? 'Compartir' : 'Share'}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    <Button variant="outline" className="w-full gap-2">
+                      <Share2 className="h-4 w-4" />
+                      {language === 'es' ? 'Compartir artículo' : 'Share article'}
+                    </Button>
+                    <Button variant="outline" className="w-full gap-2">
+                      <BookmarkPlus className="h-4 w-4" />
+                      {language === 'es' ? 'Guardar para después' : 'Save for later'}
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </div>
 
           {/* Actions */}
-          <div className="flex items-center justify-between mt-8">
+          <div className="flex items-center justify-between mt-12">
             <Link href="/blog">
               <Button variant="outline" className="gap-2">
                 <ArrowLeft className="h-4 w-4" />
                 {language === 'es' ? 'Volver al Blog' : 'Back to Blog'}
               </Button>
             </Link>
-            
-            <div className="flex gap-2">
-              <Button variant="outline" size="icon">
-                <Share2 className="h-4 w-4" />
-              </Button>
-              <Button variant="outline" size="icon">
-                <BookmarkPlus className="h-4 w-4" />
-              </Button>
-            </div>
           </div>
 
           {/* Related Posts */}
@@ -237,26 +423,35 @@ export default function BlogPostPage() {
               {language === 'es' ? 'Artículos Relacionados' : 'Related Articles'}
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
-              {Object.entries(blogPosts).slice(0, 2).map(([id, relatedPost]) => (
-                id !== postId && (
-                  <Card key={id} className="border-border/40 hover:border-profit/40 transition-all">
-                    <CardHeader>
-                      <div className="text-4xl mb-4">{relatedPost.image}</div>
-                      <Badge className="mb-2 w-fit bg-profit/10 text-profit border-profit/20">
-                        {relatedPost.category}
-                      </Badge>
-                      <CardTitle className="text-xl">{relatedPost.titleKey}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <Link href={`/blog/${id}`}>
-                        <Button variant="outline" className="w-full">
-                          {language === 'es' ? 'Leer más' : 'Read more'}
-                        </Button>
-                      </Link>
-                    </CardContent>
-                  </Card>
-                )
-              ))}
+              {Object.entries(blogPosts)
+                .filter(([id]) => id !== postId)
+                .slice(0, 2)
+                .map(([id, relatedPost]) => {
+                  const relatedTitle = relatedPost.title[language as keyof typeof relatedPost.title] || relatedPost.title.es;
+                  const relatedExcerpt = relatedPost.excerpt[language as keyof typeof relatedPost.excerpt] || relatedPost.excerpt.es;
+                  
+                  return (
+                    <Card key={id} className="border-border/40 hover:border-profit/40 transition-all group">
+                      <CardHeader>
+                        <div className="text-4xl mb-4">{relatedPost.image}</div>
+                        <Badge className="mb-2 w-fit bg-profit/10 text-profit border-profit/20">
+                          {relatedPost.category}
+                        </Badge>
+                        <CardTitle className="text-xl group-hover:text-profit transition-colors">
+                          {relatedTitle}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-muted-foreground text-sm mb-4">{relatedExcerpt}</p>
+                        <Link href={`/blog/${id}`}>
+                          <Button variant="outline" className="w-full">
+                            {language === 'es' ? 'Leer más' : 'Read more'}
+                          </Button>
+                        </Link>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
             </div>
           </section>
         </div>
