@@ -59,6 +59,7 @@ export default function PortafoliosPage() {
       maxDrawdown: portfolio.drawdown || 0,
       sharpeRatio: portfolio.sharpe_ratio || 0,
       winRate: portfolio.win_rate || 0,
+      darwinexUrl: portfolio.darwinex_url, // Agregar URL de Darwinex
       monthlyReturns: [
         {
           year: currentYear,

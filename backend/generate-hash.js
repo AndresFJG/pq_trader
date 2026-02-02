@@ -1,7 +1,7 @@
 // Script rápido para generar hash de contraseña
 const bcrypt = require('bcryptjs');
 
-const password = 'Admin123!'; // Cambia esto si quieres
+const password = 'PqT#2026!Secure$Admin'; // Cambia esto si quieres
 
 bcrypt.hash(password, 10, (err, hash) => {
   if (err) {

@@ -201,6 +201,7 @@ export interface Portfolio {
   win_rate: number;
   sharpe_ratio?: number;
   drawdown?: number;
+  darwinex_url?: string;
   status: 'active' | 'archived';
   created_at: Date;
   updated_at: Date;

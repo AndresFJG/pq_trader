@@ -10,6 +10,7 @@ export interface Portfolio {
   drawdown: number;
   win_rate: number;
   total_trades: number;
+  darwinex_url?: string;
   status: 'active' | 'archived';
   created_at: string;
   updated_at: string;
