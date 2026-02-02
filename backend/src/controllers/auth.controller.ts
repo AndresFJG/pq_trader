@@ -39,14 +39,14 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     res.cookie('accessToken', token, {
       httpOnly: true,
       secure: config.server.nodeEnv === 'production', // HTTPS en producción
-      sameSite: 'strict',
+      sameSite: config.server.nodeEnv === 'production' ? 'none' : 'lax', // 'none' para cross-domain
       maxAge: 15 * 60 * 1000, // 15 minutos
     });
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: config.server.nodeEnv === 'production',
-      sameSite: 'strict',
+      sameSite: config.server.nodeEnv === 'production' ? 'none' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 días
     });
 
@@ -107,14 +107,14 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     res.cookie('accessToken', token, {
       httpOnly: true,
       secure: config.server.nodeEnv === 'production',
-      sameSite: 'strict',
+      sameSite: config.server.nodeEnv === 'production' ? 'none' : 'lax',
       maxAge: 15 * 60 * 1000, // 15 minutos
     });
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: config.server.nodeEnv === 'production',
-      sameSite: 'strict',
+      sameSite: config.server.nodeEnv === 'production' ? 'none' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 días
     });
 
@@ -201,7 +201,7 @@ export const refreshToken = async (req: Request, res: Response): Promise<void> =
       res.cookie('accessToken', newToken, {
         httpOnly: true,
         secure: config.server.nodeEnv === 'production',
-        sameSite: 'strict',
+        sameSite: config.server.nodeEnv === 'production' ? 'none' : 'lax',
         maxAge: 15 * 60 * 1000,
       });
 
