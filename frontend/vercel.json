@@ -34,11 +34,5 @@
         }
       ]
     }
-  ],
-  "env": {
-    "NEXT_PUBLIC_API_URL": "@next_public_api_url",
-    "NEXT_PUBLIC_STRIPE_PUBLIC_KEY": "@next_public_stripe_public_key",
-    "NEXT_PUBLIC_PAYPAL_CLIENT_ID": "@next_public_paypal_client_id",
-    "NEXT_PUBLIC_SITE_URL": "@next_public_site_url"
-  }
+  ]
 }
