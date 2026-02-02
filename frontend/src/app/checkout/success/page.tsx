@@ -37,6 +37,11 @@ function SuccessContent() {
       try {
         console.log('🔍 Verificando sesión:', sessionId);
         
+        // 1. Obtener detalles de sesión (esto actualizará la transacción automáticamente)
+        await api.get(`/stripe/session/${sessionId}`);
+        console.log('✅ Sesión verificada y transacción actualizada');
+        
+        // 2. Crear enrollment si aplica
         const response = await api.post('/stripe/verify-session', { sessionId });
         
         if (response.data.success) {

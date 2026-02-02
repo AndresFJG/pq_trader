@@ -45,7 +45,7 @@ export class UserService {
   static async findByEmail(email: string): Promise<User | null> {
     const { data, error } = await supabase
       .from('users')
-      .select('*')
+      .select('id, name, email, password, role, subscription_status, subscription_tier, created_at')
       .eq('email', email)
       .single();
 
@@ -66,7 +66,7 @@ export class UserService {
   static async findById(id: string | number): Promise<User | null> {
     const { data, error } = await supabase
       .from('users')
-      .select('*')
+      .select('id, name, email, password, role, subscription_status, subscription_tier, stripe_customer_id, created_at, updated_at')
       .eq('id', id)
       .single();
 

@@ -1,50 +1,119 @@
 import { Request, Response, NextFunction } from 'express';
+import { logger } from '../utils/logger';
+import { config } from '../config/env';
 
-interface ErrorResponse {
-  success: boolean;
-  error: string;
-  stack?: string;
+/**
+ * Interface para errores de la aplicación
+ */
+interface AppError extends Error {
+  statusCode?: number;
+  code?: string;
+  errors?: any[];
+  isOperational?: boolean;
 }
 
+/**
+ * Error handler middleware
+ * Captura y formatea todos los errores de la aplicación
+ */
 export const errorHandler = (
-  err: any,
+  err: AppError,
   req: Request,
   res: Response,
   next: NextFunction
 ): void => {
   let error = { ...err };
   error.message = err.message;
+  error.statusCode = err.statusCode;
 
-  // Log to console for dev
-  console.error('Error:', err);
+  // Log del error
+  logger.error('Error Handler', {
+    message: error.message,
+    statusCode: error.statusCode,
+    stack: err.stack,
+    url: req.url,
+    method: req.method,
+    ip: req.ip,
+    userId: (req as any).user?.id,
+  });
 
-  // Mongoose bad ObjectId
+  // Mongoose/MongoDB bad ObjectId
   if (err.name === 'CastError') {
     const message = 'Recurso no encontrado';
-    error = { name: 'CastError', message, statusCode: 404 };
+    error = { 
+      ...error,
+      name: 'CastError', 
+      message, 
+      statusCode: 404,
+      isOperational: true 
+    };
   }
 
   // Mongoose duplicate key
-  if (err.code === 11000) {
-    const message = 'Este email ya está registrado';
-    error = { name: 'DuplicateKey', message, statusCode: 400 };
+  if ((err as any).code === 11000) {
+    const message = 'Este valor ya existe en la base de datos';
+    error = { 
+      ...error,
+      name: 'DuplicateKey', 
+      message, 
+      statusCode: 400,
+      isOperational: true 
+    };
   }
 
   // Mongoose validation error
   if (err.name === 'ValidationError') {
-    const message = Object.values(err.errors)
+    const message = Object.values((err as any).errors || {})
       .map((val: any) => val.message)
       .join(', ');
-    error = { name: 'ValidationError', message, statusCode: 400 };
+    error = { 
+      ...error,
+      name: 'ValidationError', 
+      message, 
+      statusCode: 400,
+      isOperational: true 
+    };
   }
 
-  const response: ErrorResponse = {
+  // JWT errors
+  if (err.name === 'JsonWebTokenError') {
+    error = {
+      ...error,
+      message: 'Token inválido',
+      statusCode: 401,
+      isOperational: true
+    };
+  }
+
+  if (err.name === 'TokenExpiredError') {
+    error = {
+      ...error,
+      message: 'Token expirado',
+      statusCode: 401,
+      isOperational: true
+    };
+  }
+
+  // Supabase/PostgreSQL errors
+  if ((err as any).code?.startsWith('PGRST')) {
+    error = {
+      ...error,
+      message: 'Error en la base de datos',
+      statusCode: 500,
+      isOperational: false
+    };
+  }
+
+  const response: any = {
     success: false,
     error: error.message || 'Error del servidor',
   };
 
-  if (process.env.NODE_ENV === 'development') {
+  // Incluir detalles adicionales en desarrollo
+  if (config.server.isDevelopment) {
     response.stack = err.stack;
+    response.statusCode = error.statusCode;
+    response.name = err.name;
   }
 
   res.status(error.statusCode || 500).json(response);

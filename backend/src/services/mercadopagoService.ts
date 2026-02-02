@@ -1,6 +1,8 @@
 // Mercado Pago Service (placeholder)
 // Install: npm install mercadopago
 
+import { logger } from '../utils/logger';
+
 export class MercadoPagoService {
   public readonly accessToken: string; // Se usará cuando se implemente la integración real
 
@@ -29,7 +31,7 @@ export class MercadoPagoService {
   }
 
   async getPaymentStatus(paymentId: string) {
-    console.log('[MercadoPago] Getting payment status:', paymentId);
+    logger.info('MercadoPago: Getting payment status', { paymentId });
 
     return {
       status: 'pending',

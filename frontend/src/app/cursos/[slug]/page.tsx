@@ -51,12 +51,59 @@ async function getCourse(slug: string): Promise<Course | null> {
   }
 }
 
+// Función para obtener los módulos según el curso
+function getCourseModules(slug: string): string[] {
+  const modules: Record<string, string[]> = {
+    'curso-basico-trading-algoritmico': [
+      'Fundamentos del enfoque cuantitativo y microestructura',
+      'Operativa técnica y gestión de plataforma (MT5)',
+      'Construcción lógica de estrategias y gestión de riesgo',
+      'Evaluación estadística y análisis de métricas de rendimiento',
+      'Pruebas de robustez y validación de datos no vistos',
+      'Implementación en real, monitoreo y mejora continua'
+    ],
+    'strategyquant-masterclass': [
+      'Fundamentos y Flujo de Trabajo',
+      'Configuración y Gestión de Datos',
+      'Motor de Generación',
+      'Evaluación y Robustez',
+      'Exportación e Implementación'
+    ],
+    'fxdreema-masterclass': [
+      'Fundamentos y Lógica: Variables y desarrollo de indicadores',
+      'Mecánicas Operativas: Eventos (On Tick, On Trade, On Timer)',
+      'Filtros de tiempo y acciones de trading',
+      'Gestión de riesgos (Trailing Stop y Breakeven)',
+      'Estrategias Avanzadas: Trend Follow, Scalping, Grid',
+      'Optimización para obtener un edge estadístico sólido'
+    ],
+    'teoria-mercado-real-datos-optimizacion-robustez': [
+      'Optimización Profesional y Walk Forward Analysis',
+      'Calidad de Datos y Robustez',
+      'Tests de Montecarlo para medir probabilidad de éxito',
+      'Gestión de Portafolios con QuantAnalyzer',
+      'Implementación en Vivo: VPS y auditoría de cuentas',
+      'Análisis de performance en tiempo real'
+    ]
+  };
+  
+  return modules[slug] || [
+    'Fundamentos de trading algorítmico',
+    'Implementación de estrategias',
+    'Backtesting y optimización',
+    'Gestión de riesgo profesional'
+  ];
+}
+
 export default async function CourseDetailPage({ params }: { params: { slug: string } }) {
   const course = await getCourse(params.slug);
 
   if (!course) {
     notFound();
   }
+
+  // Obtener los módulos del curso
+  const modules = getCourseModules(params.slug);
 
   return (
     <main className="min-h-screen bg-background">
@@ -131,22 +178,12 @@ export default async function CourseDetailPage({ params }: { params: { slug: str
                 </CardHeader>
                 <CardContent>
                   <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <li className="flex items-start gap-2">
-                      <CheckCircle2 className="h-5 w-5 text-profit shrink-0 mt-0.5" />
-                      <span>Fundamentos de trading algorítmico</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle2 className="h-5 w-5 text-profit shrink-0 mt-0.5" />
-                      <span>Implementación de estrategias</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle2 className="h-5 w-5 text-profit shrink-0 mt-0.5" />
-                      <span>Backtesting y optimización</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle2 className="h-5 w-5 text-profit shrink-0 mt-0.5" />
-                      <span>Gestión de riesgo profesional</span>
-                    </li>
+                    {modules.map((module, index) => (
+                      <li key={index} className="flex items-start gap-2">
+                        <CheckCircle2 className="h-5 w-5 text-profit shrink-0 mt-0.5" />
+                        <span>{module}</span>
+                      </li>
+                    ))}
                   </ul>
                 </CardContent>
               </Card>

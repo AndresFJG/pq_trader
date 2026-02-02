@@ -18,15 +18,13 @@ import api from '@/lib/api';
 import toast from 'react-hot-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 
 interface Session {
@@ -267,14 +265,14 @@ export default function MentorshipBookingPage() {
       </div>
 
       {/* Booking Confirmation Dialog */}
-      <AlertDialog
+      <Dialog
         open={!!selectedSession}
         onOpenChange={(open) => !open && setSelectedSession(null)}
       >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Confirmar Reserva</AlertDialogTitle>
-            <AlertDialogDescription>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirmar Reserva</DialogTitle>
+            <DialogDescription>
               {selectedSession && (
                 <div className="space-y-3 mt-4">
                   <div>
@@ -302,22 +300,26 @@ export default function MentorshipBookingPage() {
                   </div>
                 </div>
               )}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={isBooking}>
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              disabled={isBooking}
+              onClick={() => setSelectedSession(null)}
+            >
               Cancelar
-            </AlertDialogCancel>
-            <AlertDialogAction
+            </Button>
+            <Button
               onClick={handleBooking}
               disabled={isBooking}
               className="bg-profit hover:bg-profit/90"
             >
               {isBooking ? 'Reservando...' : 'Confirmar Reserva'}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

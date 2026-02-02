@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { UserService } from '../services/user.service';
 import { AuthRequest } from '../middleware/auth.middleware';
 import { generateToken, generateRefreshToken, verifyRefreshToken } from '../utils/jwt';
+import { config } from '../config/env';
 
 // NOTA: generateToken y generateRefreshToken ahora se importan de ../utils/jwt
 
@@ -33,6 +34,21 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
     const token = generateToken(user.id);
     const refreshToken = generateRefreshToken(user.id);
+
+    // Set HttpOnly cookies (más seguro que localStorage)
+    res.cookie('accessToken', token, {
+      httpOnly: true,
+      secure: config.server.nodeEnv === 'production', // HTTPS en producción
+      sameSite: 'strict',
+      maxAge: 15 * 60 * 1000, // 15 minutos
+    });
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: config.server.nodeEnv === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 días
+    });
 
     res.status(201).json({
       success: true,
@@ -87,6 +103,21 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     const token = generateToken(user.id);
     const refreshToken = generateRefreshToken(user.id);
 
+    // Set HttpOnly cookies
+    res.cookie('accessToken', token, {
+      httpOnly: true,
+      secure: config.server.nodeEnv === 'production',
+      sameSite: 'strict',
+      maxAge: 15 * 60 * 1000, // 15 minutos
+    });
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: config.server.nodeEnv === 'production',
+      sameSite: 'strict',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 días
+    });
+
     res.json({
       success: true,
       data: {
@@ -132,7 +163,8 @@ export const getMe = async (req: AuthRequest, res: Response): Promise<void> => {
 // @access  Public
 export const refreshToken = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { refreshToken } = req.body;
+    // Leer refresh token de cookie (prioridad) o body (fallback)
+    const refreshToken = req.cookies?.refreshToken || req.body.refreshToken;
 
     if (!refreshToken) {
       res.status(401).json({
@@ -165,6 +197,14 @@ export const refreshToken = async (req: Request, res: Response): Promise<void> =
 
       const newToken = generateToken(user.id);
 
+      // Actualizar cookie de accessToken
+      res.cookie('accessToken', newToken, {
+        httpOnly: true,
+        secure: config.server.nodeEnv === 'production',
+        sameSite: 'strict',
+        maxAge: 15 * 60 * 1000,
+      });
+
       res.json({
         success: true,
         data: {
@@ -183,5 +223,18 @@ export const refreshToken = async (req: Request, res: Response): Promise<void> =
       error: error.message,
     });
   }
+};
+
+// @desc    Logout user (clear cookies)
+// @route   POST /api/auth/logout
+// @access  Public
+export const logout = async (req: Request, res: Response): Promise<void> => {
+  res.clearCookie('accessToken');
+  res.clearCookie('refreshToken');
+
+  res.json({
+    success: true,
+    message: 'Logged out successfully',
+  });
 };
 

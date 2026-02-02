@@ -10,6 +10,7 @@ import { protect, authorize } from '../middleware/auth.middleware';
 import { paymentLimiter, webhookLimiter } from '../middleware/rateLimiter.middleware';
 import { idempotency } from '../middleware/idempotency.middleware';
 import { validate } from '../middleware/validate.middleware';
+import { validatePayPalWebhook } from '../middleware/webhookValidator.middleware';
 import {
   createPayPalOrderSchema,
   refundPaymentSchema,
@@ -20,7 +21,7 @@ const router = Router();
 /**
  * Webhook de PayPal (público pero con validación de firma)
  */
-router.post('/webhook', webhookLimiter, handleWebhook);
+router.post('/webhook', webhookLimiter, validatePayPalWebhook, handleWebhook);
 
 /**
  * Rutas protegidas (requieren autenticación)

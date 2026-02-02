@@ -1,4 +1,7 @@
 // SEPA Transfer Service (Europe)
+// No tiene implementación real - solo placeholders
+
+import { logger } from '../utils/logger';
 
 export class SEPAService {
   async createPayment(data: {
@@ -36,7 +39,7 @@ export class SEPAService {
   }
 
   async getPaymentStatus(paymentId: string) {
-    console.log('[SEPA] Getting payment status:', paymentId);
+    logger.info('SEPA: Getting payment status', { paymentId });
 
     return {
       status: 'pending',

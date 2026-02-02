@@ -5,193 +5,14 @@ import { Footer } from '@/components/layouts/Footer';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Clock, Video, MessageCircle, Users, Award, CheckCircle, Target, Rocket, BookOpen, Linkedin, Mail, Code2, BarChart3 } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Calendar, Clock, Video, MessageCircle, Users, Award, CheckCircle, Target, Rocket, BookOpen, Linkedin, Mail, Code2, BarChart3, LineChart, Zap, Cpu, TrendingUp, ChevronRight, X } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useLanguage } from '@/lib/i18n';
-
-// Profesionales/Mentores - Traducidos
-const getMentors = (language: string) => [
-  {
-    id: '1',
-    name: 'Carlos Martínez',
-    title: language === 'es' ? 'Fundador & CEO' : 'Founder & CEO',
-    subtitle: language === 'es' ? 'Especialista en Trading Algorítmico' : 'Algorithmic Trading Specialist',
-    bio: language === 'es' 
-      ? 'Más de 12 años de experiencia en mercados financieros. Ex-trader en Goldman Sachs y fundador de PQ Trader. Profesor de Trading Cuantitativo en la Universidad Tecnológica. Ha desarrollado más de 500 estrategias algorítmicas verificadas.'
-      : 'Over 12 years of experience in financial markets. Ex-trader at Goldman Sachs and founder of PQ Trader. Professor of Quantitative Trading at the Technological University. Has developed over 500 verified algorithmic strategies.',
-    quote: language === 'es' 
-      ? 'El éxito en trading algorítmico está en los datos, no en las emociones.'
-      : 'Success in algorithmic trading is in the data, not in emotions.',
-    specialties: [
-      'Python & Trading',
-      language === 'es' ? 'Backtesting Avanzado' : 'Advanced Backtesting',
-      language === 'es' ? 'Estrategias Cuantitativas' : 'Quantitative Strategies',
-      'Risk Management',
-      'Portfolio Optimization'
-    ],
-    experience: language === 'es' ? '12+ años' : '12+ years',
-    students: 2500,
-    rating: 4.9,
-    sessions: 450,
-    price: 70,
-    image: '👨‍💼',
-    linkedin: 'https://linkedin.com',
-    email: 'carlos@pqtrader.com',
-    achievements: language === 'es' ? [
-      'Ex-Quant Trader Goldman Sachs',
-      'Profesor Universitario',
-      '500+ estrategias desarrolladas',
-      'Speaker internacional'
-    ] : [
-      'Ex-Quant Trader Goldman Sachs',
-      'University Professor',
-      '500+ strategies developed',
-      'International Speaker'
-    ]
-  },
-  {
-    id: '2',
-    name: 'Ana García',
-    title: 'Head of Machine Learning',
-    subtitle: language === 'es' ? 'Experta en IA aplicada al Trading' : 'AI Expert Applied to Trading',
-    bio: language === 'es'
-      ? 'PhD en Ciencias de la Computación con especialización en Machine Learning. 8 años desarrollando modelos predictivos para fondos hedge. Pionera en aplicación de Deep Learning a mercados financieros.'
-      : 'PhD in Computer Science with specialization in Machine Learning. 8 years developing predictive models for hedge funds. Pioneer in applying Deep Learning to financial markets.',
-    quote: language === 'es' 
-      ? 'La IA no reemplaza al trader, lo potencia.'
-      : 'AI doesn\'t replace the trader, it empowers them.',
-    specialties: [
-      'Machine Learning',
-      'Deep Learning',
-      language === 'es' ? 'NLP para Trading' : 'NLP for Trading',
-      'Feature Engineering',
-      'Model Optimization'
-    ],
-    experience: language === 'es' ? '8+ años' : '8+ years',
-    students: 1800,
-    rating: 4.8,
-    sessions: 320,
-    price: 70,
-    image: '👩‍💻',
-    linkedin: 'https://linkedin.com',
-    email: 'ana@pqtrader.com',
-    achievements: language === 'es' ? [
-      'PhD Computer Science',
-      'Ex-Citadel Securities',
-      '15+ papers publicados',
-      'TensorFlow Contributor'
-    ] : [
-      'PhD Computer Science',
-      'Ex-Citadel Securities',
-      '15+ papers published',
-      'TensorFlow Contributor'
-    ]
-  },
-  {
-    id: '3',
-    name: 'Roberto Silva',
-    title: 'Chief Risk Officer',
-    subtitle: language === 'es' ? 'Especialista en Gestión de Riesgo' : 'Risk Management Specialist',
-    bio: language === 'es'
-      ? 'Más de 15 años gestionando riesgo en fondos hedge y bancos de inversión. Experto en VaR, stress testing y optimización de portfolios. Ha gestionado portfolios de +$500M.'
-      : 'Over 15 years managing risk in hedge funds and investment banks. Expert in VaR, stress testing, and portfolio optimization. Has managed portfolios of +$500M.',
-    quote: language === 'es'
-      ? 'No importa cuán buena sea tu estrategia si no sabes gestionar el riesgo.'
-      : 'It doesn\'t matter how good your strategy is if you don\'t know how to manage risk.',
-    specialties: [
-      'Risk Management',
-      'Portfolio Theory',
-      'VaR & CVaR',
-      'Position Sizing',
-      'Diversification'
-    ],
-    experience: language === 'es' ? '15+ años' : '15+ years',
-    students: 1200,
-    rating: 4.9,
-    sessions: 520,
-    price: 70,
-    image: '👨‍🏫',
-    linkedin: 'https://linkedin.com',
-    email: 'roberto@pqtrader.com',
-    achievements: language === 'es' ? [
-      'Ex-JP Morgan Risk Manager',
-      'CFA Charterholder',
-      '$500M+ gestionados',
-      'Consultor FMI'
-    ] : [
-      'Ex-JP Morgan Risk Manager',
-      'CFA Charterholder',
-      '$500M+ managed',
-      'IMF Consultant'
-    ]
-  },
-  {
-    id: '4',
-    name: 'Laura Fernández',
-    title: 'HFT Specialist',
-    subtitle: language === 'es' ? 'Experta en High Frequency Trading' : 'High Frequency Trading Expert',
-    bio: language === 'es'
-      ? '10 años desarrollando sistemas de alta frecuencia. Ex-ingeniera en Jane Street y Tower Research. Especialista en low latency, microestructura de mercado y market making.'
-      : '10 years developing high-frequency systems. Ex-engineer at Jane Street and Tower Research. Specialist in low latency, market microstructure, and market making.',
-    quote: language === 'es'
-      ? 'En HFT, los microsegundos son millones.'
-      : 'In HFT, microseconds are millions.',
-    specialties: [
-      'C++ & Low Latency',
-      'Market Making',
-      language === 'es' ? 'Microestructura' : 'Microstructure',
-      'FPGA Trading',
-      'Arbitrage Strategies'
-    ],
-    experience: language === 'es' ? '10+ años' : '10+ years',
-    students: 800,
-    rating: 4.7,
-    sessions: 280,
-    price: 70,
-    image: '👩‍💼',
-    linkedin: 'https://linkedin.com',
-    email: 'laura@pqtrader.com',
-    achievements: [
-      'Ex-Jane Street Capital',
-      'FPGA Developer',
-      'Latency < 100 nanosec',
-      'Patent holder'
-    ]
-  },
-  {
-    id: '5',
-    name: 'David López',
-    title: 'Crypto Trading Lead',
-    subtitle: language === 'es' ? 'Especialista en Criptomonedas' : 'Cryptocurrency Specialist',
-    bio: language === 'es'
-      ? '7 años en mercados cripto. Fundador de un market maker en Binance. Experto en DeFi, arbitraje cross-exchange y trading de volatilidad en derivados cripto.'
-      : '7 years in crypto markets. Founder of a market maker on Binance. Expert in DeFi, cross-exchange arbitrage, and volatility trading in crypto derivatives.',
-    quote: language === 'es'
-      ? 'Crypto es el wild west del trading algorítmico.'
-      : 'Crypto is the wild west of algorithmic trading.',
-    specialties: [
-      'Crypto Trading',
-      'DeFi Strategies',
-      'Cross-Exchange Arbitrage',
-      'MEV & Flashbots',
-      'Derivatives'
-    ],
-    experience: language === 'es' ? '7+ años' : '7+ years',
-    students: 1500,
-    rating: 4.8,
-    sessions: 380,
-    price: 190,
-    image: '👨‍💻',
-    linkedin: 'https://linkedin.com',
-    email: 'david@pqtrader.com',
-    achievements: [
-      'Market Maker Binance',
-      'DeFi Protocol Founder',
-      'Smart Contract Auditor',
-      'Crypto OG since 2017'
-    ]
-  },
-];
+import { getMentors } from '@/lib/mentors';
+import { useState } from 'react';
+import { mentorshipBookingService } from '@/services/mentorship.service';
 
 const packages = [
   {
@@ -243,19 +64,25 @@ const packages = [
   },
 ];
 
-// Mentorías Grupales - Traducidas
-const getGroupSessions = (language: string) => [
-  {
-    id: '1',
-    title: language === 'es' ? 'Introducción al Trading Algorítmico' : 'Introduction to Algorithmic Trading',
-    mentor: 'Carlos Martínez',
-    level: language === 'es' ? 'Principiante' : 'Beginner',
-    date: language === 'es' ? '15 Enero 2026' : 'January 15, 2026',
-    time: '18:00 - 20:00',
-    duration: language === 'es' ? '2 horas' : '2 hours',
-    spots: 8,
-    spotsLeft: 3,
-    price: 49,
+export default function MentoriasPage() {
+  const { t, language } = useLanguage();
+  const [selectedMentor, setSelectedMentor] = useState<any>(null);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [bookingLoading, setBookingLoading] = useState(false);
+  const upcomingSessions = [
+    {
+      id: '1',
+      title: language === 'es' ? 'Trading Algorítmico: Introducción' : 'Algorithmic Trading: Introduction',
+      mentor: 'Carlos Martínez',
+      level: language === 'es' ? 'Principiante' : 'Beginner',
+      date: language === 'es' ? '15 Enero 2026' : 'January 15, 2026',
+      time: '18:00 - 20:00',
+      duration: language === 'es' ? '2 horas' : '2 hours',
+      spots: 8,
+      spotsLeft: 3,
+      price: 49,
     topics: language === 'es' ? [
       'Conceptos básicos de trading algorítmico',
       'Python para trading',
@@ -348,15 +175,112 @@ const getGroupSessions = (language: string) => [
     description: language === 'es'
       ? 'Domina el mercado crypto. Desde lo básico hasta estrategias avanzadas de arbitraje y DeFi.'
       : 'Master the crypto market. From basics to advanced arbitrage and DeFi strategies.',
-  },
-];
-
-export default function MentoriasPage() {
-  const { t, language } = useLanguage();
+    },
+  ];
   
   // Get translated data
   const mentors = getMentors(language);
-  const groupSessions = getGroupSessions(language);
+  
+  // Temas de mentoría individuales
+  const mentorshipTopics = language === 'es' ? [
+    {
+      id: 1,
+      title: 'Trading en General',
+      description: 'Fundamentos de trading, análisis técnico, gestión de riesgo y psicología del trading',
+      icon: BarChart3
+    },
+    {
+      id: 2,
+      title: 'fxDreema',
+      description: 'Desarrollo con fxDreema Builder, optimización de EAs y resolución de dudas técnicas',
+      icon: Code2
+    },
+    {
+      id: 3,
+      title: 'StrategyQuant X',
+      description: 'Generación de estrategias, optimización, WFA y exportación a plataformas',
+      icon: Target
+    },
+    {
+      id: 4,
+      title: 'MetaTrader 4/5',
+      description: 'Configuración, uso de EAs, backtesting y operativa en real',
+      icon: LineChart
+    },
+    {
+      id: 5,
+      title: 'Python para Trading',
+      description: 'Análisis de datos, backtesting, APIs de brokers y automatización',
+      icon: BookOpen
+    },
+    {
+      id: 6,
+      title: 'PineScript y TradingView',
+      description: 'Creación de indicadores personalizados y estrategias automatizadas',
+      icon: Zap
+    },
+    {
+      id: 7,
+      title: 'MQL5',
+      description: 'Desarrollo de EAs, indicadores personalizados y optimización de código',
+      icon: Cpu
+    },
+    {
+      id: 8,
+      title: 'Performance, Darwinex y Zero',
+      description: 'Revisión de performance, análisis de métricas y auditoría de cuentas',
+      icon: TrendingUp
+    }
+  ] : [
+    {
+      id: 1,
+      title: 'General Trading',
+      description: 'Trading fundamentals, technical analysis, risk management and trading psychology',
+      icon: BarChart3
+    },
+    {
+      id: 2,
+      title: 'fxDreema',
+      description: 'fxDreema Builder development, EA optimization and technical troubleshooting',
+      icon: Code2
+    },
+    {
+      id: 3,
+      title: 'StrategyQuant X',
+      description: 'Strategy generation, optimization, WFA and platform export',
+      icon: Target
+    },
+    {
+      id: 4,
+      title: 'MetaTrader 4/5',
+      description: 'Configuration, EA usage, backtesting and live trading',
+      icon: LineChart
+    },
+    {
+      id: 5,
+      title: 'Python for Trading',
+      description: 'Data analysis, backtesting, broker APIs and automation',
+      icon: BookOpen
+    },
+    {
+      id: 6,
+      title: 'PineScript & TradingView',
+      description: 'Custom indicators creation and automated strategies',
+      icon: Zap
+    },
+    {
+      id: 7,
+      title: 'MQL5',
+      description: 'EA development, custom indicators and code optimization',
+      icon: Cpu
+    },
+    {
+      id: 8,
+      title: 'Performance, Darwinex and Zero',
+      description: 'Performance review, metrics analysis and account audit',
+      icon: TrendingUp
+    }
+  ];
   
   const packagesTranslated = [
     {
@@ -485,43 +409,44 @@ export default function MentoriasPage() {
         <div className="container mx-auto max-w-7xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              {t('mentorshipsPage.individual.title')} <span className="text-profit">{t('mentorshipsPage.individual.titleHighlight')}</span>
+              {language === 'es' ? 'Elige tu' : 'Choose your'} <span className="text-profit">{language === 'es' ? 'Plan de Mentoría' : 'Mentorship Plan'}</span>
             </h2>
-            <p className="text-lg text-muted-foreground mb-6">
-              {t('mentorshipsPage.individual.subtitle')}
+            <p className="text-lg text-muted-foreground mb-8">
+              {language === 'es' 
+                ? 'Sesiones personalizadas 1 a 1 enfocadas en tus necesidades específicas' 
+                : 'Personalized 1-on-1 sessions focused on your specific needs'}
             </p>
             
-            {/* Mentorship Topics */}
-            <div className="mb-8">
-              <p className="text-sm text-muted-foreground mb-4 font-medium">{t('mentorshipsPage.individual.topicsTitle')}</p>
-              <div className="flex flex-wrap items-center justify-center gap-3">
-                <Badge variant="outline" className="bg-profit/10 border-profit/30 text-profit px-4 py-2 text-sm font-semibold">
-                  {t('mentorshipsPage.individual.topics.trading')}
-                </Badge>
-                <Badge variant="outline" className="bg-profit/10 border-profit/30 text-profit px-4 py-2 text-sm font-semibold">
-                  {t('mentorshipsPage.individual.topics.fxdreema')}
-                </Badge>
-                <Badge variant="outline" className="bg-profit/10 border-profit/30 text-profit px-4 py-2 text-sm font-semibold">
-                  {t('mentorshipsPage.individual.topics.sqx')}
-                </Badge>
-                <Badge variant="outline" className="bg-profit/10 border-profit/30 text-profit px-4 py-2 text-sm font-semibold">
-                  {t('mentorshipsPage.individual.topics.mt45')}
-                </Badge>
-                <Badge variant="outline" className="bg-profit/10 border-profit/30 text-profit px-4 py-2 text-sm font-semibold">
-                  {t('mentorshipsPage.individual.topics.python')}
-                </Badge>
-                <Badge variant="outline" className="bg-profit/10 border-profit/30 text-profit px-4 py-2 text-sm font-semibold">
-                  {t('mentorshipsPage.individual.topics.pinescript')}
-                </Badge>
-                <Badge variant="outline" className="bg-profit/10 border-profit/30 text-profit px-4 py-2 text-sm font-semibold">
-                  {t('mentorshipsPage.individual.topics.mql5')}
-                </Badge>
-                <Badge variant="outline" className="bg-profit/10 border-profit/30 text-profit px-4 py-2 text-sm font-semibold">
-                  {t('mentorshipsPage.individual.topics.performance')}
-                </Badge>
-                <Badge variant="outline" className="bg-profit/10 border-profit/30 text-profit px-4 py-2 text-sm font-semibold">
-                  {t('mentorshipsPage.individual.topics.darwinex')}
-                </Badge>
+            {/* Mentorship Topics Grid */}
+            <div className="mb-16">
+              <div className="mb-10">
+                <h3 className="text-2xl font-bold text-foreground mb-2">
+                  {language === 'es' ? 'Temas Disponibles para Mentoría' : 'Available Mentorship Topics'}
+                </h3>
+                <p className="text-muted-foreground">
+                  {language === 'es' 
+                    ? 'Elige los temas específicos en los que deseas recibir mentoría de nuestros expertos'
+                    : 'Choose the specific topics you want to receive mentoring on from our experts'}
+                </p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {mentorshipTopics.map((topic) => {
+                  const IconComponent = topic.icon;
+                  return (
+                    <div key={topic.id} className="group relative">
+                      <div className="absolute inset-0 bg-gradient-to-r from-profit/5 to-profit/10 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <Card className="relative border-border/40 hover:border-profit/40 transition-all duration-300 h-full">
+                        <CardContent className="pt-8 pb-6 flex flex-col">
+                          <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-profit/10 mb-4 group-hover:bg-profit/20 transition-colors">
+                            <IconComponent className="w-6 h-6 text-profit" />
+                          </div>
+                          <h4 className="font-semibold text-foreground mb-2">{topic.title}</h4>
+                          <p className="text-sm text-muted-foreground leading-relaxed">{topic.description}</p>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -620,7 +545,15 @@ export default function MentoriasPage() {
                   {/* Image/Info Side */}
                   <div className={`bg-gradient-to-br from-profit/10 to-background p-12 flex flex-col justify-center ${index % 2 === 1 ? 'md:col-start-2' : ''}`}>
                     <div className="text-center mb-6">
-                      <div className="text-8xl mb-4">{mentor.image}</div>
+                      <div className="relative w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-profit/30">
+                        <Image
+                          src={mentor.image}
+                          alt={mentor.name}
+                          fill
+                          className="object-cover"
+                          priority={index === 0}
+                        />
+                      </div>
                       <h3 className="text-2xl font-bold text-foreground mb-1">{mentor.name}</h3>
                       <p className="text-profit font-semibold mb-1">{mentor.title}</p>
                       <p className="text-sm text-muted-foreground mb-4">{mentor.subtitle}</p>
@@ -716,12 +649,13 @@ export default function MentoriasPage() {
                         variant="profit" 
                         size="lg"
                         className="group"
-                        asChild
+                        onClick={() => {
+                          setSelectedMentor(mentor);
+                          setShowDatePicker(true);
+                        }}
                       >
-                        <Link href={`/checkout?type=mentoria&name=Sesión con ${mentor.name}&price=${mentor.price}&description=${encodeURIComponent(mentor.subtitle)}&id=mentor-${mentor.id}`}>
-                          {t('mentorshipsPage.labels.bookSession')}
-                          <Calendar className="ml-2 h-4 w-4 group-hover:scale-110 transition-transform" />
-                        </Link>
+                        {t('mentorshipsPage.labels.bookSession')}
+                        <Calendar className="ml-2 h-4 w-4 group-hover:scale-110 transition-transform" />
                       </Button>
                     </div>
                   </div>
@@ -732,135 +666,17 @@ export default function MentoriasPage() {
         </div>
       </section>
 
-      {/* Group Sessions */}
-      <section className="py-20 px-4 bg-gradient-to-b from-background to-background/50">
-        <div className="container mx-auto max-w-7xl">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-              {t('mentorshipsPage.groupSessions.title')} <span className="text-profit">{t('mentorshipsPage.groupSessions.titleHighlight')}</span>
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              {t('mentorshipsPage.groupSessions.subtitle')}
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-            {groupSessions.map((session) => (
-              <Card key={session.id} className="border-border/40 hover:border-profit/40 transition-all overflow-hidden">
-                <div className="bg-gradient-to-r from-profit/10 to-background p-4 border-b border-border/40">
-                  <div className="flex items-start justify-between mb-2">
-                    <div>
-                      <h3 className="text-xl font-bold text-foreground mb-1">{session.title}</h3>
-                      <p className="text-sm text-muted-foreground">con {session.mentor}</p>
-                    </div>
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                      session.level === 'Principiante' ? 'bg-blue-500/10 text-blue-500' :
-                      session.level === 'Intermedio' ? 'bg-yellow-500/10 text-yellow-500' :
-                      'bg-red-500/10 text-red-500'
-                    }`}>
-                      {session.level}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-1">
-                      <Calendar className="h-4 w-4" />
-                      {session.date}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Clock className="h-4 w-4" />
-                      {session.time}
-                    </div>
-                  </div>
-                </div>
-
-                <CardContent className="pt-6">
-                  <p className="text-muted-foreground mb-6">{session.description}</p>
-                  
-                  <div className="mb-6">
-                    <h4 className="text-sm font-semibold text-foreground mb-3">{t('mentorshipsPage.groupSessions.topicsTitle')}</h4>
-                    <ul className="space-y-2">
-                      {session.topics.map((topic, idx) => (
-                        <li key={idx} className="flex items-start gap-2 text-sm">
-                          <CheckCircle className="h-4 w-4 text-profit mt-0.5 flex-shrink-0" />
-                          <span className="text-muted-foreground">{topic}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className="flex items-center justify-between pt-4 border-t border-border/40">
-                    <div>
-                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-1">
-                        <Users className="h-4 w-4" />
-                        <span>{session.spotsLeft} {t('mentorshipsPage.groupSessions.spotsOf')} {session.spots} {t('mentorshipsPage.groupSessions.spotsLeft')}</span>
-                      </div>
-                      <p className="text-3xl font-bold text-profit">
-                        ${session.price}
-                      </p>
-                    </div>
-                    <Button 
-                      variant="profit" 
-                      size="lg"
-                      disabled={session.spotsLeft === 0}
-                      asChild={session.spotsLeft > 0}
-                    >
-                      {session.spotsLeft === 0 ? (
-                        t('mentorshipsPage.groupSessions.soldOut')
-                      ) : (
-                        <Link href={`/checkout?type=mentoria-grupal&name=${encodeURIComponent(session.title)}&price=${session.price}&description=${encodeURIComponent(session.description)}&id=${session.id}`}>
-                          {t('mentorshipsPage.groupSessions.reserveButton')}
-                        </Link>
-                      )}
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          {/* Group Benefits */}
-          <Card className="bg-gradient-to-r from-profit/5 to-background border-profit/20">
-            <CardContent className="p-8">
-              <h3 className="text-2xl font-bold text-foreground mb-6 text-center">
-                {t('mentorshipsPage.groupSessions.whyGroup')}
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-profit/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Users className="h-8 w-8 text-profit" />
-                  </div>
-                  <h4 className="font-semibold text-foreground mb-2">{t('mentorshipsPage.groupSessions.whyGroupBenefits.networking.title')}</h4>
-                  <p className="text-sm text-muted-foreground">{t('mentorshipsPage.groupSessions.whyGroupBenefits.networking.desc')}</p>
-                </div>
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-profit/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Target className="h-8 w-8 text-profit" />
-                  </div>
-                  <h4 className="font-semibold text-foreground mb-2">{t('mentorshipsPage.groupSessions.whyGroupBenefits.affordable.title')}</h4>
-                  <p className="text-sm text-muted-foreground">{t('mentorshipsPage.groupSessions.whyGroupBenefits.affordable.desc')}</p>
-                </div>
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-profit/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Video className="h-8 w-8 text-profit" />
-                  </div>
-                  <h4 className="font-semibold text-foreground mb-2">{t('mentorshipsPage.groupSessions.whyGroupBenefits.recordings.title')}</h4>
-                  <p className="text-sm text-muted-foreground">{t('mentorshipsPage.groupSessions.whyGroupBenefits.recordings.desc')}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
-
       {/* How it works */}
       <section className="py-16 px-4 bg-gradient-to-b from-background/50 to-background">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              {t('mentorshipsPage.howItWorks.title')}
+              {language === 'es' ? '¿Cómo funciona?' : 'How it works?'}
             </h2>
             <p className="text-lg text-muted-foreground">
-              {t('mentorshipsPage.howItWorks.subtitle')}
+              {language === 'es' 
+                ? 'Proceso simple para comenzar tu mentoría' 
+                : 'Simple process to start your mentorship'}
             </p>
           </div>
 
@@ -985,6 +801,146 @@ export default function MentoriasPage() {
           </div>
         </div>
       </section>
+
+      {/* Date Picker Dialog */}
+      <Dialog open={showDatePicker} onOpenChange={setShowDatePicker}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-2xl">
+              {language === 'es' ? 'Elige una fecha' : 'Choose a date'}
+            </DialogTitle>
+            <DialogDescription>
+              {language === 'es' 
+                ? `Selecciona el día que prefieres para tu mentoría con ${selectedMentor?.name}`
+                : `Select the day you prefer for your mentoring session with ${selectedMentor?.name}`}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4">
+            {/* Simple date display - Next 7 days */}
+            <div className="space-y-2">
+              {Array.from({ length: 7 }).map((_, i) => {
+                const date = new Date();
+                date.setDate(date.getDate() + i + 1);
+                const isSelected = selectedDate && selectedDate.toDateString() === date.toDateString();
+                
+                return (
+                  <button
+                    key={i}
+                    onClick={() => setSelectedDate(date)}
+                    className={`w-full p-3 rounded-lg text-left transition-all border ${
+                      isSelected
+                        ? 'bg-profit/20 border-profit text-profit'
+                        : 'border-border/40 text-foreground hover:border-profit/40 hover:bg-profit/5'
+                    }`}
+                  >
+                    <div className="font-semibold">
+                      {date.toLocaleDateString(language === 'es' ? 'es-ES' : 'en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })}
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      {language === 'es' ? '18:00 - 20:00' : '6:00 PM - 8:00 PM'}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Time selection */}
+            {selectedDate && (
+              <div className="space-y-2 pt-4 border-t border-border/40">
+                <p className="text-sm font-semibold text-foreground">
+                  {language === 'es' ? 'Horarios disponibles' : 'Available times'}
+                </p>
+                <div className="grid grid-cols-2 gap-2">
+                  {['09:00', '11:00', '14:00', '16:00', '18:00', '20:00'].map((time) => (
+                    <button
+                      key={time}
+                      onClick={() => setSelectedTime(time)}
+                      className={`p-2 rounded-lg border transition-all text-sm font-medium ${
+                        selectedTime === time
+                          ? 'bg-profit/20 border-profit text-profit'
+                          : 'border-border/40 text-foreground hover:border-profit/40'
+                      }`}
+                    >
+                      {time}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Action buttons */}
+            <div className="flex gap-3 pt-4">
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => {
+                  setShowDatePicker(false);
+                  setSelectedTime(null);
+                }}
+              >
+                {language === 'es' ? 'Cancelar' : 'Cancel'}
+              </Button>
+              <Button
+                variant="profit"
+                className="flex-1"
+                disabled={!selectedDate || !selectedTime || bookingLoading}
+                onClick={async () => {
+                  if (!selectedDate || !selectedTime || !selectedMentor) return;
+
+                  try {
+                    setBookingLoading(true);
+                    const dateStr = selectedDate.toISOString().split('T')[0];
+                    
+                    // Calculate end time (1 hour after start time)
+                    const [hours, minutes] = selectedTime.split(':').map(Number);
+                    const endHours = hours + 1;
+                    const endTime = `${String(endHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+
+                    // Create booking in database
+                    const response = await mentorshipBookingService.bookSession({
+                      mentor_id: selectedMentor.id,
+                      scheduled_date: dateStr,
+                      start_time: selectedTime,
+                      end_time: endTime,
+                      title: `${language === 'es' ? 'Mentoría con' : 'Mentorship with'} ${selectedMentor.name}`,
+                      description: selectedMentor.subtitle
+                    });
+
+                    // Redirect to checkout with booking info
+                    const bookingId = response.data.data.id;
+                    window.location.href = `/checkout?type=mentoria&name=Sesión con ${selectedMentor.name}&price=${selectedMentor.price}&description=${encodeURIComponent(selectedMentor.subtitle)}&id=mentor-${selectedMentor.id}&booking_id=${bookingId}&date=${dateStr}`;
+                  } catch (error: any) {
+                    console.error('Booking error:', error);
+                    alert(language === 'es' 
+                      ? 'Error al reservar la sesión. Intenta de nuevo.'
+                      : 'Error booking session. Please try again.');
+                  } finally {
+                    setBookingLoading(false);
+                  }
+                }}
+              >
+                {bookingLoading ? (
+                  <>
+                    <span className="animate-spin mr-2">⏳</span>
+                    {language === 'es' ? 'Reservando...' : 'Booking...'}
+                  </>
+                ) : (
+                  <>
+                    {language === 'es' ? 'Confirmar' : 'Confirm'}
+                    <ChevronRight className="ml-2 h-4 w-4" />
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <Footer />
     </main>

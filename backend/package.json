@@ -12,6 +12,7 @@
     "test:ci": "jest --ci --coverage",
     "seed": "ts-node src/scripts/seed.ts",
     "test:db": "ts-node src/scripts/test-supabase-tables.ts",
+    "test:storage": "ts-node src/scripts/check-storage-setup.ts",
     "create:admin": "ts-node src/scripts/create-admin.ts"
   },
   "keywords": [
@@ -26,11 +27,12 @@
     "@paypal/paypal-server-sdk": "^2.1.0",
     "@supabase/supabase-js": "^2.91.0",
     "@types/bcryptjs": "^2.4.6",
+    "@types/multer": "^2.0.0",
     "@types/pg": "^8.16.0",
     "axios": "^1.6.5",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.3",
-    "compression": "^1.7.4",
+    "compression": "^1.8.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "crypto-js": "^4.2.0",
@@ -44,12 +46,12 @@
     "joi": "^17.11.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
+    "multer": "^2.0.2",
     "nodemailer": "^6.10.1",
-    "pg": "^8.17.2",
-    "sequelize": "^6.37.7",
     "stripe": "^17.4.0",
     "winston": "^3.19.0",
-    "xss-clean": "^0.1.4"
+    "xss-clean": "^0.1.4",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

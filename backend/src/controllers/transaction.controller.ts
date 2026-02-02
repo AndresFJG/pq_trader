@@ -2,22 +2,27 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.middleware';
 import { supabase } from '../config/supabase';
 import TransactionService from '../services/transaction.service';
+import { asyncHandler } from '../utils/asyncHandler';
 
-export const getTransactions = async (req: AuthRequest, res: Response): Promise<void> => {
-  try {
-    const { data: transactions, error } = await supabase
-      .from('transactions')
-      .select(`
-        *,
-        users (
-          id,
-          name,
-          email
-        )
-      `)
-      .order('created_at', { ascending: false });
+export const getTransactions = asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.limit as string) || 20;
+  const offset = (page - 1) * limit;
 
-    if (error) throw error;
+  const { data: transactions, error, count } = await supabase
+    .from('transactions')
+    .select(`
+      *,
+      users (
+        id,
+        name,
+        email
+      )
+    `, { count: 'exact' })
+    .order('created_at', { ascending: false })
+    .range(offset, offset + limit - 1);
+
+  if (error) throw error;
 
     // Enriquecer con nombres de productos si no están en la columna
     const enrichedTransactions = await Promise.all(
@@ -68,15 +73,16 @@ export const getTransactions = async (req: AuthRequest, res: Response): Promise<
     res.json({
       success: true,
       count: enrichedTransactions?.length || 0,
-      data: enrichedTransactions
+      total: count || 0,
+      pagination: {
+        page,
+        limit,
+        totalPages: Math.ceil((count || 0) / limit),
+        hasMore: (count || 0) > offset + limit
+      },
+      data: enrichedTransactions || [],
     });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
-  }
-};
+});
 
 export const getUserTransactions = async (req: AuthRequest, res: Response): Promise<void> => {
   try {

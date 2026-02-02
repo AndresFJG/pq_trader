@@ -2,8 +2,10 @@ import { Request, Response } from 'express';
 import { AuthRequest } from '../middleware/auth.middleware';
 import Stripe from 'stripe';
 import { supabase } from '../config/supabase';
+import { config } from '../config/env';
+import { logger } from '../utils/logger';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+const stripe = new Stripe(config.stripe.secretKey, {
   apiVersion: '2025-02-24.acacia' as any,
 });
 
@@ -37,8 +39,8 @@ export const createCheckoutSession = async (req: AuthRequest, res: Response): Pr
     let finalAmount = amount;
     let finalProductName = productName;
 
-    // Si se envía productId sin amount, buscar en la base de datos
-    if (productId && !amount) {
+    // Si se envía productId, SIEMPRE buscar en la base de datos para obtener el nombre correcto
+    if (productId) {
       const { data: product } = await supabase
         .from('courses')
         .select('price, title')
@@ -46,9 +48,18 @@ export const createCheckoutSession = async (req: AuthRequest, res: Response): Pr
         .single();
 
       if (product) {
-        finalAmount = product.price;
+        // Si no hay amount, usar el precio de la BD
+        if (!amount) {
+          finalAmount = product.price;
+        }
+        // SIEMPRE usar el título de la BD (ignora lo que envíe el frontend)
         finalProductName = product.title;
       }
+    }
+
+    // Si no hay productName y no hay productId, usar default
+    if (!finalProductName) {
+      finalProductName = 'Producto';
     }
 
     if (!finalAmount || finalAmount <= 0) {
@@ -84,13 +95,43 @@ export const createCheckoutSession = async (req: AuthRequest, res: Response): Pr
       },
     });
 
-    console.log('✅ Stripe session created:', {
+    logger.info('Stripe session created', {
       sessionId: session.id,
       userId,
       productId,
       productType,
       productName: finalProductName,
     });
+
+    // 💾 Guardar transacción inmediatamente (no esperar webhook)
+    const transactionData: any = {
+      user_id: userId,
+      amount: finalAmount,
+      currency: currency.toUpperCase(),
+      type: 'stripe',
+      status: 'pending', // Inicialmente pending, el webhook la marcará como completed
+      payment_intent_id: session.id, // Usamos session.id como referencia
+      product_id: productId,
+      product_name: finalProductName || 'Producto sin nombre',
+      product_type: productType || 'curso',
+      metadata: {
+        product_type: productType,
+        product_id: productId,
+        product_name: finalProductName,
+        productName: finalProductName,
+        productId: productId,
+        session_id: session.id,
+        customer_email: user.email,
+      },
+    };
+
+    const { error: transactionError } = await supabase.from('transactions').insert(transactionData);
+
+    if (transactionError) {
+      logger.error('Error saving pending transaction', { error: transactionError });
+    } else {
+      logger.info('Pending transaction saved successfully');
+    }
 
     res.json({
       success: true,
@@ -100,7 +141,7 @@ export const createCheckoutSession = async (req: AuthRequest, res: Response): Pr
       },
     });
   } catch (error: any) {
-    console.error('Error creating Stripe checkout:', error);
+    logger.error('Error creating Stripe checkout', { error: error.message, stack: error.stack });
     res.status(500).json({ success: false, error: error.message });
   }
 };
@@ -149,7 +190,13 @@ export const createPaymentIntent = async (req: AuthRequest, res: Response): Prom
  */
 export const handleWebhook = async (req: Request, res: Response): Promise<void> => {
   const sig = req.headers['stripe-signature'] as string;
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
+  const webhookSecret = config.stripe.webhookSecret;
+
+  if (!webhookSecret) {
+    logger.error('STRIPE_WEBHOOK_SECRET not configured');
+    res.status(500).json({ error: 'Webhook secret not configured' });
+    return;
+  }
 
   let event: Stripe.Event;
 
@@ -185,42 +232,69 @@ export const handleWebhook = async (req: Request, res: Response): Promise<void> 
           break;
         }
         
-        // Registrar transacción en la base de datos con toda la información
-        const transactionData: any = {
-          user_id: userId,
-          amount: (session.amount_total || 0) / 100,
-          currency: session.currency?.toUpperCase() || 'USD',
-          type: 'stripe',
-          status: 'completed',
-          payment_intent_id: session.payment_intent as string,
-          metadata: {
-            product_type: productType,
-            product_id: productId,
-            product_name: productName,
-            productName: productName, // Compatibilidad
-            productId: productId, // Compatibilidad
-            session_id: session.id,
-            customer_email: session.customer_email,
-          },
-          paid_at: new Date().toISOString(),
-        };
+        // Buscar transacción existente (creada durante checkout)
+        const { data: existingTransaction } = await supabase
+          .from('transactions')
+          .select('id')
+          .eq('payment_intent_id', session.id)
+          .eq('user_id', userId)
+          .single();
 
-        // Agregar columnas nuevas solo si existen (después de ejecutar migración)
-        try {
-          transactionData.product_id = productId;
-          transactionData.product_name = productName || 'Producto sin nombre';
-          transactionData.product_type = productType || 'unknown';
-        } catch (e) {
-          // Las columnas no existen aún, usaremos solo metadata
-          console.log('⚠️ Usando metadata para información de producto (ejecuta migración 008)');
-        }
+        if (existingTransaction) {
+          // Actualizar transacción existente a completed
+          const { error: updateError } = await supabase
+            .from('transactions')
+            .update({
+              status: 'completed',
+              paid_at: new Date().toISOString(),
+              payment_intent_id: session.payment_intent as string, // Actualizar con payment_intent real
+            })
+            .eq('id', existingTransaction.id);
 
-        const { error: transactionError } = await supabase.from('transactions').insert(transactionData);
-
-        if (transactionError) {
-          console.error('❌ Error saving transaction:', transactionError);
+          if (updateError) {
+            console.error('❌ Error updating transaction:', updateError);
+          } else {
+            console.log('✅ Transaction updated to completed');
+          }
         } else {
-          console.log('✅ Transaction saved successfully');
+          // Si no existe, crear nueva (fallback por si el checkout falló)
+          console.log('⚠️ No se encontró transacción pendiente, creando nueva...');
+          
+          const transactionData: any = {
+            user_id: userId,
+            amount: (session.amount_total || 0) / 100,
+            currency: session.currency?.toUpperCase() || 'USD',
+            type: 'stripe',
+            status: 'completed',
+            payment_intent_id: session.payment_intent as string,
+            metadata: {
+              product_type: productType,
+              product_id: productId,
+              product_name: productName,
+              productName: productName,
+              productId: productId,
+              session_id: session.id,
+              customer_email: session.customer_email,
+            },
+            paid_at: new Date().toISOString(),
+          };
+
+          // Agregar columnas nuevas si existen
+          try {
+            transactionData.product_id = productId;
+            transactionData.product_name = productName || 'Producto sin nombre';
+            transactionData.product_type = productType || 'unknown';
+          } catch (e) {
+            console.log('⚠️ Usando metadata para información de producto');
+          }
+
+          const { error: transactionError } = await supabase.from('transactions').insert(transactionData);
+
+          if (transactionError) {
+            console.error('❌ Error saving transaction:', transactionError);
+          } else {
+            console.log('✅ Transaction saved successfully');
+          }
         }
 
         // Si es un curso, crear el enrollment (aceptar tanto 'curso' como 'course')
@@ -465,8 +539,34 @@ export const verifySessionAndCreateEnrollment = async (req: AuthRequest, res: Re
 export const getSessionDetails = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { sessionId } = req.params;
+    const userId = req.user?.id;
 
     const session = await stripe.checkout.sessions.retrieve(sessionId);
+
+    // Si el pago fue exitoso, actualizar transacción automáticamente
+    if (session.payment_status === 'paid' && userId) {
+      const { data: existingTransaction } = await supabase
+        .from('transactions')
+        .select('id, status')
+        .eq('payment_intent_id', sessionId)
+        .eq('user_id', userId)
+        .single();
+
+      if (existingTransaction && existingTransaction.status === 'pending') {
+        const { error: updateError } = await supabase
+          .from('transactions')
+          .update({
+            status: 'completed',
+            paid_at: new Date().toISOString(),
+            payment_intent_id: session.payment_intent as string || sessionId,
+          })
+          .eq('id', existingTransaction.id);
+
+        if (!updateError) {
+          console.log('✅ Transaction auto-updated to completed');
+        }
+      }
+    }
 
     res.json({
       success: true,

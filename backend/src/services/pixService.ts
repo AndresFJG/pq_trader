@@ -1,6 +1,8 @@
 // PIX Service (Brazil)
 // Requiere integración con gateway como Stripe, PagSeguro, etc.
 
+import { logger } from '../utils/logger';
+
 export class PixService {
   async createPayment(data: {
     amount: number;
@@ -27,7 +29,7 @@ export class PixService {
   }
 
   async getPaymentStatus(paymentId: string) {
-    console.log('[PIX] Getting payment status:', paymentId);
+    logger.info('PIX: Getting payment status', { paymentId });
 
     return {
       status: 'pending',

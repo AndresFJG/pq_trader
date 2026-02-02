@@ -1,9 +1,10 @@
 import jwt, { SignOptions } from 'jsonwebtoken';
+import { config } from '../config/env';
 
-const JWT_SECRET = process.env.JWT_SECRET!;
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET!;
-const JWT_EXPIRE = process.env.JWT_EXPIRE || '15m';
-const JWT_REFRESH_EXPIRE = process.env.JWT_REFRESH_EXPIRE || '7d';
+const JWT_SECRET = config.jwt.secret;
+const JWT_REFRESH_SECRET = config.jwt.refreshSecret;
+const JWT_EXPIRE = config.jwt.expire;
+const JWT_REFRESH_EXPIRE = config.jwt.refreshExpire;
 
 /**
  * Generar access token

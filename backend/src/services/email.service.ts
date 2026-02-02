@@ -1,4 +1,5 @@
 import nodemailer, { Transporter } from 'nodemailer';
+import { logger } from '../utils/logger';
 
 interface EmailOptions {
   to: string;
@@ -35,9 +36,9 @@ export class EmailService {
         html: options.html,
       });
 
-      console.log(`Email sent to ${options.to}`);
+      logger.info('Email sent successfully', { to: options.to });
     } catch (error: any) {
-      console.error('Error sending email:', error.message);
+      logger.error('Error sending email', { error: error.message, to: options.to });
       throw new Error('Error al enviar el email');
     }
   }

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import {
   register,
   login,
-  // logout,
+  logout,
   // verifyEmail,
   // forgotPassword,
   // resetPassword,
@@ -34,6 +34,7 @@ const router = Router();
  */
 router.post('/register', registerLimiter, validate(registerSchema), register);
 router.post('/login', authLimiter, validate(loginSchema), login);
+router.post('/logout', logout); // Logout puede ser público (solo limpia cookies)
 // router.get('/verify-email/:token', verifyEmail);
 // router.post('/forgot-password', passwordResetLimiter, validate(forgotPasswordSchema), forgotPassword);
 // router.post('/reset-password/:token', passwordResetLimiter, validate(resetPasswordSchema), resetPassword);
@@ -44,7 +45,6 @@ router.post('/login', authLimiter, validate(loginSchema), login);
  */
 router.use(protect); // Todas las rutas siguientes requieren autenticación
 
-// router.post('/logout', logout);
 router.get('/me', getMe);
 // router.put('/update-profile', validate(updateProfileSchema), updateProfile);
 // router.put('/change-password', validate(changePasswordSchema), changePassword);

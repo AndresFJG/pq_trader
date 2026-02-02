@@ -28,19 +28,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const checkAuth = async () => {
     try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        setLoading(false);
-        return;
-      }
-
+      // Las cookies se envían automáticamente, no necesitamos localStorage
       const response = await api.get<ApiResponse<User>>('/auth/me');
       if (response.data.success && response.data.data) {
         setUser(response.data.data);
       }
     } catch (error) {
-      localStorage.removeItem('token');
-      localStorage.removeItem('refreshToken');
+      // Usuario no autenticado, no hacer nada
     } finally {
       setLoading(false);
     }
@@ -54,9 +48,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
 
       if (response.data.success && response.data.data) {
-        const { user, token, refreshToken } = response.data.data;
-        localStorage.setItem('token', token);
-        localStorage.setItem('refreshToken', refreshToken);
+        const { user } = response.data.data;
+        // Ya no necesitamos guardar tokens en localStorage (se usan cookies HttpOnly)
         setUser(user);
         toast.success('¡Bienvenido de nuevo!');
         
@@ -71,7 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Manejo específico de errores según el código HTTP
       if (error.response?.status === 401) {
         toast.error('❌ Usuario o contraseña incorrectos. Por favor, verifica tus credenciales.', {
-          duration: 4000,
+          duration: 6000,
           position: 'top-center',
           style: {
             background: '#FF3B30',
@@ -84,15 +77,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         });
       } else if (error.response?.status === 400) {
         toast.error('Datos inválidos. Revisa el formulario.', {
-          duration: 3000,
+          duration: 5000,
         });
       } else if (error.response?.status === 500) {
         toast.error('Error del servidor. Intenta nuevamente más tarde.', {
-          duration: 3000,
+          duration: 5000,
         });
       } else {
         toast.error(error.response?.data?.error || 'Error al iniciar sesión. Verifica tu conexión.', {
-          duration: 3000,
+          duration: 5000,
         });
       }
       throw error;
@@ -108,9 +101,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
 
       if (response.data.success && response.data.data) {
-        const { user, token, refreshToken } = response.data.data;
-        localStorage.setItem('token', token);
-        localStorage.setItem('refreshToken', refreshToken);
+        const { user } = response.data.data;
+        // Cookies HttpOnly se setean automáticamente por el backend
         setUser(user);
         toast.success('🎉 ¡Cuenta creada exitosamente!', {
           duration: 3000,
@@ -147,12 +139,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('refreshToken');
-    setUser(null);
-    toast.success('Sesión cerrada');
-    router.push('/');
+  const logout = async () => {
+    try {
+      // Llamar al endpoint de logout para limpiar cookies HttpOnly
+      await api.post('/auth/logout');
+    } catch (error) {
+      // Ignorar errores de logout
+    } finally {
+      setUser(null);
+      toast.success('Sesión cerrada');
+      router.push('/');
+    }
   };
 
   const updateUser = (updatedUser: User) => {

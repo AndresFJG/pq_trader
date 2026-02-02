@@ -7,22 +7,31 @@ import {
   verifySessionAndCreateEnrollment,
 } from '../controllers/stripe.controller';
 import { protect } from '../middleware/auth.middleware';
+import { paymentLimiter, webhookLimiter } from '../middleware/payment-limiter.middleware';
+import { validateStripeWebhook } from '../middleware/webhookValidator.middleware';
 
 const router = Router();
+
+/**
+ * @route   POST /api/stripe/webhook
+ * @desc    Webhook de eventos de Stripe
+ * @access  Public (validado por Stripe signature)
+ */
+router.post('/webhook', webhookLimiter, validateStripeWebhook, handleWebhook);
 
 /**
  * @route   POST /api/stripe/checkout
  * @desc    Crear sesión de checkout de Stripe
  * @access  Private
  */
-router.post('/checkout', protect, createCheckoutSession);
+router.post('/checkout', protect, paymentLimiter, createCheckoutSession);
 
 /**
  * @route   POST /api/stripe/payment-intent
  * @desc    Crear Payment Intent
  * @access  Private
  */
-router.post('/payment-intent', protect, createPaymentIntent);
+router.post('/payment-intent', protect, paymentLimiter, createPaymentIntent);
 
 /**
  * @route   POST /api/stripe/verify-session
@@ -30,13 +39,6 @@ router.post('/payment-intent', protect, createPaymentIntent);
  * @access  Private
  */
 router.post('/verify-session', protect, verifySessionAndCreateEnrollment);
-
-/**
- * @route   POST /api/stripe/webhook
- * @desc    Webhook de eventos de Stripe
- * @access  Public (validado por Stripe signature)
- */
-router.post('/webhook', handleWebhook);
 
 /**
  * @route   GET /api/stripe/session/:sessionId

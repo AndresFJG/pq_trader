@@ -25,15 +25,16 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Upload, X, FileVideo, FileAudio, FileText, Image as ImageIcon, CheckCircle2 } from 'lucide-react';
 import api from '@/lib/api';
 import toast from 'react-hot-toast';
+import { UploadHelpDialog } from './UploadHelpDialog';
 
 const lessonSchema = z.object({
   title: z.string().min(3, 'El título debe tener al menos 3 caracteres'),
   description: z.string().min(10, 'La descripción debe tener al menos 10 caracteres'),
   duration: z.string().min(1, 'La duración es requerida'),
-  video_url: z.string().url('Debe ser una URL válida').optional().or(z.literal('')),
+  video_url: z.string().optional(),
   content: z.string().optional(),
   order_index: z.string().min(1, 'El orden es requerido'),
   is_free: z.boolean().default(false),
@@ -66,6 +67,10 @@ export function LessonFormDialog({
   onSuccess,
 }: LessonFormDialogProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadedFileUrl, setUploadedFileUrl] = useState<string>('');
+  const [useExternalUrl, setUseExternalUrl] = useState(true);
   const isEditing = !!lesson;
 
   const form = useForm<LessonFormValues>({
@@ -92,6 +97,8 @@ export function LessonFormDialog({
         order_index: lesson.order_index.toString(),
         is_free: lesson.is_free,
       });
+      setUploadedFileUrl(lesson.video_url || '');
+      setUseExternalUrl(!lesson.video_url || lesson.video_url.startsWith('http'));
     } else {
       form.reset({
         title: '',
@@ -102,14 +109,102 @@ export function LessonFormDialog({
         order_index: '1',
         is_free: false,
       });
+      setSelectedFile(null);
+      setUploadedFileUrl('');
+      setUseExternalUrl(true);
     }
   }, [lesson, form]);
+
+  // Manejar selección de archivo
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validar tamaño (500 MB máximo)
+      const maxSize = 500 * 1024 * 1024;
+      if (file.size > maxSize) {
+        toast.error('El archivo es demasiado grande. Tamaño máximo: 500 MB');
+        return;
+      }
+
+      // Validar tipo
+      const allowedTypes = [
+        'video/mp4', 'video/webm', 'video/ogg', 'video/quicktime',
+        'audio/mpeg', 'audio/wav', 'audio/ogg',
+        'application/pdf',
+        'image/jpeg', 'image/png', 'image/gif', 'image/webp'
+      ];
+      
+      if (!allowedTypes.includes(file.type)) {
+        toast.error('Tipo de archivo no permitido. Solo videos, audio, PDFs e imágenes.');
+        return;
+      }
+
+      setSelectedFile(file);
+      setUploadedFileUrl('');
+    }
+  };
+
+  // Subir archivo al servidor
+  const uploadFile = async (file: File): Promise<string | null> => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await api.post('/upload/lesson-media', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / (progressEvent.total || 1)
+          );
+          setUploadProgress(percentCompleted);
+        },
+      });
+
+      if (response.data.success) {
+        return response.data.data.url;
+      }
+      return null;
+    } catch (error: any) {
+      console.error('Error uploading file:', error);
+      toast.error(error.response?.data?.error || 'Error al subir el archivo');
+      return null;
+    } finally {
+      setUploadProgress(0);
+    }
+  };
+
+  // Obtener icono según tipo de archivo
+  const getFileIcon = (file: File) => {
+    if (file.type.startsWith('video/')) return <FileVideo className="h-5 w-5" />;
+    if (file.type.startsWith('audio/')) return <FileAudio className="h-5 w-5" />;
+    if (file.type === 'application/pdf') return <FileText className="h-5 w-5" />;
+    if (file.type.startsWith('image/')) return <ImageIcon className="h-5 w-5" />;
+    return <FileText className="h-5 w-5" />;
+  };
 
   const onSubmit = async (data: LessonFormValues) => {
     setIsLoading(true);
     try {
+      let finalVideoUrl = data.video_url || '';
+
+      // Si hay un archivo seleccionado, subirlo primero
+      if (!useExternalUrl && selectedFile) {
+        const uploadedUrl = await uploadFile(selectedFile);
+        if (!uploadedUrl) {
+          toast.error('Error al subir el archivo');
+          setIsLoading(false);
+          return;
+        }
+        finalVideoUrl = uploadedUrl;
+      } else if (!useExternalUrl && uploadedFileUrl) {
+        finalVideoUrl = uploadedFileUrl;
+      }
+
       const payload = {
         ...data,
+        video_url: finalVideoUrl,
         duration: parseInt(data.duration),
         order_index: parseInt(data.order_index),
         course_id: parseInt(courseId),
@@ -214,25 +309,136 @@ export function LessonFormDialog({
               />
             </div>
 
-            <FormField
-              control={form.control}
-              name="video_url"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>URL del Video</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="https://www.youtube.com/embed/..."
-                      {...field}
+            {/* Selector de tipo de video */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <FormLabel>Archivo Multimedia *</FormLabel>
+                <UploadHelpDialog />
+              </div>
+              <div className="flex gap-2 mb-3">
+                <Button
+                  type="button"
+                  variant={useExternalUrl ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => {
+                    setUseExternalUrl(true);
+                    setSelectedFile(null);
+                  }}
+                >
+                  URL Externa
+                </Button>
+                <Button
+                  type="button"
+                  variant={!useExternalUrl ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setUseExternalUrl(false)}
+                >
+                  Subir Archivo
+                </Button>
+              </div>
+
+              {useExternalUrl ? (
+                <FormField
+                  control={form.control}
+                  name="video_url"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input
+                          placeholder="https://www.youtube.com/embed/..."
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormDescription className="text-xs">
+                        URL embebida de YouTube, Vimeo, etc.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              ) : (
+                <div className="space-y-3">
+                  {/* Input de archivo */}
+                  <div className="border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-6 text-center">
+                    <input
+                      type="file"
+                      id="file-upload"
+                      className="hidden"
+                      accept="video/*,audio/*,application/pdf,image/*"
+                      onChange={handleFileSelect}
                     />
-                  </FormControl>
-                  <FormDescription className="text-xs">
-                    URL embebida de YouTube, Vimeo, etc.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
+                    <label
+                      htmlFor="file-upload"
+                      className="cursor-pointer flex flex-col items-center gap-2"
+                    >
+                      <Upload className="h-10 w-10 text-gray-400" />
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        {selectedFile ? 'Cambiar archivo' : 'Click para seleccionar archivo'}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        Videos, audio, PDFs, imágenes (Max: 500 MB)
+                      </p>
+                    </label>
+                  </div>
+
+                  {/* Preview del archivo seleccionado */}
+                  {selectedFile && (
+                    <div className="flex items-center gap-3 p-3 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                      <div className="flex-shrink-0">
+                        {getFileIcon(selectedFile)}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium truncate">
+                          {selectedFile.name}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB
+                        </p>
+                      </div>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setSelectedFile(null)}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  )}
+
+                  {/* Archivo ya subido */}
+                  {!selectedFile && uploadedFileUrl && (
+                    <div className="flex items-center gap-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                      <CheckCircle2 className="h-5 w-5 text-green-600" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-green-700 dark:text-green-400">
+                          Archivo subido correctamente
+                        </p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 truncate">
+                          {uploadedFileUrl}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Barra de progreso */}
+                  {uploadProgress > 0 && uploadProgress < 100 && (
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-xs text-gray-600">
+                        <span>Subiendo archivo...</span>
+                        <span>{uploadProgress}%</span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div
+                          className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                          style={{ width: `${uploadProgress}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
               )}
-            />
+            </div>
 
             <FormField
               control={form.control}

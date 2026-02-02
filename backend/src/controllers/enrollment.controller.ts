@@ -2,89 +2,82 @@ import { Response } from 'express';
 import { AuthRequest } from '../middleware/auth.middleware';
 import { supabase } from '../config/supabase';
 import { logger } from '../utils/logger';
+import { asyncHandler } from '../utils/asyncHandler';
 
 /**
  * @desc    Obtener cursos comprados por el usuario
  * @route   GET /api/enrollments/my-courses
  * @access  Private
  */
-export const getMyCourses = async (req: AuthRequest, res: Response): Promise<void> => {
-  try {
-    const userId = req.user?.id;
+export const getMyCourses = asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {
+  const userId = req.user?.id;
 
-    if (!userId) {
-      res.status(401).json({ success: false, error: 'No autorizado' });
-      return;
-    }
+  if (!userId) {
+    res.status(401).json({ success: false, error: 'No autorizado' });
+    return;
+  }
 
-    console.log('🔍 Buscando enrollments para usuario:', userId);
+  logger.info('Fetching courses for user', { userId });
 
-    // Obtener enrollments del usuario con información del curso
-    const { data: enrollments, error: enrollError } = await supabase
-      .from('enrollments')
-      .select(`
-        *,
-        courses (
-          id,
-          title,
-          slug,
-          description,
-          thumbnail,
-          level,
-          duration_hours,
-          price,
-          enrollment_count,
-          rating,
-          category
-        )
-      `)
-      .eq('user_id', userId)
-      .eq('status', 'active')
-      .order('enrolled_at', { ascending: false });
+  // Obtener enrollments del usuario con información del curso
+  const { data: enrollments, error: enrollError } = await supabase
+    .from('enrollments')
+    .select(`
+      *,
+      courses (
+        id,
+        title,
+        slug,
+        description,
+        thumbnail,
+        level,
+        duration_hours,
+        price,
+        enrollment_count,
+        rating,
+        category
+      )
+    `)
+    .eq('user_id', userId)
+    .eq('status', 'active')
+    .order('enrolled_at', { ascending: false });
 
-    if (enrollError) {
-      console.error('❌ Error obteniendo enrollments:', enrollError);
-      throw enrollError;
-    }
+  if (enrollError) {
+    logger.error('Error fetching enrollments', { error: enrollError.message, userId });
+    throw enrollError;
+  }
 
-    console.log('✅ Enrollments encontrados:', enrollments?.length || 0);
+  logger.info('Enrollments found', { count: enrollments?.length || 0, userId });
 
-    if (!enrollments || enrollments.length === 0) {
-      res.json({
-        success: true,
-        data: [],
-        message: 'No tienes cursos inscritos todavía',
-      });
-      return;
-    }
+  if (!enrollments || enrollments.length === 0) {
+    res.json({
+      success: true,
+      data: [],
+      message: 'No tienes cursos inscritos todavía',
+    });
+    return;
+  }
 
-    // Mapear enrollments a formato esperado con información adicional
-    const coursesWithProgress = enrollments.map(enrollment => ({
-      ...enrollment.courses,
-      enrollmentId: enrollment.id,
-      progress: enrollment.progress || 0,
-      enrolledAt: enrollment.enrolled_at,
-      status: enrollment.status,
-    }));
+  // Mapear enrollments a formato esperado con información adicional
+  const coursesWithProgress = enrollments.map(enrollment => ({
+    ...enrollment.courses,
+    enrollmentId: enrollment.id,
+    progress: enrollment.progress || 0,
+    enrolledAt: enrollment.enrolled_at,
+    status: enrollment.status,
+  }));
 
-    logger.info('User courses retrieved', { 
+  logger.info('User courses retrieved', { 
       userId, 
       count: coursesWithProgress.length,
       courses: coursesWithProgress.map(c => ({ id: c.id, title: c.title }))
     });
 
-    res.json({
-      success: true,
-      data: coursesWithProgress,
-    });
-  } catch (error: any) {
-    logger.error('Get my courses error', { error: error.message, userId: req.user?.id });
-    res.status(500).json({
-      success: false,
-      error: error.message || 'Error al obtener cursos',
-    });
-  }
-};
+  res.json({
+    success: true,
+    data: coursesWithProgress,
+  });
+});
 
 /**
  * @desc    Obtener progreso del usuario en todos sus cursos

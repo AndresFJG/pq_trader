@@ -8,6 +8,33 @@
 [![Node.js](https://img.shields.io/badge/Node.js-20-green)](https://nodejs.org/)
 [![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-green)](https://supabase.com/)
 
+---
+
+## 🌐 Deployment en Producción
+
+**Stack:**
+- **Frontend**: Vercel (Next.js SSR)
+- **Backend**: Railway (Node.js API)
+- **Database**: Supabase (PostgreSQL)
+- **Costos**: ~$5/mes
+
+**Guías completas:**
+- 📖 [DEPLOYMENT.md](./DEPLOYMENT.md) - Guía paso a paso
+- ✅ [DEPLOY_CHECKLIST.md](./DEPLOY_CHECKLIST.md) - Checklist interactivo
+
+**Quick Deploy:**
+```bash
+# 1. Railway (Backend)
+railway up
+
+# 2. Vercel (Frontend)
+vercel --prod
+
+# 3. Configurar webhooks (ver DEPLOYMENT.md)
+```
+
+---
+
 ## 📋 Descripción
 
 PQ Trader es una plataforma educativa completa para traders que ofrece:

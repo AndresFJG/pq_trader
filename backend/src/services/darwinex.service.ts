@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
+import { logger } from '../utils/logger';
 
 interface DarwinPerformance {
   return: number;
@@ -39,7 +40,7 @@ export class DarwinexService {
       const response = await this.client.get(`/darwins/${darwinName}/performance`);
       return response.data;
     } catch (error: any) {
-      console.error('Error fetching Darwinex performance:', error.message);
+      logger.error('Error fetching Darwinex performance', { darwinName, error: error.message });
       throw new Error('Error al obtener datos de Darwinex');
     }
   }
@@ -54,7 +55,7 @@ export class DarwinexService {
       );
       return await Promise.all(promises);
     } catch (error: any) {
-      console.error('Error fetching Darwinex portfolios:', error.message);
+      logger.error('Error fetching Darwinex portfolios', { error: error.message });
       throw new Error('Error al obtener portafolios');
     }
   }
@@ -79,7 +80,7 @@ export class DarwinexService {
       );
       return response.data;
     } catch (error: any) {
-      console.error('Error fetching historical data:', error.message);
+      logger.error('Error fetching historical data', { darwinName, error: error.message });
       throw new Error('Error al obtener datos históricos');
     }
   }
@@ -92,7 +93,7 @@ export class DarwinexService {
       const response = await this.client.get(`/darwins/${darwinName}/stats`);
       return response.data;
     } catch (error: any) {
-      console.error('Error fetching statistics:', error.message);
+      logger.error('Error fetching statistics', { darwinName, error: error.message });
       throw new Error('Error al obtener estadísticas');
     }
   }

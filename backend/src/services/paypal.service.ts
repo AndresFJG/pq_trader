@@ -89,12 +89,20 @@ class PayPalService {
       const returnUrl = data.returnUrl || `${frontendUrl}/checkout/paypal-return`;
       const cancelUrl = data.cancelUrl || `${frontendUrl}/checkout/paypal-cancel`;
       
+      // PayPal solo soporta ciertas monedas (USD, EUR, GBP, CAD, AUD, JPY, MXN)
+      // Si la moneda no es soportada, convertir a USD
+      const supportedPayPalCurrencies = ['USD', 'EUR', 'GBP', 'CAD', 'AUD', 'JPY', 'MXN'];
+      const requestedCurrency = (data.currency || 'EUR').toUpperCase();
+      const finalCurrency = supportedPayPalCurrencies.includes(requestedCurrency) 
+        ? requestedCurrency 
+        : 'USD'; // Default a USD si la moneda no es soportada
+
       const orderData = {
         intent: 'CAPTURE',
         purchase_units: [
           {
             amount: {
-              currency_code: data.currency || 'EUR',
+              currency_code: finalCurrency,
               value: data.amount.toFixed(2),
             },
             description: data.plan || 'PQ Trader Payment',

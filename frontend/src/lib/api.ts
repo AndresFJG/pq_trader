@@ -7,18 +7,14 @@ export const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  withCredentials: true, // Enviar cookies automáticamente
 });
 
-// Interceptor para agregar token de autenticación
+// Interceptor para agregar token de autenticación (fallback para compatibilidad) (fallback para compatibilidad)
 api.interceptors.request.use(
   (config) => {
-    // Solo acceder a localStorage en el cliente
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('token');
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-    }
+    // Las cookies se envían automáticamente con withCredentials: true
+    // Este interceptor se mantiene solo para compatibilidad con APIs externas
     return config;
   },
   (error) => {
@@ -32,25 +28,18 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // Si el token expiró, intentar refrescar
+    // Si el token expiró, intentar refrescar automáticamente
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
-        const refreshToken = localStorage.getItem('refreshToken');
-        const response = await axios.post(`${API_URL}/auth/refresh`, {
-          refreshToken,
-        });
-
-        const { token } = response.data;
-        localStorage.setItem('token', token);
-
-        originalRequest.headers.Authorization = `Bearer ${token}`;
+        // El refresh token se envía automáticamente via cookie
+        await api.post(`${API_URL}/auth/refresh`, {});
+        
+        // Reintentar la petición original (nueva cookie se envía automáticamente)
         return api(originalRequest);
       } catch (refreshError) {
-        // Si falla el refresh, limpiar tokens y redirigir a login
-        localStorage.removeItem('token');
-        localStorage.removeItem('refreshToken');
+        // Si falla el refresh, redirigir a login
         window.location.href = '/login';
         return Promise.reject(refreshError);
       }

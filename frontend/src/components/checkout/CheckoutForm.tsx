@@ -251,7 +251,7 @@ export function CheckoutForm({
         body: JSON.stringify({
           productId,
           productName,
-          productType,
+          productType: productType || 'curso', // Asegurar que siempre se envíe
           amount: totalWithTax,
           currency: selectedCurrency.toLowerCase(),
         }),

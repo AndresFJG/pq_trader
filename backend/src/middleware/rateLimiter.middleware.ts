@@ -1,9 +1,10 @@
 import rateLimit from 'express-rate-limit';
+import { config } from '../config/env';
 
 // General API rate limiter
 export const apiLimiter = rateLimit({
-  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS!) || 15 * 60 * 1000, // 15 minutes
-  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS!) || 100,
+  windowMs: parseInt(config.rateLimit.windowMs || '900000'), // 15 minutes
+  max: parseInt(config.rateLimit.maxRequests || '100'),
   message: {
     success: false,
     error: 'Demasiadas peticiones desde esta IP, por favor intenta más tarde',

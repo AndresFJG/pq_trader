@@ -6,6 +6,7 @@ import { logger, logTransaction, logSecurity } from '../utils/logger';
 import { convertPrice } from '../config/pricing.config';
 import TransactionService from '../services/transaction.service';
 import { supabase } from '../config/supabase';
+import { config } from '../config/env';
 
 /**
  * @desc    Crear orden de PayPal
@@ -322,7 +323,13 @@ export const refundPayment = async (req: AuthRequest, res: Response): Promise<vo
  */
 export const handleWebhook = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const webhookId = process.env.PAYPAL_WEBHOOK_ID!;
+    const webhookId = config.paypal.webhookId;
+    
+    if (!webhookId) {
+      logger.error('PAYPAL_WEBHOOK_ID not configured');
+      res.status(500).json({ error: 'Webhook ID not configured' });
+      return;
+    }
 
     // Verificar firma del webhook
     const isValid = await paypalService.verifyWebhookSignature(
