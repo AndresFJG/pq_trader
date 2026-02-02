@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,8 +9,6 @@ import {
   Calendar,
   Clock,
   Users,
-  Video,
-  CheckCircle2,
   ArrowLeft,
 } from 'lucide-react';
 import { Navbar } from '@/components/layouts/Navbar';
@@ -61,11 +59,7 @@ export default function MentorshipBookingPage() {
   const [bookingNotes, setBookingNotes] = useState('');
   const [isBooking, setIsBooking] = useState(false);
 
-  useEffect(() => {
-    fetchData();
-  }, [mentorshipId]);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const [mentorshipRes, sessionsRes] = await Promise.all([
         api.get(`/mentorships/${mentorshipId}`),
@@ -85,12 +79,15 @@ export default function MentorshipBookingPage() {
         setSessions(futureSessions);
       }
     } catch (error) {
-      console.error('Error:', error);
       toast.error('Error al cargar datos');
     } finally {
       setLoading(false);
     }
-  };
+  }, [mentorshipId]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handleBooking = async () => {
     if (!user) {

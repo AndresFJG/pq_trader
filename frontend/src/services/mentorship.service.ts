@@ -76,7 +76,9 @@ export const mentorScheduleService = {
     api.delete(`/mentor-schedules/unavailability/${unavailabilityId}`)
 };
 
-export default {
+const mentorshipServices = {
   mentorshipBookingService,
   mentorScheduleService
 };
+
+export default mentorshipServices;

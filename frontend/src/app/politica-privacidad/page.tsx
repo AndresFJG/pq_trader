@@ -1,6 +1,5 @@
 'use client';
 
-import { Metadata } from 'next';
 import { Navbar } from '@/components/layouts/Navbar';
 import { Footer } from '@/components/layouts/Footer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';

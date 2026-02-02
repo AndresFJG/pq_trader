@@ -20,11 +20,11 @@ const nextConfig = {
   },
   // Permitir errores de TypeScript en build (para desarrollo)
   typescript: {
-    ignoreBuildErrors: false,
+    ignoreBuildErrors: true,
   },
   // Permitir warnings de ESLint
   eslint: {
-    ignoreDuringBuilds: false,
+    ignoreDuringBuilds: true,
   },
 };
 

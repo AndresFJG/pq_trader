@@ -6,7 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { Calendar, Clock, Video, MessageCircle, Users, Award, CheckCircle, Target, Rocket, BookOpen, Linkedin, Mail, Code2, BarChart3, LineChart, Zap, Cpu, TrendingUp, ChevronRight, X } from 'lucide-react';
+import { Calendar, Clock, Video, MessageCircle, Users, Award, CheckCircle, Target, Rocket, BookOpen, Linkedin, Mail, Code2, BarChart3, LineChart, Zap, Cpu, TrendingUp, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useLanguage } from '@/lib/i18n';
@@ -71,7 +71,6 @@ export default function MentoriasPage() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [bookingLoading, setBookingLoading] = useState(false);
-  const upcomingSessions = [
     {
       id: '1',
       title: language === 'es' ? 'Trading Algorítmico: Introducción' : 'Algorithmic Trading: Introduction',
