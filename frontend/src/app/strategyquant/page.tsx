@@ -2,10 +2,11 @@
 
 import { Navbar } from '@/components/layouts/Navbar';
 import { Footer } from '@/components/layouts/Footer';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useLanguage } from '@/lib/i18n';
+import Image from 'next/image';
 import { 
   Zap, 
   Brain, 
@@ -17,7 +18,6 @@ import {
   BarChart3,
   CheckCircle,
   Sparkles,
-  Cpu,
   LineChart,
   PlayCircle,
   ChevronDown
@@ -119,7 +119,6 @@ export default function StrategyQuantPage() {
   return (
     <main className="min-h-screen bg-background">
       <Navbar />
-      
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-4 bg-gradient-to-b from-background via-profit/5 to-background">
         <div className="container mx-auto max-w-7xl">
@@ -130,15 +129,12 @@ export default function StrategyQuantPage() {
                 <Zap className="h-3 w-3 mr-1" />
                 {t('strategyquantPage.hero.badge')}
               </Badge>
-              
               <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6">
                 {t('strategyquantPage.hero.title')} <span className="text-profit">{t('strategyquantPage.hero.titleHighlight')}</span>
               </h1>
-              
               <p className="text-xl text-muted-foreground mb-8">
                 {t('strategyquantPage.hero.subtitle')}
               </p>
-
               <div className="flex flex-col sm:flex-row gap-4 mb-12">
                 <Link href="/mentorias#club-strategyquant">
                   <Button variant="profit" size="lg" className="text-lg">
@@ -153,83 +149,14 @@ export default function StrategyQuantPage() {
                 </Link>
               </div>
             </div>
-
             {/* Stats Sidebar */}
             <div className="lg:col-span-1 space-y-4">
-              <Card className="border-profit/20 hover:border-profit/40 transition-all">
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="bg-profit/10 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Cpu className="h-6 w-6 text-profit" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-bold text-sm mb-1">
-                        1000x {language === 'es' ? 'Más Rápido' : 'Faster'}
-                      </h3>
-                      <p className="text-lg font-bold text-profit mb-1">
-                        {language === 'es' ? 'Millones de estrategias/día' : 'Millions of strategies/day'}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {language === 'es' 
-                          ? 'Lo que tardarías años en probar manualmente, StrategyQuant lo hace en horas'
-                          : 'What would take you years to test manually, StrategyQuant does in hours'
-                        }
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="border-profit/20 hover:border-profit/40 transition-all">
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="bg-profit/10 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
-                      <Brain className="h-6 w-6 text-profit" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-bold text-sm mb-1">
-                        {language === 'es' ? 'Edge Cuantificado' : 'Quantified Edge'}
-                      </h3>
-                      <p className="text-lg font-bold text-profit mb-1">
-                        95% {language === 'es' ? 'Confianza Estadística' : 'Statistical Confidence'}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {language === 'es'
-                          ? 'Solo estrategias con ventaja matemática verificable pasan los filtros'
-                          : 'Only strategies with verifiable mathematical edge pass the filters'
-                        }
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="border-profit/20 hover:border-profit/40 transition-all">
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="bg-profit/10 w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0">
-                      <TrendingUp className="h-6 w-6 text-profit" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-bold text-sm mb-1">
-                        {language === 'es' ? 'Resultados Reales' : 'Real Results'}
-                      </h3>
-                      <p className="text-lg font-bold text-profit mb-1">
-                        {language === 'es' ? 'Track Record Verificado' : 'Verified Track Record'}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {language === 'es'
-                          ? 'Estrategias testeadas con datos históricos reales de 20+ años'
-                          : 'Strategies tested with real historical data from 20+ years'
-                        }
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              {/* Aquí puedes agregar cards de estadísticas, testimonios, etc. */}
             </div>
           </div>
         </div>
       </section>
-
+      {/* Features */}
       {/* Features */}
       <section id="caracteristicas" className="py-20 px-4">
         <div className="container mx-auto max-w-7xl">
@@ -294,10 +221,13 @@ export default function StrategyQuantPage() {
                   className="block relative group"
                 >
                   <div className="relative pb-[56.25%] overflow-hidden">
-                    <img 
+                    <Image
                       src="https://img.youtube.com/vi/sa5RN9fjSVw/maxresdefault.jpg"
                       alt="Introducing StrategyQuant X"
+                      fill
                       className="absolute inset-0 w-full h-full object-cover"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      priority={true}
                     />
                     <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-all flex items-center justify-center">
                       <PlayCircle className="h-20 w-20 text-white group-hover:scale-110 transition-transform" />
@@ -329,10 +259,13 @@ export default function StrategyQuantPage() {
                   className="block relative group"
                 >
                   <div className="relative pb-[56.25%] overflow-hidden">
-                    <img 
+                    <Image
                       src="https://img.youtube.com/vi/XCSwpbvBaGE/maxresdefault.jpg"
                       alt="Introducing QuantDataManager"
+                      fill
                       className="absolute inset-0 w-full h-full object-cover"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      priority={false}
                     />
                     <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-all flex items-center justify-center">
                       <PlayCircle className="h-20 w-20 text-white group-hover:scale-110 transition-transform" />
@@ -451,6 +384,56 @@ export default function StrategyQuantPage() {
           </div>
         </div>
       </section>
+      
+         {/* Descuento Especial */}
+      <section className="py-20 px-4 bg-surface/20">
+        <div className="container mx-auto max-w-5xl">
+          <Card className="border-2 border-profit/40 bg-gradient-to-br from-background to-profit/5">
+            <CardContent className="p-12">
+              <div className="grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                  <Badge className="mb-4 bg-profit/10 text-profit border-profit/20 text-xs">
+                    Oferta exclusiva
+                  </Badge>
+                  <h2 className="text-3xl font-bold mb-4">
+                    Compra StrategyQuant X con Descuento
+                  </h2>
+                  <p className="text-lg text-muted-foreground mb-6">
+                    Consigue acceso con el Club PQ Trader utilizando nuestro <span className="text-profit font-semibold">código de descuento</span> y descarga directa de SQX. Solo para miembros de la comunidad.
+                  </p>
+                  <ul className="list-disc pl-6 text-muted-foreground mb-6 space-y-2">
+                    <li>Descuento exclusivo en la licencia oficial</li>
+                    <li>Soporte en español y recursos premium</li>
+                    <li>Acceso inmediato a la descarga de SQX</li>
+                  </ul>
+                  <a
+                    href="https://strategyquant.sjv.io/Oe6x2r" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="profit" size="lg" className="w-full mt-2">
+                      Obtener Descuento y Descargar SQX
+                    </Button>
+                  </a>
+                </div>
+                <div className="bg-surface/30 rounded-lg p-8 text-center">
+                  <h3 className="font-bold text-lg mb-4">¿Ya tienes StrategyQuant?</h3>
+                  <p className="text-muted-foreground mb-6">Únete al Club para acceder a plantillas, webinars y soporte premium.</p>
+                  <Link href="/mentorias#club-strategyquant">
+                    <Button variant="profit" size="lg" className="w-full">
+                      Unirme al Club
+                    </Button>
+                  </Link>
+                  <p className="text-xs text-center text-muted-foreground mt-4">
+                    Cancela cuando quieras. Sin compromisos a largo plazo.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
 
       {/* Process */}
       <section className="py-20 px-4">
@@ -460,7 +443,9 @@ export default function StrategyQuantPage() {
               {t('strategyquantPage.process.title')}
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              {t('common.fromConceptToLive') || 'Del concepto al trading en vivo con validación científica'}
+              {t('common.fromConceptToLive') !== 'common.fromConceptToLive'
+                ? t('common.fromConceptToLive')
+                : 'Del concepto al trading en vivo con validación científica'}
             </p>
           </div>
 
@@ -619,6 +604,8 @@ export default function StrategyQuantPage() {
         </div>
       </section>
 
+
+    
       {/* FAQ */}
       <section className="py-20 px-4">
         <div className="container mx-auto max-w-4xl">
@@ -670,69 +657,7 @@ export default function StrategyQuantPage() {
         </div>
       </section>
 
-      {/* Descuento Especial */}
-      <section className="py-20 px-4 bg-surface/20">
-        <div className="container mx-auto max-w-5xl">
-          <Card className="border-2 border-profit/40 bg-gradient-to-br from-background to-profit/5">
-            <CardContent className="p-12">
-              <div className="grid md:grid-cols-2 gap-8 items-center">
-                <div>
-                  <Badge className="mb-4 bg-profit text-background">
-                    Oferta Exclusiva PQ Trader
-                  </Badge>
-                  <h2 className="text-3xl font-bold mb-4">
-                    Compra StrategyQuant X con Descuento
-                  </h2>
-                  <p className="text-muted-foreground mb-6 leading-relaxed">
-                    Como miembro del Club PQ Trader tendrás acceso a descuentos especiales en la licencia oficial de StrategyQuant X. 
-                    Además, recibirás soporte en español y acompañamiento personalizado.
-                  </p>
-                  <ul className="space-y-3 mb-6">
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-profit mt-0.5 flex-shrink-0" />
-                      <span className="text-sm">Descuentos exclusivos para miembros del Club</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-profit mt-0.5 flex-shrink-0" />
-                      <span className="text-sm">Soporte técnico en español incluido</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-profit mt-0.5 flex-shrink-0" />
-                      <span className="text-sm">Formación completa sobre cómo usar el software</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <CheckCircle className="h-5 w-5 text-profit mt-0.5 flex-shrink-0" />
-                      <span className="text-sm">Plantillas y workflows pre-configurados</span>
-                    </li>
-                  </ul>
-                </div>
-                <div className="bg-surface/30 rounded-lg p-8 text-center">
-                  <div className="mb-6">
-                    <p className="text-sm text-muted-foreground mb-2">Prueba gratis por</p>
-                    <div className="text-5xl font-bold text-profit mb-2">14 días</div>
-                    <p className="text-sm text-muted-foreground">Sin compromisos ni tarjeta de crédito</p>
-                  </div>
-                  <div className="space-y-3">
-                    <a href="https://strategyquant.com/" target="_blank" rel="noopener noreferrer">
-                      <Button variant="profit" size="lg" className="w-full">
-                        Probar StrategyQuant X Gratis
-                      </Button>
-                    </a>
-                    <Link href="/mentorias#club-strategyquant">
-                      <Button variant="outline" size="lg" className="w-full">
-                        Unirme al Club - $150/mes
-                      </Button>
-                    </Link>
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-4">
-                    Miembros del Club reciben código de descuento exclusivo
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
+     
 
       {/* CTA Final */}
       <section className="py-20 px-4">
@@ -745,7 +670,7 @@ export default function StrategyQuantPage() {
           </p>
           <Link href="/mentorias#club-strategyquant">
             <Button variant="profit" size="lg" className="text-lg px-12">
-              Unirme al Club - $150/mes
+              Unirme al Club
               <TrendingUp className="ml-2 h-5 w-5" />
             </Button>
           </Link>

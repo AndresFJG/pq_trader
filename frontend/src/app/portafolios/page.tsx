@@ -4,15 +4,14 @@ import { useEffect, useState } from 'react';
 import { Navbar } from '@/components/layouts/Navbar';
 import { Footer } from '@/components/layouts/Footer';
 import { TrackRecordCard } from '@/components/trading/TrackRecordCard';
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useLanguage } from '@/lib/i18n';
 import { TrendingUp, Shield, BarChart3, Zap, CheckCircle, ExternalLink, Award } from 'lucide-react';
-import Link from 'next/link';
+
 import { portfolioService, Portfolio } from '@/services/portfolioService';
 
-// Función auxiliar para generar datos de gráfico
 function generateChartData(roi: number) {
   const data = [];
   const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
@@ -61,7 +60,7 @@ export default function PortafoliosPage() {
       year: 2024,
       months: monthNames.map((month, idx) => ({
         month,
-        return: idx >= 9 ? parseFloat((Math.random() * 0.5).toFixed(2)) : null
+        return: idx >= 9 ? parseFloat((Math.random() * 0.5).toFixed(2)) : 0
       }))
     });
 
@@ -79,7 +78,7 @@ export default function PortafoliosPage() {
       year: currentYear,
       months: monthNames.map((month, idx) => ({
         month,
-        return: idx <= currentMonth ? parseFloat((monthlyReturn + (Math.random() - 0.5) * 2).toFixed(2)) : null
+        return: idx <= currentMonth ? parseFloat((monthlyReturn + (Math.random() - 0.5) * 2).toFixed(2)) : 0
       }))
     });
 
@@ -408,186 +407,7 @@ export default function PortafoliosPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Basic Plan */}
-            <Card className="relative border-border/40 hover:border-profit/40 transition-all">
-              <div className="absolute top-4 left-4 bg-blue-500/10 border border-blue-500/30 rounded-full px-3 py-1">
-                <span className="text-xs font-bold text-blue-500">BASIC</span>
-              </div>
-              <div className="absolute top-4 right-4 bg-profit/10 border border-profit/30 rounded-full p-2">
-                <Shield className="h-5 w-5 text-profit" />
-              </div>
-
-              <CardHeader className="text-center pt-16 pb-8">
-                <CardTitle className="text-2xl mb-4">3 Robots</CardTitle>
-                <div className="space-y-3 text-left mb-6">
-                  <div className="flex items-center gap-2 text-sm">
-                    <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">{t('portafoliosPage.features.monthlyOptimization')}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">{t('portafoliosPage.features.riskManagement')}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">{t('portafoliosPage.features.support247')}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">{t('portafoliosPage.features.profitability')}: <span className="font-bold text-profit">14.47%</span></span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">{t('portafoliosPage.features.drawdown')}: <span className="font-bold">0.5%</span></span>
-                  </div>
-                </div>
-                
-                <div className="border-t border-border/40 pt-6 space-y-4">
-                  <div>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">{t('portafoliosPage.pricing.rentLabel')}</p>
-                    <p className="text-3xl font-bold text-foreground">699 <span className="text-lg">€</span></p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">{t('portafoliosPage.pricing.buyLabel')}</p>
-                    <p className="text-3xl font-bold text-profit">899 <span className="text-lg">€</span></p>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardFooter className="flex-col gap-3">
-                <Button variant="outline" className="w-full" asChild>
-                  <Link href="/checkout?type=portafolio&name=Portafolio Basic - Alquiler 1 año&price=699&description=3 Robots con optimización mensual&id=basic-rent">
-                    {t('portafoliosPage.pricing.rentButton')}
-                  </Link>
-                </Button>
-                <Button variant="profit" className="w-full" asChild>
-                  <Link href="/checkout?type=portafolio&name=Portafolio Basic - Compra&price=899&description=3 Robots de por vida&id=basic-buy">
-                    {t('portafoliosPage.purchase.button')}
-                  </Link>
-                </Button>
-              </CardFooter>
-            </Card>
-
-            {/* Medium Plan - Popular */}
-            <Card className="relative border-profit shadow-2xl shadow-profit/20 scale-105">
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                <span className="bg-profit text-background text-xs font-bold px-6 py-2 rounded-full flex items-center gap-2">
-                  ⭐ MEDIUM ⭐
-                </span>
-              </div>
-              <div className="absolute top-4 right-4 bg-profit/10 border border-profit/30 rounded-full p-2">
-                <Shield className="h-5 w-5 text-profit" />
-              </div>
-
-              <CardHeader className="text-center pt-16 pb-8">
-                <CardTitle className="text-2xl mb-4">6 Robots</CardTitle>
-                <div className="space-y-3 text-left mb-6">
-                  <div className="flex items-center gap-2 text-sm">
-                    <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">{t('portafoliosPage.features.monthlyOptimization')}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">{t('portafoliosPage.features.riskManagement')}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">{t('portafoliosPage.features.support247')}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">{t('portafoliosPage.features.profitability')}: <span className="font-bold text-profit">14.68%</span></span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">{t('portafoliosPage.features.drawdown')}: <span className="font-bold">0.29%</span></span>
-                  </div>
-                </div>
-                
-                <div className="border-t border-border/40 pt-6 space-y-4">
-                  <div>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">{t('portafoliosPage.pricing.rentLabel')}</p>
-                    <p className="text-3xl font-bold text-foreground">899 <span className="text-lg">€</span></p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">{t('portafoliosPage.pricing.buyLabel')}</p>
-                    <p className="text-3xl font-bold text-profit">1699 <span className="text-lg">€</span></p>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardFooter className="flex-col gap-3">
-                <Button variant="outline" className="w-full" asChild>
-                  <Link href="/checkout?type=portafolio&name=Portafolio Medium - Alquiler 1 año&price=899&description=6 Robots con optimización mensual&id=medium-rent">
-                    {t('portafoliosPage.pricing.rentButton')}
-                  </Link>
-                </Button>
-                <Button variant="profit" className="w-full" asChild>
-                  <Link href="/checkout?type=portafolio&name=Portafolio Medium - Compra&price=1799&description=7 Robots de por vida&id=medium-buy">
-                    {t('portafoliosPage.purchase.button')}
-                  </Link>
-                </Button>
-              </CardFooter>
-            </Card>
-
-            {/* Premium Plan */}
-            <Card className="relative border-border/40 hover:border-profit/40 transition-all">
-              <div className="absolute top-4 left-4 bg-yellow-500/10 border border-yellow-500/30 rounded-full px-3 py-1">
-                <span className="text-xs font-bold text-yellow-500 flex items-center gap-1">⭐ PREMIUM ⭐</span>
-              </div>
-              <div className="absolute top-4 right-4 bg-profit/10 border border-profit/30 rounded-full p-2">
-                <Shield className="h-5 w-5 text-profit" />
-              </div>
-
-              <CardHeader className="text-center pt-16 pb-8">
-                <CardTitle className="text-2xl mb-4">12 Robots</CardTitle>
-                <div className="space-y-3 text-left mb-6">
-                  <div className="flex items-center gap-2 text-sm">
-                    <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">{t('portafoliosPage.features.monthlyOptimization')}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">{t('portafoliosPage.features.riskManagement')}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">{t('portafoliosPage.features.support247')}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">{t('portafoliosPage.features.profitability')}: <span className="font-bold text-profit">14.24%</span></span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm">
-                    <CheckCircle className="h-4 w-4 text-profit" />
-                    <span className="text-muted-foreground">{t('portafoliosPage.features.drawdown')}: <span className="font-bold">0.24%</span></span>
-                  </div>
-                </div>
-                
-                <div className="border-t border-border/40 pt-6 space-y-4">
-                  <div>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">{t('portafoliosPage.pricing.rentLabel')}</p>
-                    <p className="text-3xl font-bold text-foreground">1699 <span className="text-lg">€</span></p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">{t('portafoliosPage.pricing.buyLabel')}</p>
-                    <p className="text-3xl font-bold text-profit">3299 <span className="text-lg">€</span></p>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardFooter className="flex-col gap-3">
-                <Button variant="outline" className="w-full" asChild>
-                  <Link href="/checkout?type=portafolio&name=Portafolio Premium - Alquiler 1 año&price=1699&description=12 Robots con optimización mensual&id=premium-rent">
-                    {t('portafoliosPage.pricing.rentButton')}
-                  </Link>
-                </Button>
-                <Button variant="profit" className="w-full" asChild>
-                  <Link href="/checkout?type=portafolio&name=Portafolio Premium - Compra&price=3499&description=15+ Robots de por vida&id=premium-buy">
-                    {t('portafoliosPage.purchase.button')}
-                  </Link>
-                </Button>
-              </CardFooter>
-            </Card>
-          </div>
+          {/* Sección de portafolios de 3, 6 y 12 robots eliminada por duplicidad */}
 
           {/* Additional Info */}
           <Card className="mt-12 bg-gradient-to-r from-profit/5 to-background border-profit/20">

@@ -23,18 +23,18 @@ export default function ContactoPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-
     try {
-      // Implementar envío de email con backend
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      toast.success('¡Mensaje enviado! Te responderemos pronto.');
+      // Enviar el formulario directamente por email usando mailto como fallback
+      window.location.href = `mailto:info@pqtrader.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent('Nombre: ' + formData.name + '\nEmail: ' + formData.email + '\n\n' + formData.message)}`;
       setFormData({ name: '', email: '', subject: '', message: '' });
+      toast.success('Redirigiendo a tu cliente de correo...');
     } catch (error) {
-      toast.error('Error al enviar el mensaje');
+      toast.error('Error al abrir el cliente de correo. Puedes escribirnos a info@pqtrader.com');
     } finally {
       setLoading(false);
     }
   };
+
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({ ...prev, [e.target.id]: e.target.value }));
@@ -67,8 +67,8 @@ export default function ContactoPage() {
                 <CardDescription>Respuesta en menos de 24h</CardDescription>
               </CardHeader>
               <CardContent>
-                <a href="mailto:info@pqtrader.com" className="text-profit hover:underline">
-                  info@pqtrader.com
+                <a href="mailto:info@pqtraders.com" className="text-profit hover:underline">
+                  info@pqtraders.com
                 </a>
               </CardContent>
             </Card>
@@ -100,8 +100,8 @@ export default function ContactoPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Madrid, España<br />
-                  Zona horaria: GMT+1
+                  407 LINCOLN ROAD SUITE-12<br />
+                  Miami Beach FL 33139
                 </p>
               </CardContent>
             </Card>
@@ -134,7 +134,7 @@ export default function ContactoPage() {
                     <Input
                       id="email"
                       type="email"
-                      placeholder="juan@email.com"
+                      placeholder="tu@email.com"
                       value={formData.email}
                       onChange={handleChange}
                       required
@@ -142,7 +142,6 @@ export default function ContactoPage() {
                     />
                   </div>
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="subject">Asunto</Label>
                   <Input
@@ -154,7 +153,6 @@ export default function ContactoPage() {
                     disabled={loading}
                   />
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="message">Mensaje</Label>
                   <Textarea
@@ -191,5 +189,5 @@ export default function ContactoPage() {
 
       <Footer />
     </main>
-  );
+);
 }

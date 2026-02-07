@@ -44,9 +44,9 @@ export default function AlquileresPage() {
       description: t('alquileresPage.plans.individual.description'),
       features: translations.alquileresPage.plans.individual.features,
       pricing: [
-        { period: language === 'es' ? 'Mensual' : 'Monthly', price: 50, unit: language === 'es' ? '€/mes' : '€/month' },
-        { period: language === 'es' ? 'Trimestral' : 'Quarterly', price: 130, unit: language === 'es' ? '€/3 meses' : '€/3 months', savings: t('alquileresPage.plans.individual.cta') },
-        { period: language === 'es' ? 'Semestral' : 'Semiannual', price: 250, unit: language === 'es' ? '€/6 meses' : '€/6 months', savings: t('alquileresPage.plans.individual.cta'), popular: true }
+        { period: language === 'es' ? 'Mensual' : 'Monthly', price: 50, unit: language === 'es' ? '$/mes' : '$/month' },
+        { period: language === 'es' ? 'Trimestral' : 'Quarterly', price: 130, unit: language === 'es' ? '$/3 meses' : '$/3 months', savings: t('alquileresPage.plans.individual.cta') },
+        { period: language === 'es' ? 'Semestral' : 'Semiannual', price: 250, unit: language === 'es' ? '$/6 meses' : '$/6 months', savings: t('alquileresPage.plans.individual.cta'), popular: true }
       ],
       stats: {
         winRate: '65%',
@@ -62,9 +62,9 @@ export default function AlquileresPage() {
       description: t('alquileresPage.plans.portfolioFondeo.description'),
       features: translations.alquileresPage.plans.portfolioFondeo.features,
       pricing: [
-        { period: language === 'es' ? 'Mensual' : 'Monthly', price: 120, unit: language === 'es' ? '€/mes' : '€/month' },
-        { period: language === 'es' ? 'Trimestral' : 'Quarterly', price: 320, unit: language === 'es' ? '€/3 meses' : '€/3 months', savings: t('alquileresPage.plans.portfolioFondeo.savings') },
-        { period: language === 'es' ? 'Semestral' : 'Semiannual', price: 600, unit: language === 'es' ? '€/6 meses' : '€/6 months', savings: t('alquileresPage.plans.portfolioFondeo.savings'), popular: true }
+        { period: language === 'es' ? 'Mensual' : 'Monthly', price: 120, unit: language === 'es' ? '$/mes' : '$/month' },
+        { period: language === 'es' ? 'Trimestral' : 'Quarterly', price: 320, unit: language === 'es' ? '$/3 meses' : '$/3 months', savings: t('alquileresPage.plans.portfolioFondeo.savings') },
+        { period: language === 'es' ? 'Semestral' : 'Semiannual', price: 600, unit: language === 'es' ? '$/6 meses' : '$/6 months', savings: t('alquileresPage.plans.portfolioFondeo.savings'), popular: true }
       ],
       stats: {
         winRate: '68%',
@@ -81,9 +81,9 @@ export default function AlquileresPage() {
       description: t('alquileresPage.plans.portfolioDarwinex.description'),
       features: translations.alquileresPage.plans.portfolioDarwinex.features,
       pricing: [
-        { period: language === 'es' ? 'Mensual' : 'Monthly', price: 200, unit: language === 'es' ? '€/mes' : '€/month' },
-        { period: language === 'es' ? 'Trimestral' : 'Quarterly', price: 550, unit: language === 'es' ? '€/3 meses' : '€/3 months', savings: t('alquileresPage.plans.portfolioDarwinex.savings') },
-        { period: language === 'es' ? 'Semestral' : 'Semiannual', price: 1050, unit: language === 'es' ? '€/6 meses' : '€/6 months', savings: t('alquileresPage.plans.portfolioDarwinex.savings'), popular: true }
+        { period: language === 'es' ? 'Mensual' : 'Monthly', price: 200, unit: language === 'es' ? '$/mes' : '$/month' },
+        { period: language === 'es' ? 'Trimestral' : 'Quarterly', price: 550, unit: language === 'es' ? '$/3 meses' : '$/3 months', savings: t('alquileresPage.plans.portfolioDarwinex.savings') },
+        { period: language === 'es' ? 'Semestral' : 'Semiannual', price: 1050, unit: language === 'es' ? '$/6 meses' : '$/6 months', savings: t('alquileresPage.plans.portfolioDarwinex.savings'), popular: true }
       ],
       stats: {
         winRate: '70%',
@@ -283,7 +283,7 @@ export default function AlquileresPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
             <div className="bg-surface/50 border border-border/40 rounded-lg p-6">
               <TrendingUp className="h-8 w-8 text-profit mx-auto mb-2" />
-              <p className="text-2xl font-bold text-foreground">€50</p>
+              <p className="text-2xl font-bold text-foreground">$50</p>
               <p className="text-sm text-muted-foreground">{t('alquileresPage.stats.fromMonth')}</p>
             </div>
             <div className="bg-surface/50 border border-border/40 rounded-lg p-6">

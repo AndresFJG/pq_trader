@@ -8,6 +8,7 @@ import { CTA } from '@/components/sections/CTA';
 import { Footer } from '@/components/layouts/Footer';
 import { Navbar } from '@/components/layouts/Navbar';
 import { StructuredData, generateOrganizationSchema } from '@/lib/seo';
+import { AxtralWidget } from '@/components/widgets/AxtralWidget';
 
 export const metadata: Metadata = {
   alternates: {
@@ -21,12 +22,15 @@ export default function HomePage() {
   return (
     <>
       <StructuredData data={orgSchema} />
+      
       <main className="min-h-screen bg-gradient-to-b from-background via-background to-secondary/20">
         <Navbar />
         <Hero />
         <Features />
         <Courses />
         <TrackRecords />
+        <AxtralWidget />
+        
         <Darwinex />
         <CTA />
         <Footer />

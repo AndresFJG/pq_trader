@@ -92,9 +92,10 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/faqs" className="text-muted-foreground hover:text-profit transition-colors inline-block">
-                  {t('footer.faqs')}
-                </Link>
+                <span className="text-muted-foreground">Email: <a href="mailto:info@pqtraders.com" className="text-profit hover:underline">info@pqtraders.com</a></span>
+              </li>
+              <li>
+                <span className="text-muted-foreground">407 LINCOLN ROAD SUITE-12<br/>Miami Beach FL 33139</span>
               </li>
             </ul>
           </div>

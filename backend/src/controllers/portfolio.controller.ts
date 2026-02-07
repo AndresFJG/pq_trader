@@ -31,8 +31,7 @@ export const getFeaturedPortfolios = async (req: AuthRequest, res: Response): Pr
       .from('portfolios')
       .select('*')
       .eq('status', 'active')
-      .order('roi', { ascending: false })
-      .limit(6);
+      .order('roi', { ascending: false });
 
     if (error) throw error;
 

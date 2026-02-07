@@ -4,10 +4,28 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, TrendingUp, BarChart3 } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n';
+import { useEffect, useState } from 'react';
+import { portfolioService, Portfolio } from '@/services/portfolioService';
+import { dashboardService, DashboardStats } from '@/services/dashboardService';
 
 export function Hero() {
   const { t } = useLanguage();
-  
+  const [portfolios, setPortfolios] = useState<Portfolio[]>([]);
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    portfolioService.getFeaturedPortfolios()
+      .then((data) => {
+        // Filtrar solo el portafolio JATA (case-insensitive)
+        const jata = (data || []).filter((p) => p.name.toLowerCase().includes('jata'));
+        setPortfolios(jata);
+      });
+    dashboardService.getStats()
+      .then(setStats);
+    setLoading(false);
+  }, []);
+
   return (
     <section className="pt-32 pb-20 px-4">
       <div className="container mx-auto">
@@ -47,67 +65,65 @@ export function Hero() {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-8 pt-8">
               <div>
-                <div className="text-3xl font-bold text-profit">500+</div>
+                <div className="text-3xl font-bold text-profit">{stats ? stats.totalUsers : '...'}</div>
                 <div className="text-sm text-muted-foreground">{t('hero.stats.students')}</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-profit">4.8</div>
+                <div className="text-3xl font-bold text-profit">{stats ? (stats.totalCourses ? stats.totalCourses.toFixed(1) : '0.0') : '...'}</div>
                 <div className="text-sm text-muted-foreground">{t('hero.stats.rating')}</div>
               </div>
               <div>
-                <div className="text-3xl font-bold text-profit">15+</div>
+                <div className="text-3xl font-bold text-profit">{stats ? stats.totalCourses : '...'}</div>
                 <div className="text-sm text-muted-foreground">{t('hero.stats.courses')}</div>
               </div>
             </div>
           </div>
 
           {/* Right Content - Trading Chart Visual */}
-          <div className="relative">
-            <div className="bg-secondary/50 backdrop-blur-xl rounded-2xl p-8 border border-border shadow-2xl">
-              <div className="space-y-6">
-                {/* Mock Trading Interface */}
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center space-x-2">
-                    <BarChart3 className="h-6 w-6 text-profit" />
-                    <span className="font-semibold">{t('hero.portfolio')}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <TrendingUp className="h-5 w-5 text-profit" />
-                    <span className="text-lg font-bold text-profit">+24.5%</span>
-                  </div>
-                </div>
-
-                {/* Mock Chart Bars */}
-                <div className="flex items-end justify-between h-48 gap-2">
-                  {[60, 80, 45, 90, 70, 100, 75, 85].map((height, i) => (
-                    <div key={i} className="flex-1 flex flex-col justify-end">
-                      <div
-                        className={`w-full rounded-t ${
-                          height > 70 ? 'bg-profit' : 'bg-loss'
-                        }`}
-                        style={{ height: `${height}%` }}
-                      />
+          <div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {loading ? (
+                <div className="text-center text-muted-foreground py-16">Cargando portafolios...</div>
+              ) : portfolios.length > 0 ? (
+                portfolios.map((portfolio) => (
+                  <div key={portfolio.id} className="relative bg-secondary/50 backdrop-blur-xl rounded-2xl p-8 border border-border shadow-2xl min-h-[180px] flex flex-col justify-between">
+                    <div className="flex items-center justify-between mb-2">
+                      <div>
+                        <div className="flex items-center space-x-2">
+                          <BarChart3 className="h-6 w-6 text-profit" />
+                          <span className="font-bold text-xl">{portfolio.name}</span>
+                        </div>
+                        <div className="text-xs text-muted-foreground mt-1">
+                          Periodo: Ene 1, 2024 - FEB 2026
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-end">
+                        <div className="flex items-center gap-2">
+                          <TrendingUp className="h-5 w-5 text-profit" />
+                          <span className="text-2xl font-bold text-profit">{portfolio.roi >= 0 ? '+' : ''}{portfolio.roi}%</span>
+                        </div>
+                        <span className="text-xs text-muted-foreground mt-1">Retorno Total</span>
+                      </div>
                     </div>
-                  ))}
-                </div>
-
-                {/* Stats Row */}
-                <div className="grid grid-cols-2 gap-4 pt-4 border-t border-border">
-                  <div>
-                    <div className="text-xs text-muted-foreground">{t('hero.winRate')}</div>
-                    <div className="text-lg font-semibold text-profit">68.4%</div>
+                    <div className="flex justify-between items-end border-t border-border pt-4 mt-4">
+                      <div>
+                        <div className="text-xs text-muted-foreground">Win Rate</div>
+                        <div className="text-lg font-semibold text-profit">{portfolio.win_rate}%</div>
+                      </div>
+                      <div>
+                        <div className="text-xs text-muted-foreground">Sharpe Ratio</div>
+                        <div className="text-lg font-semibold">{portfolio.sharpe_ratio}</div>
+                      </div>
+                    </div>
+                    {/* Floating Elements */}
+                    <div className="absolute -top-3 -right-3 bg-profit/10 backdrop-blur-xl rounded-lg p-3 border border-profit/20">
+                      <TrendingUp className="h-5 w-5 text-profit" />
+                    </div>
                   </div>
-                  <div>
-                    <div className="text-xs text-muted-foreground">{t('hero.sharpeRatio')}</div>
-                    <div className="text-lg font-semibold">2.45</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Floating Elements */}
-            <div className="absolute -top-3 -right-3 bg-profit/10 backdrop-blur-xl rounded-lg p-3 border border-profit/20">
-              <TrendingUp className="h-5 w-5 text-profit" />
+                ))
+              ) : (
+                <div className="text-center text-muted-foreground py-16">No hay portafolios disponibles</div>
+              )}
             </div>
           </div>
         </div>
