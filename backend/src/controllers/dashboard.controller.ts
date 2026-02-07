@@ -189,7 +189,7 @@ export const getDashboardStats = async (req: Request, res: Response): Promise<vo
           value: `${conversionRateThisMonth >= conversionRateLastMonth ? '+' : ''}${(conversionRateThisMonth - conversionRateLastMonth).toFixed(1)}%`,
           isPositive: conversionRateThisMonth >= conversionRateLastMonth,
         },
-        certificatesChange: calculateAbsoluteChange(certificatesIssued, 0), // TODO: Track certificates by month
+        certificatesChange: calculateAbsoluteChange(certificatesIssued, 0), // Tracking mensual pendiente: agregar created_at a certificates
       },
     });
   } catch (error: any) {

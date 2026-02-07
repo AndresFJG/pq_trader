@@ -178,12 +178,13 @@ export const deleteCourse = async (req: AuthRequest, res: Response): Promise<voi
 // @desc    Enroll in course
 // @route   POST /api/courses/:id/enroll
 // @access  Private
+// NOTA: Esta funcionalidad está deshabilitada porque los enrollments se crean
+// automáticamente vía webhooks de Stripe/PayPal después del pago exitoso
 export const enrollCourse = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    // TODO: Implement enrollments table
-    res.status(501).json({
+    res.status(400).json({
       success: false,
-      error: 'Funcionalidad pendiente de implementar',
+      error: 'Los enrollments se crean automáticamente después del pago. Por favor, utiliza el sistema de checkout.',
     });
   } catch (error: any) {
     logger.error('Error enrolling in course:', error);

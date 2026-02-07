@@ -1,4 +1,4 @@
-import { Metadata } from 'next';
+﻿import { Metadata } from 'next';
 import { Hero } from '@/components/sections/Hero';
 import { Features } from '@/components/sections/Features';
 import { Courses } from '@/components/sections/Courses';
@@ -8,7 +8,6 @@ import { CTA } from '@/components/sections/CTA';
 import { Footer } from '@/components/layouts/Footer';
 import { Navbar } from '@/components/layouts/Navbar';
 import { StructuredData, generateOrganizationSchema } from '@/lib/seo';
-import { AxtralWidget } from '@/components/widgets/AxtralWidget';
 
 export const metadata: Metadata = {
   alternates: {
@@ -29,8 +28,6 @@ export default function HomePage() {
         <Features />
         <Courses />
         <TrackRecords />
-        <AxtralWidget />
-        
         <Darwinex />
         <CTA />
         <Footer />

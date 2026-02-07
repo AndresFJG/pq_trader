@@ -93,16 +93,49 @@ export const getMyProgress = async (req: AuthRequest, res: Response): Promise<vo
       return;
     }
 
-    // TODO: Implementar tabla de progreso en la BD
-    // Por ahora retornar progreso vacío
+    // Obtener todos los enrollments activos del usuario
+    const { data: enrollments, error: enrollError } = await supabase
+      .from('enrollments')
+      .select('id, progress, course_id, enrolled_at')
+      .eq('user_id', userId)
+      .eq('status', 'active');
+
+    if (enrollError) {
+      throw enrollError;
+    }
+
+    const totalCourses = enrollments?.length || 0;
+    const completedCourses = enrollments?.filter(e => e.progress >= 100).length || 0;
+    
+    // Calcular progreso promedio
+    const totalProgress = totalCourses > 0 
+      ? Math.round(enrollments!.reduce((sum, e) => sum + (e.progress || 0), 0) / totalCourses)
+      : 0;
+
+    // Calcular horas esta semana (enrollments de los últimos 7 días)
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+    
+    const recentEnrollments = enrollments?.filter(e => 
+      new Date(e.enrolled_at) >= oneWeekAgo
+    ) || [];
+    
+    // Estimar ~2 horas por curso nuevo esta semana
+    const hoursThisWeek = recentEnrollments.length * 2;
+
+    // Contar lecciones completadas (estimado: progress/10 por curso)
+    const lessonsCompleted = enrollments?.reduce((sum, e) => 
+      sum + Math.floor((e.progress || 0) / 10), 0
+    ) || 0;
+
     res.json({
       success: true,
       data: {
-        totalCourses: 0,
-        completedCourses: 0,
-        totalProgress: 0,
-        hoursThisWeek: 0,
-        lessonsCompleted: 0,
+        totalCourses,
+        completedCourses,
+        totalProgress,
+        hoursThisWeek,
+        lessonsCompleted,
       },
     });
   } catch (error: any) {

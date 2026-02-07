@@ -340,8 +340,12 @@ export const handleWebhook = async (req: Request, res: Response): Promise<void> 
 
         // Si es una mentoría, crear el registro
         if (productType === 'mentoria' && productId) {
+          // Obtener mentor_id de la metadata o usar mentor principal (id=1)
+          const mentorIdFromMeta = session.metadata?.mentorId ? parseInt(session.metadata.mentorId) : null;
+          const finalMentorId = mentorIdFromMeta || 1; // Por defecto: mentor principal (admin)
+          
           const { error: mentorshipError } = await supabase.from('mentorships').insert({
-            mentor_id: 1, // TODO: Obtener del producto
+            mentor_id: finalMentorId,
             student_id: userId,
             title: productName || 'Mentoría',
             description: 'Mentoría adquirida',
@@ -353,7 +357,7 @@ export const handleWebhook = async (req: Request, res: Response): Promise<void> 
           if (mentorshipError) {
             console.error('❌ Error creating mentorship:', mentorshipError);
           } else {
-            console.log('✅ Mentorship created successfully');
+            console.log('✅ Mentorship created successfully with mentor_id:', finalMentorId);
           }
         }
         

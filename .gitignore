@@ -1,0 +1,78 @@
+﻿# Dependencies
+node_modules/
+**/node_modules/
+package-lock.json
+
+# Environment variables
+.env
+.env*.local
+.env.production
+.env.development
+backend/.env
+frontend/.env*
+*.env
+
+# Build artifacts
+dist/
+build/
+.next/
+out/
+backend/dist/
+frontend/.next/
+frontend/out/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+backend/logs/
+
+# Uploads
+uploads/
+backend/uploads/
+
+# Testing
+coverage/
+.nyc_output/
+.jest-cache
+.coverage
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+temp/
+.cache
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
