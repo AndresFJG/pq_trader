@@ -7,34 +7,34 @@ const FALLBACK_MENTORS = [
     id: '1',
     name: 'Marco Andrés',
     email: 'marco.andres@pqtrader.com',
-    avatar: '/mentors/1.jpg',
-    bio: 'Más de 5 años de trayectoria en MQL5 y 100% enfocado en el desarrollo de estrategias basadas en Price Action.',
-    specialties: ['Python', 'StrategyQuant', 'Risk Management'],
-    achievements: ['Trader Profesional', 'Mentor Certificado'],
-    linkedin: '',
-    image: '/mentors/1.jpg',
+    avatar: 'https://twbppbgvcvcxktloulyp.supabase.co/storage/v1/object/public/mentors/Martin.jpg',
+    bio: 'Más de 5 años de trayectoria en MQL5 y 100% de éxito en Upwork. Profesor de Trading Algorítmico y experto en el desarrollo de Expert Advisors (EAs) para la plataforma MT4. Ha validado sistemas con esperanza matemática positiva en tiempo real y cuenta con certificaciones oficiales en pruebas de fondeo. Tutor de traders Top 1 en Darwinex Zero.',
+    specialties: ['Localizador de ventajas estadísticas', 'Métodos personalizados de optimización', 'Estrategias de volatilidad extrema', 'MQL5, fxDremma, EAbuilder'],
+    achievements: ['5 años de clientes satisfechos en MQL5', '4 años como profesor de trading algorítmico', '100% de clientes satisfechos en Upwork', 'Tutor de traders top 1 en Darwinex Zero', '+ de 2000 estrategias creadas desde 2021'],
+    linkedin: 'https://www.mql5.com/es/users/marcotisma/news',
+    image: 'https://twbppbgvcvcxktloulyp.supabase.co/storage/v1/object/public/mentors/Martin.jpg',
     title: 'Trader & tutor',
     subtitle: 'Trader Algorítmico de enfoque práctico',
     students: 50,
-    rating: 5.0,
+    rating: 4.9,
     sessions: 100,
     quote: 'El trading es la forma más difícil de hacer dinero fácil'
   },
   {
     id: '2',
-    name: 'Andrés J',
-    email: 'andres.j@pqtrader.com',
-    avatar: '/mentors/2.jpg',
-    bio: 'Más de cinco años de experiencia en el desarrollo de estrategias de trading algorítmico.',
-    specialties: ['Trading Algorítmico', 'Análisis Cuantitativo'],
-    achievements: ['Especialista en Trading', 'Desarrollador quantitative'],
+    name: 'Jeremias',
+    email: 'jeremias@pqtrader.com',
+    avatar: 'https://twbppbgvcvcxktloulyp.supabase.co/storage/v1/object/public/mentors/Jeremias.jpeg',
+    bio: 'Más de cinco años de experiencia en el desarrollo, optimización y automatización de sistemas de trading algorítmico. Trabajo orientado a la construcción de estrategias sistemáticas sostenibles en el tiempo. Formado en el Programa Quant de UCEMA y con una Diplomatura en Asesoramiento Financiero (Universidad Blas Pascal), combina fundamentos académicos con experiencia operativa. Cuenta con experiencia en Darwinex y Darwinex Zero, incluyendo diseño de estrategias adaptadas al motor de riesgo de la plataforma y acompañamiento técnico en cuentas de fondeo y acceso a capital.',
+    specialties: ['Backtesting y optimización (WFA)', 'Tests de robustez (Montecarlo)', 'Portafolios algorítmicos'],
+    achievements: ['Programa Quant UCEMA', 'Diplomatura Asesoramiento Financiero', 'Experiencia Darwinex & Darwinex Zero'],
     linkedin: '',
-    image: '/mentors/2.jpg',
+    image: 'https://twbppbgvcvcxktloulyp.supabase.co/storage/v1/object/public/mentors/Jeremias.jpeg',
     title: 'Especialista en Trading Algorítmico',
-    subtitle: 'Especialista en Trading Algorítmico',
-    students: 45,
-    rating: 5.0,
-    sessions: 95,
+    subtitle: '5+ años en desarrollo y optimización de estrategias',
+    students: 150,
+    rating: 4.9,
+    sessions: 200,
     quote: 'El trading algorítmico exige evidencia y robustez'
   }
 ];
@@ -52,24 +52,30 @@ export async function GET() {
     }
 
     // Mapear a la estructura esperada por el frontend
-    const formattedMentors = (mentors || []).map(mentor => ({
-      id: mentor.id.toString(),
-      name: mentor.name,
-      email: `${mentor.name.toLowerCase().replace(/\s+/g, '.')}@pqtrader.com`,
-      avatar: `/mentors/${mentor.id}.jpg`,
-      bio: mentor.description || 'Mentor especializado en trading algorítmico.',
-      specialties: Array.isArray(mentor.highlights) ? mentor.highlights : ['Python', 'StrategyQuant', 'Risk Management'],
-      achievements: ['Trader Profesional', 'Mentor Certificado'],
-      linkedin: '',
-      // Campos adicionales para compatibilidad con la UI de mentorias
-      image: `/mentors/${mentor.id}.jpg`,
-      title: mentor.title || mentor.name,
-      subtitle: mentor.subtitle || 'Experto en Trading Algorítmico',
-      students: 50,
-      rating: 5.0,
-      sessions: 100,
-      quote: mentor.phrase || 'Transformando traders en profesionales exitosos.'
-    }));
+    const formattedMentors = (mentors || []).map(mentor => {
+      // Buscar el fallback correspondiente para obtener la URL de Supabase
+      const fallback = FALLBACK_MENTORS.find(f => f.id === mentor.id.toString());
+      const imageUrl = fallback?.image || `https://twbppbgvcvcxktloulyp.supabase.co/storage/v1/object/public/mentors/Martin.jpg`;
+      
+      return {
+        id: mentor.id.toString(),
+        name: mentor.name,
+        email: `${mentor.name.toLowerCase().replace(/\s+/g, '.')}@pqtrader.com`,
+        avatar: imageUrl,
+        bio: mentor.description || 'Mentor especializado en trading algorítmico.',
+        specialties: Array.isArray(mentor.highlights) ? mentor.highlights : ['Python', 'StrategyQuant', 'Risk Management'],
+        achievements: ['Trader Profesional', 'Mentor Certificado'],
+        linkedin: '',
+        // Campos adicionales para compatibilidad con la UI de mentorias
+        image: imageUrl,
+        title: mentor.title || mentor.name,
+        subtitle: mentor.subtitle || 'Experto en Trading Algorítmico',
+        students: 50,
+        rating: 5.0,
+        sessions: 100,
+        quote: mentor.phrase || 'Transformando traders en profesionales exitosos.'
+      };
+    });
 
     return NextResponse.json(formattedMentors);
   } catch (err: any) {

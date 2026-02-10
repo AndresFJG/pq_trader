@@ -4,6 +4,7 @@ import { supabase } from '../config/supabase';
 import { asyncHandler } from '../utils/asyncHandler';
 
 // Datos hardcoded como fallback si falla la consulta RPC
+// URLs de Supabase Storage
 const FALLBACK_MENTORS = [
   {
     id: 1,
@@ -11,17 +12,19 @@ const FALLBACK_MENTORS = [
     phrase: 'El trading es la forma más difícil de hacer dinero fácil',
     title: 'Trader & tutor',
     subtitle: 'Trader Algorítmico de enfoque práctico',
-    description: 'Más de 5 años de trayectoria en MQL5 y 100% enfocado en el desarrollo de estrategias basadas en Price Action.',
-    highlights: ['Python', 'StrategyQuant', 'Risk Management']
+    description: 'Más de 5 años de trayectoria en MQL5 y 100% de éxito en Upwork. Profesor de Trading Algorítmico y experto en el desarrollo de Expert Advisors (EAs) para la plataforma MT4. Ha validado sistemas con esperanza matemática positiva en tiempo real y cuenta con certificaciones oficiales en pruebas de fondeo. Tutor de traders Top 1 en Darwinex Zero.',
+    highlights: ['Localizador de ventajas estadísticas', 'Métodos personalizados de optimización', 'Estrategias de volatilidad extrema', 'MQL5, fxDremma, EAbuilder'],
+    image: 'https://twbppbgvcvcxktloulyp.supabase.co/storage/v1/object/public/mentors/Martin.jpg'
   },
   {
     id: 2,
-    name: 'Andrés J',
+    name: 'Jeremias',
     phrase: 'El trading algorítmico exige evidencia y robustez',
     title: 'Especialista en Trading Algorítmico',
-    subtitle: 'Especialista en Trading Algorítmico',
-    description: 'Más de cinco años de experiencia en el desarrollo de estrategias de trading algorítmico.',
-    highlights: ['Trading Algorítmico', 'Análisis Cuantitativo']
+    subtitle: '5+ años en desarrollo y optimización de estrategias',
+    description: 'Más de cinco años de experiencia en el desarrollo, optimización y automatización de sistemas de trading algorítmico. Trabajo orientado a la construcción de estrategias sistemáticas sostenibles en el tiempo. Formado en el Programa Quant de UCEMA y con una Diplomatura en Asesoramiento Financiero (Universidad Blas Pascal), combina fundamentos académicos con experiencia operativa. Cuenta con experiencia en Darwinex y Darwinex Zero, incluyendo diseño de estrategias adaptadas al motor de riesgo de la plataforma y acompañamiento técnico en cuentas de fondeo y acceso a capital.',
+    highlights: ['Backtesting y optimización (WFA)', 'Tests de robustez (Montecarlo)', 'Portafolios algorítmicos'],
+    image: 'https://twbppbgvcvcxktloulyp.supabase.co/storage/v1/object/public/mentors/Jeremias.jpeg'
   }
 ];
 
@@ -51,12 +54,12 @@ export const getMentors = asyncHandler(async (req: AuthRequest, res: Response): 
       id: mentor.id.toString(),
       name: mentor.name,
       email: `${mentor.name.toLowerCase().replace(/\s+/g, '.')}@pqtrader.com`,
-      avatar: `/mentors/${mentor.id}.jpg`,
+      avatar: mentor.image || `/mentors/${mentor.id}.jpg`,
       bio: mentor.description,
       specialties: Array.isArray(mentor.highlights) ? mentor.highlights : ['Python', 'StrategyQuant', 'Risk Management'],
       achievements: ['Trader Profesional', 'Mentor Certificado'],
       linkedin: '',
-      image: `/mentors/${mentor.id}.jpg`,
+      image: mentor.image || `/mentors/${mentor.id}.jpg`,
       title: mentor.title,
       subtitle: mentor.subtitle,
       students: 50,
@@ -134,12 +137,12 @@ export const getMentor = asyncHandler(async (req: AuthRequest, res: Response): P
       id: fallbackMentor.id.toString(),
       name: fallbackMentor.name,
       email: `${fallbackMentor.name.toLowerCase().replace(/\s+/g, '.')}@pqtrader.com`,
-      avatar: `/mentors/${fallbackMentor.id}.jpg`,
+      avatar: fallbackMentor.image || `/mentors/${fallbackMentor.id}.jpg`,
       bio: fallbackMentor.description,
       specialties: Array.isArray(fallbackMentor.highlights) ? fallbackMentor.highlights : ['Python', 'StrategyQuant', 'Risk Management'],
       achievements: ['Trader Profesional', 'Mentor Certificado'],
       linkedin: '',
-      image: `/mentors/${fallbackMentor.id}.jpg`,
+      image: fallbackMentor.image || `/mentors/${fallbackMentor.id}.jpg`,
       title: fallbackMentor.title,
       subtitle: fallbackMentor.subtitle,
       students: 50,

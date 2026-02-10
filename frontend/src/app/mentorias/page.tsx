@@ -252,9 +252,9 @@ export default function MentoriasPage() {
               >
                 <div className={`grid md:grid-cols-2 gap-0 ${index % 2 === 1 ? 'md:grid-flow-dense' : ''}`}>
                   {/* Image/Info Side */}
-                  <div className={`bg-gradient-to-br from-profit/10 to-background p-12 flex flex-col justify-center ${index % 2 === 1 ? 'md:col-start-2' : ''}`}>
-                    <div className="text-center mb-6">
-                      <div className="relative w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-4 border-profit/30">
+                  <div className={`bg-gradient-to-br from-profit/10 to-background p-16 md:p-20 flex flex-col justify-center ${index % 2 === 1 ? 'md:col-start-2' : ''}`}>
+                    <div className="text-center mb-12">
+                      <div className="relative w-44 h-44 mx-auto mb-8 rounded-full overflow-hidden border-4 border-profit/30">
                         <Image
                           src={mentor.image}
                           alt={mentor.name}
@@ -263,28 +263,28 @@ export default function MentoriasPage() {
                           priority={index === 0}
                         />
                       </div>
-                      <h3 className="text-2xl font-bold text-foreground mb-1">{mentor.name}</h3>
-                      <p className="text-profit font-semibold mb-1">{mentor.title}</p>
-                      <p className="text-sm text-muted-foreground mb-4">{mentor.subtitle}</p>
+                      <h3 className="text-3xl font-bold text-foreground mb-3">{mentor.name}</h3>
+                      <p className="text-lg text-profit font-semibold mb-2">{mentor.title}</p>
+                      <p className="text-base text-muted-foreground mb-8">{mentor.subtitle}</p>
                       
                       {/* Stats */}
-                      <div className="flex justify-center gap-6 mb-6">
+                      <div className="flex justify-center gap-8 mb-10 pt-6 border-t border-border/30">
                         <div className="text-center">
-                          <p className="text-2xl font-bold text-profit">{mentor.students}+</p>
-                          <p className="text-xs text-muted-foreground">{t('mentorshipsPage.labels.students')}</p>
+                          <p className="text-3xl font-bold text-profit">{mentor.students}+</p>
+                          <p className="text-sm text-muted-foreground">{t('mentorshipsPage.labels.students')}</p>
                         </div>
                         <div className="text-center">
-                          <p className="text-2xl font-bold text-profit">{mentor.rating}</p>
-                          <p className="text-xs text-muted-foreground">{t('mentorshipsPage.labels.rating')}</p>
+                          <p className="text-3xl font-bold text-profit">{mentor.rating}</p>
+                          <p className="text-sm text-muted-foreground">{t('mentorshipsPage.labels.rating')}</p>
                         </div>
                         <div className="text-center">
-                          <p className="text-2xl font-bold text-profit">{mentor.sessions}+</p>
-                          <p className="text-xs text-muted-foreground">{t('mentorshipsPage.labels.sessions')}</p>
+                          <p className="text-3xl font-bold text-profit">{mentor.sessions}+</p>
+                          <p className="text-sm text-muted-foreground">{t('mentorshipsPage.labels.sessions')}</p>
                         </div>
                       </div>
 
                       {/* Contact */}
-                      <div className="flex justify-center gap-3">
+                      <div className="flex justify-center gap-3 mb-10 pb-6 border-b border-border/30">
                         <a 
                           href={mentor.linkedin}
                           className="p-2 bg-background hover:bg-profit/10 rounded-lg transition-colors"
@@ -303,41 +303,41 @@ export default function MentoriasPage() {
                     </div>
 
                     {/* Achievements */}
-                    <div className="space-y-2">
+                    <div className="space-y-4 mt-6">
                       {mentor.achievements.map((achievement: string, idx: number) => (
-                        <div key={idx} className="flex items-start gap-2 text-sm">
-                          <CheckCircle className="h-4 w-4 text-profit mt-0.5 flex-shrink-0" />
-                          <span className="text-muted-foreground">{achievement}</span>
+                        <div key={idx} className="flex items-start gap-3 text-base">
+                          <CheckCircle className="h-5 w-5 text-profit mt-1 flex-shrink-0" />
+                          <span className="text-muted-foreground leading-relaxed">{achievement}</span>
                         </div>
                       ))}
                     </div>
                   </div>
 
                   {/* Content Side */}
-                  <div className={`p-12 flex flex-col justify-center ${index % 2 === 1 ? 'md:col-start-1 md:row-start-1' : ''}`}>
+                  <div className={`p-16 md:p-20 flex flex-col justify-center ${index % 2 === 1 ? 'md:col-start-1 md:row-start-1' : ''}`}>
                     {/* Quote */}
-                    <div className="mb-6">
-                      <div className="text-6xl text-profit/20 leading-none mb-2">&ldquo;</div>
-                      <p className="text-lg italic text-foreground mb-2">{mentor.quote}</p>
-                      <div className="text-6xl text-profit/20 leading-none text-right">&rdquo;</div>
+                    <div className="mb-10">
+                      <div className="text-7xl text-profit/20 leading-none mb-3">&ldquo;</div>
+                      <p className="text-xl italic text-foreground mb-3 leading-loose">{mentor.quote}</p>
+                      <div className="text-7xl text-profit/20 leading-none text-right">&rdquo;</div>
                     </div>
 
                     {/* Bio */}
-                    <p className="text-muted-foreground mb-6 leading-relaxed">
+                    <p className="text-base text-muted-foreground mb-10 leading-loose">
                       {mentor.bio}
                     </p>
 
                     {/* Specialties */}
-                    <div className="mb-6">
-                      <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
-                        <Target className="h-4 w-4 text-profit" />
+                    <div className="mb-0">
+                      <h4 className="text-base font-semibold text-foreground mb-5 flex items-center gap-2">
+                        <Target className="h-5 w-5 text-profit" />
                         {t('mentorshipsPage.labels.specialties')}
                       </h4>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-3">
                         {mentor.specialties.map((specialty: string) => (
                           <span
                             key={specialty}
-                            className="text-xs bg-profit/10 text-profit px-3 py-1.5 rounded-full font-medium"
+                            className="text-sm bg-profit/10 text-profit px-4 py-2.5 rounded-full font-medium"
                           >
                             {specialty}
                           </span>
