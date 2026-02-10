@@ -25,9 +25,8 @@
   "dependencies": {
     "@paypal/checkout-server-sdk": "^1.0.3",
     "@paypal/paypal-server-sdk": "^2.1.0",
-    "@supabase/supabase-js": "^2.91.0",
+    "@supabase/supabase-js": "^2.95.3",
     "@types/bcryptjs": "^2.4.6",
-    "@types/multer": "^2.0.0",
     "@types/pg": "^8.16.0",
     "axios": "^1.6.5",
     "bcrypt": "^5.1.1",
@@ -62,6 +61,7 @@
     "@types/jest": "^29.5.11",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/morgan": "^1.9.9",
+    "@types/multer": "^2.0.0",
     "@types/node": "^20.10.6",
     "@types/nodemailer": "^6.4.22",
     "@types/supertest": "^6.0.2",

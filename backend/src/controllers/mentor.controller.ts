@@ -190,3 +190,63 @@ export const getMentor = asyncHandler(async (req: AuthRequest, res: Response): P
     data: formattedMentor
   });
 });
+
+/**
+ * @desc    Upload mentor photo to Supabase Storage
+ * @route   POST /api/mentors/upload-photo
+ * @access  Protected (Admin)
+ */
+export const uploadMentorPhoto = asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {
+  const file = req.file;
+  
+  if (!file) {
+    res.status(400).json({
+      success: false,
+      error: 'No se proporcionó ninguna imagen'
+    });
+    return;
+  }
+
+  const mentorName = req.body.name || 'mentor';
+  const ext = file.originalname.split('.').pop();
+  const fileName = `${mentorName.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}.${ext}`;
+
+  try {
+    // Subir a Supabase Storage usando service role key para permisos completos
+    const { data, error } = await supabase.storage
+      .from('mentors')
+      .upload(fileName, file.buffer, {
+        contentType: file.mimetype,
+        upsert: true,
+      });
+
+    if (error) {
+      console.error('❌ Error uploading to Supabase Storage:', error);
+      res.status(500).json({
+        success: false,
+        error: error.message || 'Error al subir la imagen'
+      });
+      return;
+    }
+
+    // Obtener URL pública
+    const { data: publicUrlData } = supabase.storage
+      .from('mentors')
+      .getPublicUrl(fileName);
+
+    console.log('✅ Imagen subida exitosamente:', publicUrlData.publicUrl);
+
+    res.json({
+      success: true,
+      url: publicUrlData.publicUrl,
+      fileName: fileName,
+      message: 'Imagen subida exitosamente'
+    });
+  } catch (error: any) {
+    console.error('❌ Exception uploading mentor photo:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Error interno al subir la imagen'
+    });
+  }
+});

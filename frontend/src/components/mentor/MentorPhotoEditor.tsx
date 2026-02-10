@@ -40,30 +40,61 @@ export default function MentorPhotoEditor({ mentor, onUpdate }: MentorPhotoEdito
     const file = event.target.files?.[0];
     if (!file) return;
 
+    // Validar tamaño (máximo 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('La imagen debe ser menor a 5MB');
+      return;
+    }
+
+    // Validar que sea imagen
+    if (!file.type.startsWith('image/')) {
+      alert('Solo se permiten imágenes');
+      return;
+    }
+
     try {
       setUploading(true);
       
-      // Create FormData for file upload
+      // Obtener token JWT del localStorage
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert('Debes iniciar sesión como administrador');
+        return;
+      }
+
+      // Create FormData para subir a Supabase Storage
       const formData = new FormData();
-      formData.append('file', file);
-      formData.append('type', 'mentor-photo');
-      formData.append('mentor_id', mentor.id);
+      formData.append('photo', file); // Campo 'photo' según el endpoint
+      formData.append('name', mentor.name); // Nombre del mentor
 
-      // Upload file
-      const uploadResponse = await axios.post('/api/upload', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-        withCredentials: true
-      });
+      // Upload file al backend que sube a Supabase Storage
+      const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
+      const uploadResponse = await axios.post(
+        `${API_URL}/mentors/upload-photo`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${token}`
+          }
+        }
+      );
 
-      const imageUrl = uploadResponse.data.url;
-      setPreviewUrl(imageUrl);
+      if (uploadResponse.data.success) {
+        const imageUrl = uploadResponse.data.url;
+        setPreviewUrl(imageUrl);
 
-      // Update mentor with new image
-      onUpdate({ ...mentor, image: imageUrl });
-      setShowUploadDialog(false);
-    } catch (error) {
+        // Update mentor with new image
+        onUpdate({ ...mentor, image: imageUrl });
+        setShowUploadDialog(false);
+        alert('Imagen subida exitosamente a Supabase Storage');
+      } else {
+        alert('Error al subir la imagen: ' + uploadResponse.data.error);
+      }
+    } catch (error: any) {
       console.error('Upload error:', error);
-      alert('Error uploading image');
+      const errorMsg = error.response?.data?.error || error.message || 'Error al subir la imagen';
+      alert(errorMsg);
     } finally {
       setUploading(false);
     }
