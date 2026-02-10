@@ -148,6 +148,12 @@ export function Footer() {
           {/* Copyright */}
           <div className="text-center text-sm text-muted-foreground">
             <p>{t('footer.rights')}</p>
+            <p className="mt-2">
+              Página creada por{' '}
+              <a href="https://technohouse2025.netlify.app/" target="_blank" rel="noopener noreferrer" className="underline text-profit hover:text-profit/80">
+                TechnoHouse
+              </a>
+            </p>
           </div>
         </div>
       </div>
