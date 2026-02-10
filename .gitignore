@@ -3,14 +3,43 @@ node_modules/
 **/node_modules/
 package-lock.json
 
-# Environment variables
+# Environment variables (CRÍTICO - NO SUBIR)
 .env
+.env*
+!.env.example
+!.env*.example
 .env*.local
 .env.production
 .env.development
+.env.test
 backend/.env
+backend/.env*
+!backend/.env.example
+!backend/.env*.example
 frontend/.env*
+!frontend/.env.example
 *.env
+!*.env.example
+
+# API Keys y Secrets (CRÍTICO - NO SUBIR)
+**/config/secrets.*
+**/config/keys.*
+**/secrets/
+**/*secret*
+**/*key*
+!**/package*.json
+!**/*keyframes*
+!**/*keyboard*
+
+# Archivos de configuración sensibles
+railway.toml
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+credentials.json
+serviceAccountKey.json
 
 # Build artifacts
 dist/
@@ -21,24 +50,49 @@ backend/dist/
 frontend/.next/
 frontend/out/
 
-# Logs
+# Uploads y archivos generados por usuarios
+uploads/
+backend/uploads/
+**/uploads/
+user-content/
+attachments/
+
+# Logs (pueden contener información sensible)
 logs/
 *.log
+*.log.*
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 backend/logs/
+frontend/logs/
+access.log
+error.log
 
-# Uploads
-uploads/
-backend/uploads/
-
-# Testing
+# Testing y coverage
 coverage/
 .nyc_output/
 .jest-cache
 .coverage
+test-results/
+e2e-results/
+
+# Bases de datos locales
+*.sqlite
+*.sqlite3
+*.db
+database.json
+db.json
+prisma/migrations/
+!prisma/schema.prisma
+
+# Archivos de respaldo
+*.backup
+*.bak
+*.dump
+*.sql.gz
+backups/
 
 # IDE
 .vscode/
@@ -76,3 +130,34 @@ __pycache__/
 
 # TypeScript
 *.tsbuildinfo
+
+# Archivos específicos del proyecto que pueden contener datos sensibles
+PAYPAL_CREDENCIALES.md
+*CREDENCIALES*
+*PASSWORDS*
+*SECRETS*
+mentorship_session_notes/
+mentor_contact_info/
+user_private_data/
+
+# Archivos temporales de desarrollo  
+debug.log
+test.log
+scratch.js
+scratch.ts
+playground/
+experiments/
+
+# Certificados y llaves SSL
+*.crt
+*.key
+*.pem
+*.p12
+*.pfx
+ssl/
+certs/
+
+# Configuraciones de producción con datos sensibles
+docker-compose.override.yml
+k8s-secrets.yaml
+.env.production.local
