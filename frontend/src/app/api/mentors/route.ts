@@ -60,19 +60,19 @@ export async function GET() {
       return {
         id: mentor.id.toString(),
         name: mentor.name,
-        email: `${mentor.name.toLowerCase().replace(/\s+/g, '.')}@pqtrader.com`,
+        email: mentor.email || `${mentor.name.toLowerCase().replace(/\s+/g, '.')}@pqtrader.com`,
         avatar: imageUrl,
         bio: mentor.description || 'Mentor especializado en trading algorítmico.',
         specialties: Array.isArray(mentor.highlights) ? mentor.highlights : ['Python', 'StrategyQuant', 'Risk Management'],
-        achievements: ['Trader Profesional', 'Mentor Certificado'],
-        linkedin: '',
+        achievements: fallback?.achievements || ['Trader Profesional', 'Mentor Certificado'],
+        linkedin: mentor.linkedin || '',
         // Campos adicionales para compatibilidad con la UI de mentorias
         image: imageUrl,
         title: mentor.title || mentor.name,
         subtitle: mentor.subtitle || 'Experto en Trading Algorítmico',
-        students: 50,
-        rating: 5.0,
-        sessions: 100,
+        students: mentor.students || 50,
+        rating: mentor.rating || 5.0,
+        sessions: mentor.sessions || 100,
         quote: mentor.phrase || 'Transformando traders en profesionales exitosos.'
       };
     });

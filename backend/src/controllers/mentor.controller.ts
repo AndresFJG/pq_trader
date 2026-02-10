@@ -50,23 +50,30 @@ export const getMentors = asyncHandler(async (req: AuthRequest, res: Response): 
     console.error('❌ Supabase error:', error);
     console.log('⚠️ Using fallback mentor data');
     // Usar datos hardcoded si falla la RPC
-    const formattedMentors = FALLBACK_MENTORS.map(mentor => ({
-      id: mentor.id.toString(),
-      name: mentor.name,
-      email: `${mentor.name.toLowerCase().replace(/\s+/g, '.')}@pqtrader.com`,
-      avatar: mentor.image || `/mentors/${mentor.id}.jpg`,
-      bio: mentor.description,
-      specialties: Array.isArray(mentor.highlights) ? mentor.highlights : ['Python', 'StrategyQuant', 'Risk Management'],
-      achievements: ['Trader Profesional', 'Mentor Certificado'],
-      linkedin: '',
-      image: mentor.image || `/mentors/${mentor.id}.jpg`,
-      title: mentor.title,
-      subtitle: mentor.subtitle,
-      students: 50,
-      rating: 5.0,
-      sessions: 100,
-      quote: mentor.phrase
-    }));
+    const formattedMentors = FALLBACK_MENTORS.map(mentor => {
+      // Achievements específicos por mentor
+      const achievements = mentor.id === 1 
+        ? ['5 años de clientes satisfechos en MQL5', '4 años como profesor de trading algorítmico', '100% de clientes satisfechos en Upwork', 'Tutor de traders top 1 en Darwinex Zero', '+ de 2000 estrategias creadas desde 2021']
+        : ['Programa Quant UCEMA', 'Diplomatura Asesoramiento Financiero', 'Experiencia Darwinex & Darwinex Zero'];
+      
+      return {
+        id: mentor.id.toString(),
+        name: mentor.name,
+        email: mentor.id === 1 ? 'marco.andres@pqtrader.com' : 'jeremias@pqtrader.com',
+        avatar: mentor.image,
+        bio: mentor.description,
+        specialties: Array.isArray(mentor.highlights) ? mentor.highlights : [],
+        achievements: achievements,
+        linkedin: mentor.id === 1 ? 'https://www.mql5.com/es/users/marcotisma/news' : '',
+        image: mentor.image,
+        title: mentor.title,
+        subtitle: mentor.subtitle,
+        students: mentor.id === 1 ? 50 : 150,
+        rating: 4.9,
+        sessions: mentor.id === 1 ? 100 : 200,
+        quote: mentor.phrase
+      };
+    });
     
     res.json({
       success: true,
@@ -80,24 +87,35 @@ export const getMentors = asyncHandler(async (req: AuthRequest, res: Response): 
   console.log('📊 Mentor data:', JSON.stringify(mentors, null, 2));
 
   // Mapear a la estructura esperada por el frontend
-  const formattedMentors = (mentors || []).map(mentor => ({
-    id: mentor.id.toString(),
-    name: mentor.name,
-    email: `${mentor.name.toLowerCase().replace(/\s+/g, '.')}@pqtrader.com`,
-    avatar: `/mentors/${mentor.id}.jpg`,
-    bio: mentor.description || 'Mentor especializado en trading algorítmico.',
-    specialties: Array.isArray(mentor.highlights) ? mentor.highlights : ['Python', 'StrategyQuant', 'Risk Management'],
-    achievements: ['Trader Profesional', 'Mentor Certificado'],
-    linkedin: '',
-    // Campos adicionales para compatibilidad con la UI de mentorias
-    image: `/mentors/${mentor.id}.jpg`,
-    title: mentor.title || mentor.name,
-    subtitle: mentor.subtitle || 'Experto en Trading Algorítmico',
-    students: 50,
-    rating: 5.0,
-    sessions: 100,
-    quote: mentor.phrase || 'Transformando traders en profesionales exitosos.'
-  }));
+  const formattedMentors = (mentors || []).map(mentor => {
+    // Buscar fallback para obtener URL de imagen
+    const fallback = FALLBACK_MENTORS.find(f => f.id === mentor.id);
+    const imageUrl = fallback?.image || 'https://twbppbgvcvcxktloulyp.supabase.co/storage/v1/object/public/mentors/Martin.jpg';
+    
+    // Achievements específicos por mentor
+    const achievements = mentor.id === 1 
+      ? ['5 años de clientes satisfechos en MQL5', '4 años como profesor de trading algorítmico', '100% de clientes satisfechos en Upwork', 'Tutor de traders top 1 en Darwinex Zero', '+ de 2000 estrategias creadas desde 2021']
+      : ['Programa Quant UCEMA', 'Diplomatura Asesoramiento Financiero', 'Experiencia Darwinex & Darwinex Zero'];
+    
+    return {
+      id: mentor.id.toString(),
+      name: mentor.name,
+      email: mentor.email || `${mentor.name.toLowerCase().replace(/\s+/g, '.')}@pqtrader.com`,
+      avatar: imageUrl,
+      bio: mentor.description || 'Mentor especializado en trading algorítmico.',
+      specialties: Array.isArray(mentor.highlights) ? mentor.highlights : ['Python', 'StrategyQuant', 'Risk Management'],
+      achievements: achievements,
+      linkedin: mentor.linkedin || '',
+      // Campos adicionales para compatibilidad con la UI de mentorias
+      image: imageUrl,
+      title: mentor.title || mentor.name,
+      subtitle: mentor.subtitle || 'Experto en Trading Algorítmico',
+      students: mentor.students || 50,
+      rating: mentor.rating || 5.0,
+      sessions: mentor.sessions || 100,
+      quote: mentor.phrase || 'Transformando traders en profesionales exitosos.'
+    };
+  });
 
   res.json({
     success: true,
@@ -133,21 +151,26 @@ export const getMentor = asyncHandler(async (req: AuthRequest, res: Response): P
       return;
     }
     
+    // Achievements específicos por mentor
+    const achievements = fallbackMentor.id === 1 
+      ? ['5 años de clientes satisfechos en MQL5', '4 años como profesor de trading algorítmico', '100% de clientes satisfechos en Upwork', 'Tutor de traders top 1 en Darwinex Zero', '+ de 2000 estrategias creadas desde 2021']
+      : ['Programa Quant UCEMA', 'Diplomatura Asesoramiento Financiero', 'Experiencia Darwinex & Darwinex Zero'];
+    
     const formattedMentor = {
       id: fallbackMentor.id.toString(),
       name: fallbackMentor.name,
-      email: `${fallbackMentor.name.toLowerCase().replace(/\s+/g, '.')}@pqtrader.com`,
-      avatar: fallbackMentor.image || `/mentors/${fallbackMentor.id}.jpg`,
+      email: fallbackMentor.id === 1 ? 'marco.andres@pqtrader.com' : 'jeremias@pqtrader.com',
+      avatar: fallbackMentor.image,
       bio: fallbackMentor.description,
-      specialties: Array.isArray(fallbackMentor.highlights) ? fallbackMentor.highlights : ['Python', 'StrategyQuant', 'Risk Management'],
-      achievements: ['Trader Profesional', 'Mentor Certificado'],
-      linkedin: '',
-      image: fallbackMentor.image || `/mentors/${fallbackMentor.id}.jpg`,
+      specialties: Array.isArray(fallbackMentor.highlights) ? fallbackMentor.highlights : [],
+      achievements: achievements,
+      linkedin: fallbackMentor.id === 1 ? 'https://www.mql5.com/es/users/marcotisma/news' : '',
+      image: fallbackMentor.image,
       title: fallbackMentor.title,
       subtitle: fallbackMentor.subtitle,
-      students: 50,
-      rating: 5.0,
-      sessions: 100,
+      students: fallbackMentor.id === 1 ? 50 : 150,
+      rating: 4.9,
+      sessions: fallbackMentor.id === 1 ? 100 : 200,
       quote: fallbackMentor.phrase
     };
     
@@ -170,21 +193,29 @@ export const getMentor = asyncHandler(async (req: AuthRequest, res: Response): P
   }
 
   // Formatear con estructura completa
+  const fallback = FALLBACK_MENTORS.find(f => f.id === mentor.id);
+  const imageUrl = fallback?.image || 'https://twbppbgvcvcxktloulyp.supabase.co/storage/v1/object/public/mentors/Martin.jpg';
+  
+  // Achievements específicos por mentor
+  const achievements = mentor.id === 1 
+    ? ['5 años de clientes satisfechos en MQL5', '4 años como profesor de trading algorítmico', '100% de clientes satisfechos en Upwork', 'Tutor de traders top 1 en Darwinex Zero', '+ de 2000 estrategias creadas desde 2021']
+    : ['Programa Quant UCEMA', 'Diplomatura Asesoramiento Financiero', 'Experiencia Darwinex & Darwinex Zero'];
+  
   const formattedMentor = {
     id: mentor.id.toString(),
     name: mentor.name,
-    email: `${mentor.name.toLowerCase().replace(/\s+/g, '.')}@pqtrader.com`,
-    avatar: `/mentors/${mentor.id}.jpg`,
+    email: mentor.email || `${mentor.name.toLowerCase().replace(/\s+/g, '.')}@pqtrader.com`,
+    avatar: imageUrl,
     bio: mentor.description || 'Mentor especializado en trading algorítmico.',
     specialties: Array.isArray(mentor.highlights) ? mentor.highlights : ['Python', 'StrategyQuant', 'Risk Management'],
-    achievements: ['Trader Profesional', 'Mentor Certificado'],
-    linkedin: '',
-    image: `/mentors/${mentor.id}.jpg`,
+    achievements: achievements,
+    linkedin: mentor.linkedin || '',
+    image: imageUrl,
     title: mentor.title || mentor.name,
     subtitle: mentor.subtitle || 'Experto en Trading Algorítmico',
-    students: 50,
-    rating: 5.0,
-    sessions: 100,
+    students: mentor.students || 50,
+    rating: mentor.rating || 5.0,
+    sessions: mentor.sessions || 100,
     quote: mentor.phrase || 'Transformando traders en profesionales exitosos.'
   };
 
