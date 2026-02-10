@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { AuthRequest } from '../types';
+import { AuthRequest } from '../middleware/auth.middleware';
 import BlogPostModel, { BlogPost } from '../models/BlogPost';
 
 // Get all blog posts (public and admin)

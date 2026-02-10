@@ -194,3 +194,37 @@ export const enrollCourse = async (req: AuthRequest, res: Response): Promise<voi
     });
   }
 };
+
+// @desc    Get course statistics (public stats for courses page)
+// @route   GET /api/courses/stats
+// @access  Public
+export const getCourseStats = asyncHandler(async (_req: AuthRequest, res: Response): Promise<void> => {
+  // Obtener total de cursos publicados
+  const { count: activeCourses, error: countError } = await supabase
+    .from('courses')
+    .select('*', { count: 'exact', head: true })
+    .eq('is_published', true);
+
+  if (countError) throw countError;
+
+  // Obtener suma de enrollment_count y duration_hours de cursos publicados
+  const { data: coursesData, error: coursesError } = await supabase
+    .from('courses')
+    .select('enrollment_count, duration_hours')
+    .eq('is_published', true);
+
+  if (coursesError) throw coursesError;
+
+  // Calcular totales
+  const totalStudents = coursesData?.reduce((sum, course) => sum + (course.enrollment_count || 0), 0) || 0;
+  const totalHours = coursesData?.reduce((sum, course) => sum + (course.duration_hours || 0), 0) || 0;
+
+  res.json({
+    success: true,
+    data: {
+      activeCourses: activeCourses || 0,
+      totalStudents,
+      totalHours,
+    },
+  });
+});

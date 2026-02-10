@@ -15,6 +15,12 @@ export interface Course {
   category: string;
 }
 
+export interface CourseStats {
+  activeCourses: number;
+  totalStudents: number;
+  totalHours: number;
+}
+
 export const courseService = {
   async getFeaturedCourses(): Promise<Course[]> {
     try {
@@ -40,6 +46,16 @@ export const courseService = {
       return data.data || null;
     } catch (error: any) {
       return null;
+    }
+  },
+
+  async getCourseStats(): Promise<CourseStats> {
+    try {
+      const { data } = await api.get('/courses/stats');
+      return data.data || { activeCourses: 0, totalStudents: 0, totalHours: 0 };
+    } catch (error: any) {
+      console.error('Error fetching course stats:', error);
+      return { activeCourses: 0, totalStudents: 0, totalHours: 0 };
     }
   },
 };

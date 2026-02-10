@@ -15,6 +15,7 @@ import TransactionService from './services/transaction.service';
 // Import routes
 import authRoutes from './routes/auth.routes';
 import userRoutes from './routes/user.routes';
+import mentorRoutes from './routes/mentor.routes';
 import courseRoutes from './routes/course.routes';
 import lessonRoutes from './routes/lesson.routes';
 import dashboardRoutes from './routes/dashboard.routes';
@@ -80,6 +81,7 @@ app.get('/live', livenessCheck);  // Kubernetes liveness probe
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/mentors', mentorRoutes);
 app.use('/api/courses', courseRoutes);
 app.use('/api/courses/:courseId/lessons', lessonRoutes);
 app.use('/api/dashboard', dashboardRoutes);

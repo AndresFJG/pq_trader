@@ -358,9 +358,9 @@ export default function StrategyQuantPage() {
                       : 'Weekly live webinars, real strategies and personalized support'
                     }
                   </p>
-                  <Link href="/mentorias#club-strategyquant">
+                  <Link href="https://www.skool.com/club-pqtrader-8889/about">
                     <Button variant="profit" size="sm" className="w-full">
-                      {language === 'es' ? 'Unirme al Club - $150/mes' : 'Join the Club - $150/month'}
+                      {language === 'es' ? 'Unirme al Club' : 'Join the Club'}
                     </Button>
                   </Link>
                 </div>
@@ -375,7 +375,7 @@ export default function StrategyQuantPage() {
                 : 'Prefer to learn in Spanish with personalized guidance?'
               }
             </p>
-            <Link href="/mentorias#club-strategyquant">
+            <Link href="https://www.skool.com/club-pqtrader-8889/about" target="_blank">
               <Button variant="profit" size="lg">
                 {language === 'es' ? 'Ver Club StrategyQuant' : 'View StrategyQuant Club'}
                 <TrendingUp className="ml-2 h-5 w-5" />
@@ -419,7 +419,7 @@ export default function StrategyQuantPage() {
                 <div className="bg-surface/30 rounded-lg p-8 text-center">
                   <h3 className="font-bold text-lg mb-4">¿Ya tienes StrategyQuant?</h3>
                   <p className="text-muted-foreground mb-6">Únete al Club para acceder a plantillas, webinars y soporte premium.</p>
-                  <Link href="/mentorias#club-strategyquant">
+                  <Link href="https://www.skool.com/club-pqtrader-8889/about" target="_blank">
                     <Button variant="profit" size="lg" className="w-full">
                       Unirme al Club
                     </Button>
@@ -668,7 +668,7 @@ export default function StrategyQuantPage() {
           <p className="text-xl text-muted-foreground mb-10">
             Únete al Club StrategyQuant y aprende de la mano de expertos
           </p>
-          <Link href="/mentorias#club-strategyquant">
+          <Link href="https://www.skool.com/club-pqtrader-8889/about" target="_blank">
             <Button variant="profit" size="lg" className="text-lg px-12">
               Unirme al Club
               <TrendingUp className="ml-2 h-5 w-5" />

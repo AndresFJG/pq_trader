@@ -9,12 +9,13 @@ import { Breadcrumbs } from '@/components/ui/breadcrumbs';
 import { Clock, Users, Star, BookOpen, TrendingUp, Award, ArrowRight } from 'lucide-react';
 import { CourseDetailsModal } from '@/components/modals/CourseDetailsModal';
 import { useLanguage } from '@/lib/i18n';
-import { courseService, Course } from '@/services/courseService';
+import { courseService, Course, CourseStats } from '@/services/courseService';
 import Link from 'next/link';
 
 export default function CursosPage() {
   const { t, language } = useLanguage();
   const [courses, setCourses] = useState<Course[]>([]);
+  const [stats, setStats] = useState({ activeCourses: 0, totalStudents: 0, totalHours: 0 });
   const [loading, setLoading] = useState(true);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,9 +33,19 @@ export default function CursosPage() {
     }
   }, []);
 
+  const loadStats = useCallback(async () => {
+    try {
+      const data = await courseService.getCourseStats();
+      setStats(data);
+    } catch (error) {
+      console.error('❌ Error loading stats:', error);
+    }
+  }, []);
+
   useEffect(() => {
     loadCourses();
-  }, [loadCourses]);
+    loadStats();
+  }, [loadCourses, loadStats]);
 
   const levels = useMemo(() => [
     { value: 'all', label: t('coursesPage.filters.all') },
@@ -103,20 +114,20 @@ export default function CursosPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto mt-12">
             <div className="bg-surface/50 border border-border/40 rounded-lg p-6">
               <BookOpen className="h-8 w-8 text-profit mx-auto mb-2" />
-              <p className="text-3xl font-bold text-foreground">{courses.length}</p>
+              <p className="text-3xl font-bold text-foreground">{stats.activeCourses}</p>
               <p className="text-sm text-muted-foreground">{t('coursesPage.stats.activeCourses')}</p>
             </div>
             <div className="bg-surface/50 border border-border/40 rounded-lg p-6">
               <Users className="h-8 w-8 text-profit mx-auto mb-2" />
               <p className="text-3xl font-bold text-foreground">
-                {courses.reduce((sum, course) => sum + (course.enrollment_count || 0), 0).toLocaleString()}
+                {stats.totalStudents.toLocaleString()}
               </p>
               <p className="text-sm text-muted-foreground">{t('coursesPage.stats.totalStudents')}</p>
             </div>
             <div className="bg-surface/50 border border-border/40 rounded-lg p-6">
               <TrendingUp className="h-8 w-8 text-profit mx-auto mb-2" />
               <p className="text-3xl font-bold text-foreground">
-                {courses.reduce((sum, course) => sum + (course.duration_hours || 0), 0)}
+                {stats.totalHours}
               </p>
               <p className="text-sm text-muted-foreground">{t('coursesPage.stats.contentHours')}</p>
             </div>
