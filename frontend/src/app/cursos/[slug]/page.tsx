@@ -16,26 +16,15 @@ import {
 } from 'lucide-react';
 import { courseService, Course } from '@/services/courseService';
 
+// Forzar dynamic rendering para evitar problemas en build time
+export const dynamic = 'force-dynamic';
+
 // Generar las rutas estáticas para todos los cursos
 export async function generateStaticParams() {
   try {
-    // Usar fetch directamente para evitar problemas con axios en el servidor
-    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
-    const response = await fetch(`${API_URL}/courses`, {
-      cache: 'no-store'
-    });
-    
-    if (!response.ok) {
-      console.error('Error fetching courses for static params');
-      return [];
-    }
-    
-    const data = await response.json();
-    const courses = data.data || [];
-    
-    return courses.map((course: Course) => ({
-      slug: course.slug,
-    }));
+    // Durante build time, retornar array vacío para evitar errores
+    // Las páginas se generarán on-demand
+    return [];
   } catch (error) {
     console.error('Error generating static params:', error);
     return [];
