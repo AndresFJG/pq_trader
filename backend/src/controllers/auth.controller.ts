@@ -38,7 +38,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       type: 'new_user',
       title: 'Nuevo usuario registrado',
       message: `${name} se ha registrado en la plataforma`,
-      user_id: user.id,
+      user_id: user.id.toString(),
       metadata: {
         email,
         name,

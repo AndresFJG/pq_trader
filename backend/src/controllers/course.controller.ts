@@ -108,8 +108,8 @@ export const createCourse = async (req: AuthRequest, res: Response): Promise<voi
       type: 'new_course',
       title: 'Nuevo curso publicado',
       message: `El curso "${data.title}" ha sido publicado`,
-      user_id: req.user?.id,
-      related_id: data.id,
+      user_id: req.user?.id?.toString(),
+      related_id: data.id.toString(),
       metadata: {
         course_title: data.title,
         course_price: data.price,
