@@ -31,10 +31,13 @@ interface Mentorship {
   id: string;
   title: string;
   description: string;
-  duration: number;
+  duration?: number;
+  duration_minutes?: number;
   price: number;
   mentor_id: string;
   status: string;
+  is_active?: boolean;
+  enrolled_count?: number;
   created_at: string;
 }
 
@@ -140,7 +143,7 @@ export function MentorshipsTable({ searchQuery }: MentorshipsTableProps) {
                   <TableCell>
                     <div className="flex items-center gap-1">
                       <Clock className="h-4 w-4 text-gray-400" />
-                      {mentorship.duration} min
+                      {mentorship.duration || mentorship.duration_minutes || 60} min
                     </div>
                   </TableCell>
                   <TableCell className="font-medium">

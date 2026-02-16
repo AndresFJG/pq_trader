@@ -24,37 +24,37 @@ export function Navbar() {
   return (
     <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <TrendingUp className="h-8 w-8 text-profit" />
-            <span className="text-xl font-bold">PQ Trader</span>
+            <TrendingUp className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 text-profit" />
+            <span className="text-lg sm:text-xl font-bold">PQ Trader</span>
           </Link>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-8">
-            <Link href="/cursos" className="text-foreground hover:text-profit transition" prefetch={true}>
+          <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
+            <Link href="/cursos" className="text-sm lg:text-base text-foreground hover:text-profit transition" prefetch={true}>
               {t('nav.courses')}
             </Link>
-            <Link href="/mentorias" className="text-foreground hover:text-profit transition" prefetch={true}>
+            <Link href="/mentorias" className="text-sm lg:text-base text-foreground hover:text-profit transition" prefetch={true}>
               {t('nav.mentorships')}
             </Link>
-            <Link href="/strategyquant" className="text-foreground hover:text-profit transition" prefetch={true}>
+            <Link href="/strategyquant" className="text-sm lg:text-base text-foreground hover:text-profit transition" prefetch={true}>
               {t('nav.strategyquant')}
             </Link>
-            <Link href="/portafolios" className="text-foreground hover:text-profit transition" prefetch={true}>
+            <Link href="/portafolios" className="text-sm lg:text-base text-foreground hover:text-profit transition" prefetch={true}>
               {t('nav.portfolios')}
             </Link>
-            <Link href="/alquileres" className="text-foreground hover:text-profit transition" prefetch={true}>
+            <Link href="/alquileres" className="text-sm lg:text-base text-foreground hover:text-profit transition" prefetch={true}>
               {t('nav.rentals')}
             </Link>
-            <Link href="/blog" className="text-foreground hover:text-profit transition" prefetch={true}>
+            <Link href="/blog" className="text-sm lg:text-base text-foreground hover:text-profit transition" prefetch={true}>
               {t('nav.blog')}
             </Link>
           </div>
 
           {/* CTA Buttons */}
-          <div className="hidden md:flex items-center space-x-3">
+          <div className="hidden md:flex items-center space-x-2 lg:space-x-3">
             <LanguageToggle />
             <ThemeToggle />
             {loading ? (

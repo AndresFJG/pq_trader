@@ -9,46 +9,46 @@ export function Footer() {
   
   return (
     <footer className="bg-secondary/30 border-t border-border">
-      <div className="container mx-auto px-6 md:px-8 lg:px-12 py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 lg:gap-16 mb-12">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 lg:px-12 py-8 sm:py-10 md:py-12 lg:py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 md:gap-10 lg:gap-16 mb-8 sm:mb-10 md:mb-12">
           {/* Brand */}
-          <div className="space-y-4 lg:pr-8">
+          <div className="space-y-3 sm:space-y-4 lg:pr-8">
             <Link href="/" className="flex items-center space-x-2 group">
-              <TrendingUp className="h-8 w-8 text-profit group-hover:scale-110 transition-transform" />
-              <span className="text-xl font-bold">PQ Trader</span>
+              <TrendingUp className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 text-profit group-hover:scale-110 transition-transform" />
+              <span className="text-lg sm:text-xl font-bold">PQ Trader</span>
             </Link>
-            <p className="text-sm text-muted-foreground leading-relaxed">
+            <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
               {t('footer.description')}
             </p>
-            <div className="flex space-x-4 pt-2">
+            <div className="flex space-x-3 sm:space-x-4 pt-2">
               <a 
                 href="#" 
-                className="text-muted-foreground hover:text-profit transition-colors p-2 hover:bg-profit/10 rounded-lg"
+                className="text-muted-foreground hover:text-profit transition-colors p-1.5 sm:p-2 hover:bg-profit/10 rounded-lg"
                 aria-label="Twitter"
               >
-                <Twitter className="h-5 w-5" />
+                <Twitter className="h-4 w-4 sm:h-5 sm:w-5" />
               </a>
               <a 
                 href="#" 
-                className="text-muted-foreground hover:text-profit transition-colors p-2 hover:bg-profit/10 rounded-lg"
+                className="text-muted-foreground hover:text-profit transition-colors p-1.5 sm:p-2 hover:bg-profit/10 rounded-lg"
                 aria-label="LinkedIn"
               >
-                <Linkedin className="h-5 w-5" />
+                <Linkedin className="h-4 w-4 sm:h-5 sm:w-5" />
               </a>
               <a 
                 href="#" 
-                className="text-muted-foreground hover:text-profit transition-colors p-2 hover:bg-profit/10 rounded-lg"
+                className="text-muted-foreground hover:text-profit transition-colors p-1.5 sm:p-2 hover:bg-profit/10 rounded-lg"
                 aria-label="YouTube"
               >
-                <Youtube className="h-5 w-5" />
+                <Youtube className="h-4 w-4 sm:h-5 sm:w-5" />
               </a>
             </div>
           </div>
 
           {/* Productos */}
           <div>
-            <h3 className="font-semibold mb-4 text-foreground">{t('footer.products')}</h3>
-            <ul className="space-y-3 text-sm">
+            <h3 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-foreground">{t('footer.products')}</h3>
+            <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm">
               <li>
                 <Link href="/cursos" className="text-muted-foreground hover:text-profit transition-colors inline-block">
                   {t('common.courses')}
@@ -74,8 +74,8 @@ export function Footer() {
 
           {/* Compañía */}
           <div>
-            <h3 className="font-semibold mb-4 text-foreground">{t('footer.company')}</h3>
-            <ul className="space-y-3 text-sm">
+            <h3 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-foreground">{t('footer.company')}</h3>
+            <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm">
               <li>
                 <Link href="/sobre-nosotros" className="text-muted-foreground hover:text-profit transition-colors inline-block">
                   {t('footer.aboutUs')}
@@ -102,8 +102,8 @@ export function Footer() {
 
           {/* Legal */}
           <div>
-            <h3 className="font-semibold mb-4 text-foreground">{t('footer.legal')}</h3>
-            <ul className="space-y-3 text-sm">
+            <h3 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base text-foreground">{t('footer.legal')}</h3>
+            <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm">
               <li>
                 <Link href="/terminos" className="text-muted-foreground hover:text-profit transition-colors inline-block">
                   {t('footer.terms')}
@@ -129,24 +129,24 @@ export function Footer() {
         </div>
 
         {/* Regulatory Notice */}
-        <div className="border-t border-border/50 pt-8">
-          <div className="bg-yellow-500/5 border border-yellow-500/20 rounded-lg p-6 mb-8">
+        <div className="border-t border-border/50 pt-6 sm:pt-8">
+          <div className="bg-yellow-500/5 border border-yellow-500/20 rounded-lg p-4 sm:p-5 md:p-6 mb-6 sm:mb-8">
             <div className="text-center">
-              <p className="font-semibold text-foreground mb-3 flex items-center justify-center gap-2">
+              <p className="font-semibold text-sm sm:text-base text-foreground mb-2 sm:mb-3 flex items-center justify-center gap-2">
                 <span className="text-yellow-500">⚠️</span>
                 {t('footer.regulatoryNotice')}
               </p>
-              <p className="text-sm text-muted-foreground max-w-4xl mx-auto mb-3 leading-relaxed">
+              <p className="text-xs sm:text-sm text-muted-foreground max-w-4xl mx-auto mb-2 sm:mb-3 leading-relaxed px-2">
                 {t('footer.regulatoryText')}
               </p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-[10px] sm:text-xs text-muted-foreground px-2">
                 {t('footer.regulatoryDisclaimer')}
               </p>
             </div>
           </div>
 
           {/* Copyright */}
-          <div className="text-center text-sm text-muted-foreground">
+          <div className="text-center text-xs sm:text-sm text-muted-foreground px-2">
             <p>{t('footer.rights')}</p>
             <p className="mt-2">
               Página creada por{' '}

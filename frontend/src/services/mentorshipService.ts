@@ -6,10 +6,12 @@ export interface Mentorship {
   description: string;
   mentor_name: string;
   price: number;
-  duration_weeks: number;
-  spots_available: number;
+  duration?: number;
+  duration_minutes?: number;
+  duration_weeks?: number;
+  spots_available?: number;
   thumbnail?: string;
-  is_active: boolean;
+  is_active?: boolean;
   rating?: number;
   enrolled_count?: number;
   created_at: string;

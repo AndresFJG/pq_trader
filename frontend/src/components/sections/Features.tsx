@@ -41,18 +41,18 @@ export function Features() {
   ];
 
   return (
-    <section className="py-20 px-4 bg-secondary/20">
+    <section className="py-12 sm:py-16 md:py-20 px-4 bg-secondary/20">
       <div className="container mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold mb-4">
+        <div className="text-center mb-10 sm:mb-12 md:mb-16">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 px-2">
             {t('features.title')} <span className="text-profit">{t('features.titleHighlight')}</span>?
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
             {t('features.subtitle')}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (
@@ -60,12 +60,12 @@ export function Features() {
                 key={index}
                 className="border-border/50 hover:border-profit/50 transition-colors group"
               >
-                <CardContent className="p-6 space-y-4">
-                  <div className="w-12 h-12 rounded-lg bg-profit/10 flex items-center justify-center group-hover:bg-profit/20 transition">
-                    <Icon className="h-6 w-6 text-profit" />
+                <CardContent className="p-5 sm:p-6 space-y-3 sm:space-y-4">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg bg-profit/10 flex items-center justify-center group-hover:bg-profit/20 transition">
+                    <Icon className="h-5 w-5 sm:h-6 sm:w-6 text-profit" />
                   </div>
-                  <h3 className="text-xl font-semibold">{t(feature.titleKey)}</h3>
-                  <p className="text-muted-foreground">{t(feature.descriptionKey)}</p>
+                  <h3 className="text-lg sm:text-xl font-semibold">{t(feature.titleKey)}</h3>
+                  <p className="text-sm sm:text-base text-muted-foreground">{t(feature.descriptionKey)}</p>
                 </CardContent>
               </Card>
             );

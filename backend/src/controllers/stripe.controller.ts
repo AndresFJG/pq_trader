@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { AuthRequest } from '../middleware/auth.middleware';
 import Stripe from 'stripe';
 import { supabase } from '../config/supabase';
+import { NotificationService } from '../services/notification.service';
 import { config } from '../config/env';
 import { logger } from '../utils/logger';
 
@@ -255,6 +256,22 @@ export const handleWebhook = async (req: Request, res: Response): Promise<void> 
             console.error('❌ Error updating transaction:', updateError);
           } else {
             console.log('✅ Transaction updated to completed');
+            
+            // Crear notificación de pago procesado
+            await NotificationService.create({
+              type: 'payment_processed',
+              title: 'Pago procesado correctamente',
+              message: `Pago de $${(session.amount_total || 0) / 100} ${session.currency?.toUpperCase()} - ${productName || 'Producto'}`,
+              user_id: userId.toString(),
+              related_id: existingTransaction.id.toString(),
+              metadata: {
+                amount: (session.amount_total || 0) / 100,
+                currency: session.currency?.toUpperCase() || 'USD',
+                product_type: productType,
+                product_name: productName,
+                customer_email: session.customer_email,
+              },
+            });
           }
         } else {
           // Si no existe, crear nueva (fallback por si el checkout falló)
@@ -323,6 +340,25 @@ export const handleWebhook = async (req: Request, res: Response): Promise<void> 
               console.error('❌ Error creating enrollment:', enrollmentError);
             } else {
               console.log('✅ Enrollment created successfully:', enrollment);
+              
+              // Crear notificación de nueva inscripción
+              const { data: courseData } = await supabase
+                .from('courses')
+                .select('title')
+                .eq('id', productId)
+                .single();
+              
+              await NotificationService.create({
+                type: 'new_enrollment',
+                title: 'Nueva inscripción a curso',
+                message: `Un usuario se ha inscrito al curso: ${courseData?.title || productName || 'Curso'}`,
+                user_id: userId.toString(),
+                related_id: productId.toString(),
+                metadata: {
+                  course_name: courseData?.title || productName,
+                  enrollment_id: enrollment?.[0]?.id,
+                },
+              });
               
               // Actualizar el contador de enrolled_count del curso
               const { error: rpcError } = await supabase.rpc('increment_course_enrollment', {

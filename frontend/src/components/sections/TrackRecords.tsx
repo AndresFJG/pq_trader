@@ -91,9 +91,9 @@ export function TrackRecords() {
 
   if (loading) {
     return (
-      <section className="py-20 px-4 bg-gradient-to-b from-background to-background/95">
+      <section className="py-12 sm:py-16 md:py-20 px-4 bg-gradient-to-b from-background to-background/95">
         <div className="container mx-auto max-w-7xl text-center">
-          <p className="text-muted-foreground">Cargando portafolios...</p>
+          <p className="text-sm sm:text-base text-muted-foreground">Cargando portafolios...</p>
         </div>
       </section>
     );
@@ -101,47 +101,47 @@ export function TrackRecords() {
 
   if (portfolios.length === 0) {
     return (
-      <section className="py-20 px-4 bg-gradient-to-b from-background to-background/95">
+      <section className="py-12 sm:py-16 md:py-20 px-4 bg-gradient-to-b from-background to-background/95">
         <div className="container mx-auto max-w-7xl">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+          <div className="text-center mb-8 sm:mb-10 md:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-3 sm:mb-4 px-2">
               Resultados <span className="text-profit">Verificables</span>
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto px-4">
               Track records reales de nuestros sistemas de trading.
             </p>
           </div>
-          <div className="text-center py-12 bg-secondary/30 rounded-lg">
-            <p className="text-muted-foreground">No hay portafolios disponibles en este momento</p>
+          <div className="text-center py-8 sm:py-10 md:py-12 bg-secondary/30 rounded-lg">
+            <p className="text-sm sm:text-base text-muted-foreground">No hay portafolios disponibles en este momento</p>
           </div>
         </div>
       </section>
     );
   }
   return (
-    <section className="py-20 px-4 bg-gradient-to-b from-background to-background/95">
+    <section className="py-12 sm:py-16 md:py-20 px-4 bg-gradient-to-b from-background to-background/95">
       <div className="container mx-auto max-w-7xl">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+        <div className="text-center mb-8 sm:mb-10 md:mb-12">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-3 sm:mb-4 px-2">
             Resultados <span className="text-profit">Verificables</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto px-4">
             Track records reales de nuestros sistemas de trading. 
             Todos los datos están verificados y actualizados en tiempo real desde Darwinex.
           </p>
         </div>
 
         {/* Grid de Track Records */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6 md:gap-8">
           {portfolios.map((portfolio) => (
             <TrackRecordCard key={portfolio.id} data={formatPortfolioData(portfolio)} />
           ))}
         </div>
 
         {/* CTA Footer */}
-        <div className="mt-12 text-center">
-          <p className="text-sm text-muted-foreground mb-4">
+        <div className="mt-8 sm:mt-10 md:mt-12 text-center">
+          <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4 px-4">
             Los resultados pasados no garantizan rendimientos futuros
           </p>
           <a

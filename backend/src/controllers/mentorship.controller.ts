@@ -83,11 +83,19 @@ export const getMentorship = async (req: AuthRequest, res: Response): Promise<vo
 
 export const createMentorship = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const { title, description, duration, price, mentor_id } = req.body;
+    const { title, description, duration, duration_minutes, price, mentor_id } = req.body;
 
     const { data: mentorship, error } = await supabase
       .from('mentorships')
-      .insert([{ title, description, duration, price, mentor_id }])
+      .insert([{ 
+        title, 
+        description, 
+        duration: duration || duration_minutes,
+        duration_minutes: duration_minutes || duration,
+        price, 
+        mentor_id,
+        is_active: true
+      }])
       .select()
       .single();
 
@@ -108,11 +116,25 @@ export const createMentorship = async (req: AuthRequest, res: Response): Promise
 export const updateMentorship = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
-    const { title, description, duration, price, status } = req.body;
+    const { title, description, duration, duration_minutes, price, status, is_active } = req.body;
+
+    const updateData: any = { title, description, price, status };
+    
+    if (duration !== undefined) {
+      updateData.duration = duration;
+      updateData.duration_minutes = duration;
+    }
+    if (duration_minutes !== undefined) {
+      updateData.duration_minutes = duration_minutes;
+      updateData.duration = duration_minutes;
+    }
+    if (is_active !== undefined) {
+      updateData.is_active = is_active;
+    }
 
     const { data: mentorship, error } = await supabase
       .from('mentorships')
-      .update({ title, description, duration, price, status })
+      .update(updateData)
       .eq('id', id)
       .select()
       .single();

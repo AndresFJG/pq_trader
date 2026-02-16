@@ -1,5 +1,6 @@
 import { Response } from 'express';
 import { supabase } from '../config/supabase';
+import { NotificationService } from '../services/notification.service';
 import { logger } from '../utils/logger';
 import { AuthRequest } from '../middleware/auth.middleware';
 import { asyncHandler } from '../utils/asyncHandler';
@@ -101,6 +102,20 @@ export const createCourse = async (req: AuthRequest, res: Response): Promise<voi
       .single();
 
     if (error) throw error;
+
+    // Crear notificación de nuevo curso
+    await NotificationService.create({
+      type: 'new_course',
+      title: 'Nuevo curso publicado',
+      message: `El curso "${data.title}" ha sido publicado`,
+      user_id: req.user?.id,
+      related_id: data.id,
+      metadata: {
+        course_title: data.title,
+        course_price: data.price,
+        course_level: data.level,
+      },
+    });
 
     res.status(201).json({
       success: true,

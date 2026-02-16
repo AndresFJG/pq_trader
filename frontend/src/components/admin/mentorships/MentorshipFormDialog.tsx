@@ -52,7 +52,8 @@ interface MentorshipFormDialogProps {
     id: string;
     title: string;
     description: string;
-    duration: number;
+    duration?: number;
+    duration_minutes?: number;
     price: number;
     status: string;
     max_participants?: number;
@@ -82,7 +83,7 @@ export function MentorshipFormDialog({ open, onOpenChange, mentorship, onSuccess
       form.reset({
         title: mentorship.title || '',
         description: mentorship.description || '',
-        duration: mentorship.duration?.toString() || '',
+        duration: (mentorship.duration || mentorship.duration_minutes)?.toString() || '',
         price: mentorship.price?.toString() || '',
         status: (mentorship.status as 'active' | 'inactive' | 'full') || 'active',
         max_participants: mentorship.max_participants?.toString() || '',
