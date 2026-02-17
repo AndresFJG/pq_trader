@@ -28,38 +28,6 @@ export function PaymentMethods({ userCountry = 'ES' }: { userCountry?: string })
       description: t('payments.cardDesc'),
       processingTime: t('payments.instant'),
     },
-    {
-      id: 'paypal',
-      name: t('payments.paypal'),
-      icon: Globe,
-      regions: ['global'],
-      description: t('payments.paypalDesc'),
-      processingTime: t('payments.instant'),
-    },
-    {
-      id: 'mercadopago',
-      name: t('payments.mercadopago'),
-      icon: Smartphone,
-      regions: ['LATAM'],
-      description: t('payments.mercadopagoDesc'),
-      processingTime: t('payments.instant'),
-    },
-    {
-      id: 'pix',
-      name: t('payments.pix'),
-      icon: Smartphone,
-      regions: ['BR'],
-      description: t('payments.pixDesc'),
-      processingTime: t('payments.instant'),
-    },
-    {
-      id: 'sepa',
-      name: t('payments.sepa'),
-      icon: Building,
-      regions: ['EU'],
-      description: t('payments.sepaDesc'),
-      processingTime: `1-3 ${t('payments.businessDays')}`,
-    },
   ];
 
   // Filter payment methods based on user region

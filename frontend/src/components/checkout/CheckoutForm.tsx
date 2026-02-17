@@ -73,8 +73,6 @@ export function CheckoutForm({
     cardNumber: '',
     cardExpiry: '',
     cardCVV: '',
-    paypalEmail: '',
-    sepaIBAN: '',
   });
 
   // Detectar ubicación al cargar
@@ -203,21 +201,8 @@ export function CheckoutForm({
         return;
       }
 
-      // Si es PayPal, redirigir a PayPal
-      if (selectedPaymentMethod === 'paypal') {
-        await handlePayPalPayment();
-        return;
-      }
-
-      // Si es Stripe (tarjeta), crear Checkout Session
-      if (selectedPaymentMethod === 'card') {
-        await handleStripePayment();
-        return;
-      }
-
-      // Otros métodos de pago no implementados
-      setError('Método de pago no soportado');
-      setLoading(false);
+      // Procesar pago con Stripe (tarjeta)
+      await handleStripePayment();
     } catch (err: any) {
       setError(err.message || 'Hubo un error procesando tu pago');
       setLoading(false);
@@ -277,60 +262,6 @@ export function CheckoutForm({
     }
   };
 
-  /**
-   * Manejar pago con PayPal
-   */
-  const handlePayPalPayment = async () => {
-    // Prevenir doble clic
-    if (loading) {
-      return;
-    }
-
-    setLoading(true);
-    setError('');
-
-    try {
-      const token = localStorage.getItem('token');
-      
-      if (!token) {
-        setError(t('checkout.loginRequired') || 'Debes iniciar sesión');
-        router.push('/login?redirect=' + encodeURIComponent(window.location.pathname));
-        setLoading(false);
-        return;
-      }
-
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/paypal/order`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-          'Idempotency-Key': idempotencyKey,
-        },
-        body: JSON.stringify({
-          productId: productId, // Solo enviar el ID, el backend calcula el precio
-          currency: selectedCurrency,
-        }),
-      });
-
-      const result = await response.json();
-
-      if (!response.ok || !result.success) {
-        throw new Error(result.error || 'Error creating PayPal order');
-      }
-
-      // Redirigir a PayPal para aprobar el pago
-      if (result.data.approvalUrl) {
-        window.location.href = result.data.approvalUrl;
-      } else {
-        throw new Error('No approval URL received from PayPal');
-      }
-    } catch (error: any) {
-      console.error('PayPal payment error:', error);
-      setError(error.message || 'Error al procesar el pago con PayPal');
-      setLoading(false);
-    }
-  };
-
   if (isLoadingLocation) {
     return (
       <Card>
@@ -386,7 +317,7 @@ export function CheckoutForm({
           {/* Métodos de Pago */}
           <div className="space-y-3">
             <Label className="text-base font-semibold">{t('checkout.paymentMethod')}</Label>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4">
               <button
                 type="button"
                 onClick={() => setSelectedPaymentMethod('card')}
@@ -398,19 +329,7 @@ export function CheckoutForm({
               >
                 <CreditCard className="h-6 w-6 mx-auto mb-2" />
                 <div className="text-sm font-medium">{t('checkout.card')}</div>
-                <div className="text-xs text-muted-foreground mt-1">Stripe</div>
-              </button>
-              <button
-                type="button"
-                onClick={() => setSelectedPaymentMethod('paypal')}
-                className={`p-6 rounded-lg border-2 transition-all ${
-                  selectedPaymentMethod === 'paypal'
-                    ? 'border-profit bg-profit/5'
-                    : 'border-border hover:border-profit/50'
-                }`}
-              >
-                <div className="text-lg font-bold mb-1">{t('checkout.paypal')}</div>
-                <div className="text-xs text-muted-foreground">Pago seguro</div>
+                <div className="text-xs text-muted-foreground mt-1">Stripe - Secure Payment</div>
               </button>
             </div>
           </div>

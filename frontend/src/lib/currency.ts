@@ -2,11 +2,6 @@
 const exchangeRates: { [key: string]: number } = {
   EUR: 1,
   USD: 1.08,
-  GBP: 0.85,
-  MXN: 18.5,
-  ARS: 350,
-  COP: 4200,
-  CLP: 950,
 };
 
 export interface Currency {
@@ -20,11 +15,6 @@ export interface Currency {
 export const currencies: Currency[] = [
   { code: 'EUR', symbol: '€', name: 'Euro', rate: 1, decimals: 2 },
   { code: 'USD', symbol: '$', name: 'US Dollar', rate: 1.08, decimals: 2 },
-  { code: 'GBP', symbol: '£', name: 'British Pound', rate: 0.85, decimals: 2 },
-  { code: 'MXN', symbol: '$', name: 'Mexican Peso', rate: 18.5, decimals: 0 },
-  { code: 'ARS', symbol: '$', name: 'Argentine Peso', rate: 350, decimals: 0 },
-  { code: 'COP', symbol: '$', name: 'Colombian Peso', rate: 4200, decimals: 0 },
-  { code: 'CLP', symbol: '$', name: 'Chilean Peso', rate: 950, decimals: 0 },
 ];
 
 export const convertPrice = (priceInEUR: number, targetCurrency: string): number => {
@@ -36,14 +26,7 @@ export const formatPrice = (price: number, currencyCode: string): string => {
   const currency = currencies.find(c => c.code === currencyCode);
   if (!currency) return `${price}€`;
   
-  // Formatear sin decimales para monedas con valores altos
-  if (['ARS', 'COP', 'CLP', 'MXN'].includes(currencyCode)) {
-    const rounded = Math.round(price);
-    const formatted = rounded.toLocaleString('es-ES');
-    return `${currency.symbol}${formatted}`;
-  }
-  
-  // Formatear con decimales para otras monedas
+  // Formatear con decimales para EUR y USD
   const formatted = price.toLocaleString('es-ES', { 
     minimumFractionDigits: 2, 
     maximumFractionDigits: 2 
@@ -66,21 +49,20 @@ export const detectUserLocation = async (): Promise<{
     const response = await fetch('https://ipapi.co/json/');
     const data = await response.json();
     
-    // Mapear países a monedas
+    // Mapear países a monedas (solo EUR y USD)
     const currencyMap: { [key: string]: string } = {
+      // Países de la Unión Europea
       'ES': 'EUR', 'FR': 'EUR', 'DE': 'EUR', 'IT': 'EUR', 'PT': 'EUR',
       'NL': 'EUR', 'BE': 'EUR', 'AT': 'EUR', 'IE': 'EUR', 'GR': 'EUR',
+      'FI': 'EUR', 'LU': 'EUR', 'SI': 'EUR', 'EE': 'EUR', 'LV': 'EUR',
+      // Estados Unidos
       'US': 'USD',
-      'GB': 'GBP',
-      'MX': 'MXN',
-      'AR': 'ARS',
-      'CO': 'COP',
-      'CL': 'CLP',
+      // Resto del mundo: USD por defecto
     };
     
     return {
       country: data.country_code || 'ES',
-      currency: currencyMap[data.country_code] || 'EUR',
+      currency: currencyMap[data.country_code] || 'USD', // USD por defecto
       countryName: data.country_name || 'España',
     };
   } catch (error) {
