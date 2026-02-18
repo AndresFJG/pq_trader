@@ -38,7 +38,7 @@ class NotificationService {
    */
   async getAll(limit = 50, offset = 0): Promise<NotificationsResponse> {
     try {
-      const response = await axios.get(`${API_URL}/api/notifications`, {
+      const response = await axios.get(`${API_URL}/notifications`, {
         params: { limit, offset },
         withCredentials: true,
         headers: {
@@ -64,7 +64,7 @@ class NotificationService {
    */
   async getUnread(): Promise<NotificationsResponse> {
     try {
-      const response = await axios.get(`${API_URL}/api/notifications/unread`, {
+      const response = await axios.get(`${API_URL}/notifications/unread`, {
         withCredentials: true,
         headers: {
           'Cache-Control': 'no-cache',
@@ -91,7 +91,7 @@ class NotificationService {
   async getUnreadCount(): Promise<number> {
     try {
       const response = await axios.get<UnreadCountResponse>(
-        `${API_URL}/api/notifications/unread/count`,
+        `${API_URL}/notifications/unread/count`,
         { withCredentials: true }
       );
       return response.data.count;
@@ -107,7 +107,7 @@ class NotificationService {
   async markAsRead(id: string): Promise<boolean> {
     try {
       const response = await axios.put(
-        `${API_URL}/api/notifications/${id}/read`,
+        `${API_URL}/notifications/${id}/read`,
         {},
         { withCredentials: true }
       );
@@ -124,7 +124,7 @@ class NotificationService {
   async markAllAsRead(): Promise<boolean> {
     try {
       const response = await axios.put(
-        `${API_URL}/api/notifications/read-all`,
+        `${API_URL}/notifications/read-all`,
         {},
         { withCredentials: true }
       );
@@ -141,7 +141,7 @@ class NotificationService {
   async delete(id: string): Promise<boolean> {
     try {
       const response = await axios.delete(
-        `${API_URL}/api/notifications/${id}`,
+        `${API_URL}/notifications/${id}`,
         { withCredentials: true }
       );
       return response.data.success;

@@ -86,15 +86,19 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {statsData.map((stat) => {
-          const Icon = stat.icon;
-          return (
-            <Card key={stat.title}>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                  {stat.title}
-                </CardTitle>
+      <div>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          Métricas Generales
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {statsData.map((stat) => {
+            const Icon = stat.icon;
+            return (
+              <Card key={stat.title}>
+                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                    {stat.title}
+                  </CardTitle>
                 <div className={`p-2 rounded-lg ${stat.bgColor}`}>
                   <Icon className={`h-5 w-5 ${stat.color}`} />
                 </div>
@@ -114,10 +118,15 @@ export default function AdminDashboardPage() {
             </Card>
           );
         })}
+        </div>
       </div>
 
       {/* Recent Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          Actividad Reciente
+        </h2>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Users */}
         <Card>
           <CardHeader>
@@ -191,6 +200,7 @@ export default function AdminDashboardPage() {
                        transaction.status === 'pending' ? 'Pendiente' : 'Fallido'}
                     </Badge>
                   </div>
+        </div>
                 ))
               )}
             </div>

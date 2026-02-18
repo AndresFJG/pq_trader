@@ -72,6 +72,7 @@ export function AdminHeader() {
           <Input
             type="search"
             placeholder="Buscar..."
+            aria-label="Buscar en el panel de administración"
             className="pl-10 bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600"
           />
         </div>
@@ -82,7 +83,12 @@ export function AdminHeader() {
         {/* Notifications */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="relative">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="relative"
+              aria-label={unreadCount > 0 ? `Notificaciones: ${unreadCount} sin leer` : "Notificaciones"}
+            >
               <Bell className="h-5 w-5" />
               {unreadCount > 0 && (
                 <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
