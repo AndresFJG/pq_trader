@@ -207,4 +207,27 @@ export class NotificationService {
       return 0;
     }
   }
+
+  /**
+   * Eliminar TODAS las notificaciones (usar con precaución)
+   */
+  static async clearAll(): Promise<number> {
+    try {
+      const { data, error } = await supabase
+        .from('notifications')
+        .delete()
+        .neq('id', '00000000-0000-0000-0000-000000000000') // Dummy condition to delete all
+        .select();
+
+      if (error) {
+        console.error('Error clearing all notifications:', error);
+        return 0;
+      }
+
+      return data?.length || 0;
+    } catch (error) {
+      console.error('Error in NotificationService.clearAll:', error);
+      return 0;
+    }
+  }
 }

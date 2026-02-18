@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
 
 export interface Notification {
   id: string;
@@ -41,7 +41,13 @@ class NotificationService {
       const response = await axios.get(`${API_URL}/api/notifications`, {
         params: { limit, offset },
         withCredentials: true,
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache',
+        },
       });
+      
+      console.log('[NotificationService] getAll response:', response.data);
       return response.data;
     } catch (error: unknown) {
       console.error('Error fetching notifications:', error);
@@ -60,7 +66,14 @@ class NotificationService {
     try {
       const response = await axios.get(`${API_URL}/api/notifications/unread`, {
         withCredentials: true,
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache',
+        },
       });
+      
+      console.log('[NotificationService] getUnread response:', response.data);
+      console.log('[NotificationService] Notifications count:', response.data?.data?.length || 0);
       return response.data;
     } catch (error: unknown) {
       console.error('Error fetching unread notifications:', error);

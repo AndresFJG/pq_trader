@@ -23,13 +23,25 @@ export function AdminHeader() {
   const loadNotifications = async () => {
     setLoading(true);
     try {
+      console.log('[AdminHeader] Loading notifications...');
       const response = await notificationService.getUnread();
+      console.log('[AdminHeader] Notifications response:', response);
+      
       if (response.success) {
-        setNotifications(response.data.slice(0, 5)); // Mostrar solo las 5 más recientes
-        setUnreadCount(response.count || 0);
+        const notificationsList = response.data || [];
+        console.log('[AdminHeader] Setting notifications:', notificationsList);
+        setNotifications(notificationsList.slice(0, 5)); // Mostrar solo las 5 más recientes
+        setUnreadCount(response.count || notificationsList.length || 0);
+      } else {
+        // Asegurar que se limpie el estado si no hay éxito
+        console.log('[AdminHeader] Response not successful, clearing notifications');
+        setNotifications([]);
+        setUnreadCount(0);
       }
     } catch (error) {
-      console.error('Error loading notifications:', error);
+      console.error('[AdminHeader] Error loading notifications:', error);
+      setNotifications([]);
+      setUnreadCount(0);
     } finally {
       setLoading(false);
     }

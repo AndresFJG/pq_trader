@@ -42,9 +42,16 @@ export const getUnreadNotifications = async (req: AuthRequest, res: Response): P
   try {
     const data = await NotificationService.getUnread();
 
+    console.log('[NotificationController] Unread notifications count:', data.length);
+
+    // Asegurar headers de no-cache
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+
     res.json({
       success: true,
-      data,
+      data: data,
       count: data.length,
     });
   } catch (error: any) {
@@ -52,6 +59,8 @@ export const getUnreadNotifications = async (req: AuthRequest, res: Response): P
     res.status(500).json({
       success: false,
       error: error.message || 'Error al obtener notificaciones no leídas',
+      data: [],
+      count: 0,
     });
   }
 };
@@ -136,6 +145,28 @@ export const markAllAsRead = async (req: AuthRequest, res: Response): Promise<vo
     res.status(500).json({
       success: false,
       error: error.message || 'Error al marcar notificaciones como leídas',
+    });
+  }
+};
+
+/**
+ * @desc    Eliminar TODAS las notificaciones (usar con precaución)
+ * @route   DELETE /api/notifications/clear-all
+ * @access  Private (Admin)
+ */
+export const clearAllNotifications = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const count = await NotificationService.clearAll();
+
+    res.json({
+      success: true,
+      message: `${count} notificaciones eliminadas exitosamente`,
+    });
+  } catch (error: any) {
+    console.error('Error in clearAllNotifications:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Error al eliminar todas las notificaciones',
     });
   }
 };

@@ -6,6 +6,7 @@ import {
   markAsRead,
   markAllAsRead,
   deleteNotification,
+  clearAllNotifications,
 } from '../controllers/notification.controller';
 import { protect, authorize } from '../middleware/auth.middleware';
 
@@ -26,6 +27,9 @@ router.get('/unread/count', getUnreadCount);
 
 // PUT /api/notifications/read-all - Marcar todas como leídas
 router.put('/read-all', markAllAsRead);
+
+// DELETE /api/notifications/clear-all - Eliminar TODAS las notificaciones (usar con precaución)
+router.delete('/clear-all', clearAllNotifications);
 
 // PUT /api/notifications/:id/read - Marcar como leída
 router.put('/:id/read', markAsRead);
