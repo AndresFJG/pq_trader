@@ -200,7 +200,6 @@ export default function AdminDashboardPage() {
                        transaction.status === 'pending' ? 'Pendiente' : 'Fallido'}
                     </Badge>
                   </div>
-        </div>
                 ))
               )}
             </div>
