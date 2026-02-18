@@ -6,6 +6,7 @@ import {
   markAsRead,
   markAllAsRead,
   deleteNotification,
+  deleteOldNotifications,
   clearAllNotifications,
 } from '../controllers/notification.controller';
 import { protect, authorize } from '../middleware/auth.middleware';
@@ -27,6 +28,9 @@ router.get('/unread/count', getUnreadCount);
 
 // PUT /api/notifications/read-all - Marcar todas como leídas
 router.put('/read-all', markAllAsRead);
+
+// DELETE /api/notifications/old - Eliminar notificaciones antiguas (30+ días por defecto)
+router.delete('/old', deleteOldNotifications);
 
 // DELETE /api/notifications/clear-all - Eliminar TODAS las notificaciones (usar con precaución)
 router.delete('/clear-all', clearAllNotifications);

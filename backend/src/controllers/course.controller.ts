@@ -103,17 +103,18 @@ export const createCourse = async (req: AuthRequest, res: Response): Promise<voi
 
     if (error) throw error;
 
-    // Crear notificación de nuevo curso
+    // Crear notificación de nuevo curso (para administradores)
+    // NOTA: No pasar related_id porque course.id es INTEGER, no UUID
     await NotificationService.create({
       type: 'new_course',
       title: 'Nuevo curso publicado',
       message: `El curso "${data.title}" ha sido publicado`,
-      user_id: req.user?.id?.toString(),
-      related_id: data.id.toString(),
       metadata: {
+        course_id: data.id,
         course_title: data.title,
         course_price: data.price,
         course_level: data.level,
+        created_by_admin_id: req.user?.id,
       },
     });
 

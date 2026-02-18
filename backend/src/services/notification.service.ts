@@ -22,6 +22,13 @@ export class NotificationService {
    */
   static async create(data: NotificationData): Promise<Notification | null> {
     try {
+      console.log('[NotificationService] Creating notification:', {
+        type: data.type,
+        title: data.title,
+        has_user_id: !!data.user_id,
+        has_related_id: !!data.related_id,
+      });
+
       const { data: notification, error } = await supabase
         .from('notifications')
         .insert({
@@ -37,13 +44,19 @@ export class NotificationService {
         .single();
 
       if (error) {
-        console.error('Error creating notification:', error);
+        console.error('❌ Error creating notification:', {
+          error: error.message,
+          code: error.code,
+          details: error.details,
+          notification_type: data.type,
+        });
         return null;
       }
 
+      console.log('✅ Notification created successfully:', notification.id);
       return notification;
     } catch (error) {
-      console.error('Error in NotificationService.create:', error);
+      console.error('❌ Exception in NotificationService.create:', error);
       return null;
     }
   }

@@ -33,15 +33,16 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       password,
     });
 
-    // Crear notificación de nuevo usuario
+    // Crear notificación de nuevo usuario (para administradores)
+    // NOTA: No pasar user_id ni related_id porque son UUID, pero user.id es INTEGER
     await NotificationService.create({
       type: 'new_user',
       title: 'Nuevo usuario registrado',
-      message: `${name} se ha registrado en la plataforma`,
-      user_id: user.id.toString(),
+      message: `${name} (${email}) se ha registrado en la plataforma`,
       metadata: {
         email,
         name,
+        user_id: user.id,
         registration_date: new Date().toISOString(),
       },
     });

@@ -44,6 +44,7 @@ class NotificationService {
         headers: {
           'Cache-Control': 'no-cache',
           'Pragma': 'no-cache',
+          'Expires': '0',
         },
       });
       
@@ -51,6 +52,33 @@ class NotificationService {
       return response.data;
     } catch (error: unknown) {
       console.error('Error fetching notifications:', error);
+      return {
+        success: false,
+        data: [],
+        count: 0,
+      };
+    }
+  }
+
+  /**
+   * Obtener notificaciones recientes (últimas 24 horas, leídas y no leídas)
+   */
+  async getRecent(limit = 10): Promise<NotificationsResponse> {
+    try {
+      const response = await axios.get(`${API_URL}/notifications`, {
+        params: { limit, offset: 0 },
+        withCredentials: true,
+        headers: {
+          'Cache-Control': 'no-store, no-cache, must-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0',
+        },
+      });
+      
+      console.log('[NotificationService] getRecent response:', response.data);
+      return response.data;
+    } catch (error: unknown) {
+      console.error('Error fetching recent notifications:', error);
       return {
         success: false,
         data: [],

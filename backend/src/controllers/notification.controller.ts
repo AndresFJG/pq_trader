@@ -150,6 +150,30 @@ export const markAllAsRead = async (req: AuthRequest, res: Response): Promise<vo
 };
 
 /**
+ * @desc    Eliminar notificaciones antiguas (más de X días)
+ * @route   DELETE /api/notifications/old
+ * @access  Private (Admin)
+ */
+export const deleteOldNotifications = async (req: AuthRequest, res: Response): Promise<void> => {
+  try {
+    const days = parseInt(req.query.days as string) || 30;
+    const count = await NotificationService.deleteOld(days);
+
+    res.json({
+      success: true,
+      message: `${count} notificaciones antiguas (${days}+ días) eliminadas exitosamente`,
+      count,
+    });
+  } catch (error: any) {
+    console.error('Error in deleteOldNotifications:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message || 'Error al eliminar notificaciones antiguas',
+    });
+  }
+};
+
+/**
  * @desc    Eliminar TODAS las notificaciones (usar con precaución)
  * @route   DELETE /api/notifications/clear-all
  * @access  Private (Admin)
