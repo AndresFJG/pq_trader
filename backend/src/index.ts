@@ -32,7 +32,6 @@ import mentorshipBookingRoutes from './routes/mentorshipBooking.routes';
 import mentorScheduleRoutes from './routes/mentorSchedule.routes';
 import blogRoutes from './routes/blog.routes';
 import contactRoutes from './routes/contact.routes';
-import notificationRoutes from './routes/notification.routes';
 import { healthCheck, detailedHealthCheck, readinessCheck, livenessCheck } from './controllers/health.controller';
 // import darwinexRoutes from './routes/darwinex.routes';
 
@@ -100,7 +99,6 @@ app.use('/api/mentorship-bookings', mentorshipBookingRoutes);
 app.use('/api/mentor-schedules', mentorScheduleRoutes);
 app.use('/api/blog', blogRoutes);
 app.use('/api/contact', contactRoutes);
-app.use('/api/notifications', notificationRoutes);
 // app.use('/api/darwinex', darwinexRoutes); // Temporalmente deshabilitado
 
 // Error handling
