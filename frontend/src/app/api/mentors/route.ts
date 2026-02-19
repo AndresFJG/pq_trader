@@ -3,11 +3,14 @@ import { supabase } from '@/lib/supabase';
 
 export async function GET() {
   try {
-    // Usar RPC function para bypass PostgREST cache
-    const { data: mentors, error } = await supabase.rpc('get_all_mentors');
+    // Acceso directo a la tabla mentors
+    const { data: mentors, error } = await supabase
+      .from('mentors')
+      .select('*')
+      .order('id', { ascending: true });
     
     if (error) {
-      console.error('Error fetching mentors via RPC:', error);
+      console.error('Error fetching mentors from table:', error);
       return NextResponse.json(
         { success: false, error: 'Error al obtener mentores de la base de datos' }, 
         { status: 500 }
