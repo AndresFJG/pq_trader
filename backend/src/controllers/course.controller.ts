@@ -1,6 +1,5 @@
 import { Response } from 'express';
 import { supabase } from '../config/supabase';
-import { NotificationService } from '../services/notification.service';
 import { logger } from '../utils/logger';
 import { AuthRequest } from '../middleware/auth.middleware';
 import { asyncHandler } from '../utils/asyncHandler';
@@ -102,21 +101,6 @@ export const createCourse = async (req: AuthRequest, res: Response): Promise<voi
       .single();
 
     if (error) throw error;
-
-    // Crear notificación de nuevo curso (para administradores)
-    // NOTA: No pasar related_id porque course.id es INTEGER, no UUID
-    await NotificationService.create({
-      type: 'new_course',
-      title: 'Nuevo curso publicado',
-      message: `El curso "${data.title}" ha sido publicado`,
-      metadata: {
-        course_id: data.id,
-        course_title: data.title,
-        course_price: data.price,
-        course_level: data.level,
-        created_by_admin_id: req.user?.id,
-      },
-    });
 
     res.status(201).json({
       success: true,

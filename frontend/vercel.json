@@ -9,7 +9,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://pqtrader-backend.up.railway.app/api/:path*"
+      "destination": "https://pq-trader-backend-production.up.railway.app/api/:path*"
     }
   ],
   "headers": [

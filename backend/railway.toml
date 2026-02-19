@@ -20,3 +20,4 @@ interval = 30
 
 [env]
 NODE_ENV = "production"
+NIXPACKS_NODE_VERSION = "20"

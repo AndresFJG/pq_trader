@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import nodemailer from 'nodemailer';
-import { NotificationService } from '../services/notification.service';
 import { config } from '../config/env';
 import { logger } from '../utils/logger';
 
@@ -125,19 +124,6 @@ ${new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' })}
     await transporter.sendMail(mailOptions);
 
     logger.info(`Email de contacto enviado desde: ${email}`);
-
-    // Crear notificación de mensaje de contacto
-    await NotificationService.create({
-      type: 'contact_message',
-      title: 'Nuevo mensaje de contacto',
-      message: `${name} (${email}) - ${subject}`,
-      metadata: {
-        name,
-        email,
-        subject,
-        message: message.substring(0, 200), // Primeros 200 caracteres
-      },
-    });
 
     res.json({
       success: true,

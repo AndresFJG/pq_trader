@@ -17,7 +17,7 @@ export async function GET() {
       
       // Intento 2: Llamar al backend como fallback
       try {
-        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://pqtrader-backend.up.railway.app';
+        const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'https://pq-trader-backend-production.up.railway.app';
         const response = await fetch(`${backendUrl}/api/mentors`, {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },

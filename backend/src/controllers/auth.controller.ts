@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { UserService } from '../services/user.service';
-import { NotificationService } from '../services/notification.service';
 import { AuthRequest } from '../middleware/auth.middleware';
 import { generateToken, generateRefreshToken, verifyRefreshToken } from '../utils/jwt';
 import { config } from '../config/env';
@@ -31,20 +30,6 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       name,
       email,
       password,
-    });
-
-    // Crear notificación de nuevo usuario (para administradores)
-    // NOTA: No pasar user_id ni related_id porque son UUID, pero user.id es INTEGER
-    await NotificationService.create({
-      type: 'new_user',
-      title: 'Nuevo usuario registrado',
-      message: `${name} (${email}) se ha registrado en la plataforma`,
-      metadata: {
-        email,
-        name,
-        user_id: user.id,
-        registration_date: new Date().toISOString(),
-      },
     });
 
     const token = generateToken(user.id);
