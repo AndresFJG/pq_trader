@@ -9,28 +9,26 @@ import { asyncHandler } from '../utils/asyncHandler';
  * @access  Public
  */
 export const getMentors = asyncHandler(async (req: AuthRequest, res: Response): Promise<void> => {
-  console.log('🔍 Refreshing schema cache and fetching mentors...');
+  console.log('🔍 Fetching mentors directly from table...');
   
-  // Intentar refrescar el cache de PostgREST primero
-  try {
-    await supabase.rpc('notify_pgrst_reload');
-  } catch (e) {
-    console.log('⚠️ notify_pgrst_reload not available, continuing...');
-  }
-  
-  // Intentar usar la función creada
-  const { data: mentors, error } = await supabase.rpc('get_all_mentors');
+  // Acceso directo a la tabla mentors
+  const { data: mentors, error } = await supabase
+    .from('mentors')
+    .select('*')
+    .order('id', { ascending: true });
 
   if (error) {
     console.error('❌ Supabase error:', error);
     res.status(500).json({
       success: false,
-      error: 'Error al obtener mentores de la base de datos'
+      error: 'Error al obtener mentores de la base de datos',
+      details: error
     });
     return;
   }
 
   if (!mentors || mentors.length === 0) {
+    console.log('⚠️ No mentors found in database');
     res.json({
       success: true,
       count: 0,
