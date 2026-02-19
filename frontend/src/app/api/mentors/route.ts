@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 
+// API endpoint para obtener mentores con fallback a Railway backend
 export async function GET() {
   try {
     // Intentar acceso directo a tabla primero
